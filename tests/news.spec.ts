@@ -454,97 +454,66 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         await categorySelect.click({ force: true });
         await page.waitForTimeout(500);
 
-        // Click to expand group "Khác"
         const otherGroupHeader = page.locator('[data-slot="popover-content"] div, span').filter({ hasText: /^Khác/i }).first();
         if (await otherGroupHeader.isVisible().catch(() => false)) {
           await otherGroupHeader.click({ force: true }).catch(() => {});
           await page.waitForTimeout(300);
         }
-
-        // Select an item under "Khác"
-        const otherOption = page.locator('[role="option"], [data-slot="popover-content"] div, span').filter({ hasText: /Vĩ mô|Quy hoạch|Đấu giá|Dự án|Pháp lý/i }).first();
-        if (await otherOption.isVisible().catch(() => false)) {
-          await otherOption.click({ force: true });
-          await page.waitForTimeout(1500);
-        }
       }
-
       await expect(page.locator('body')).toBeVisible();
     });
   });
 
-
-
-
   /* =========================================================================
-   * 3. Lưu Bộ lọc & Huỷ Bộ lọc của Tin tức thị trường (New 3-dots Menu UI)
+   * 3. Lưu Bộ lọc & Huỷ Bộ lọc của Tin tức thị trường (Dedicated Buttons & Modal UI)
    * ========================================================================= */
-  test.describe('3. Lưu Bộ lọc & Huỷ Bộ lọc Tin tức thị trường (Giao diện Menu 3 chấm)', () => {
-    test('NEWS_FILTER_001: Click nút 3 chấm (⋮) trên thanh tìm kiếm và kiểm tra hiển thị menu tùy chọn "Lưu bộ lọc" & "Huỷ bộ lọc"', async ({ page }) => {
-      // Locate 3-dots action menu button (⋮) on search bar
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+  test.describe('3. Lưu Bộ lọc & Huỷ Bộ lọc Tin tức thị trường (Giao diện Nút bấm mới)', () => {
+    test('NEWS_FILTER_001: Kiểm tra hiển thị nút Bookmark (🔖) "Lưu bộ lọc" và nút Reset (↺) "Xóa bộ lọc" trên thanh tìm kiếm', async ({ page }) => {
+      // Locate dedicated Bookmark button (Lưu bộ lọc) & Reset button (Xóa/Huỷ bộ lọc)
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      const resetBtn = page.locator('button:has(i.fa-rotate), button:has(i.fa-arrows-rotate), button:has(i.fa-sync), button:has(svg path[d*="rotate"]), [aria-label*="Xóa bộ lọc"i], [title*="Xóa bộ lọc"i]').first();
 
-        // Verify options "Lưu bộ lọc" and "Huỷ bộ lọc" appear in menu
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        const cancelOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Huỷ bộ lọc|Hủy bộ lọc/i }).first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await expect(bookmarkBtn).toBeVisible();
+      }
+      if (await resetBtn.isVisible().catch(() => false)) {
+        await expect(resetBtn).toBeVisible();
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
 
-        if (await saveOption.isVisible().catch(() => false)) {
-          await expect(saveOption).toBeVisible();
-        }
-        if (await cancelOption.isVisible().catch(() => false)) {
-          await expect(cancelOption).toBeVisible();
+    test('NEWS_FILTER_002: Click nút Bookmark (🔖) "Lưu bộ lọc" khi CHƯA ĐĂNG NHẬP (Yêu cầu đăng nhập)', async ({ page }) => {
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i], button:has(i.fa-ellipsis-vertical)').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
+
+        // Verify Login Modal / Prompt appears for unauthenticated user
+        const loginPrompt = page.locator('#login-username, #login-trigger-btn, text=/đăng nhập/i').first();
+        if (await loginPrompt.isVisible().catch(() => false)) {
+          await expect(loginPrompt).toBeVisible();
         }
       }
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_FILTER_002: Click "Lưu bộ lọc" từ menu 3 chấm khi CHƯA ĐĂNG NHẬP (Yêu cầu đăng nhập)', async ({ page }) => {
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
-
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
-
-          // Verify Login Modal / Prompt appears for unauthenticated user
-          const loginPrompt = page.locator('#login-username, #login-trigger-btn, text=/đăng nhập/i').first();
-          if (await loginPrompt.isVisible().catch(() => false)) {
-            await expect(loginPrompt).toBeVisible();
-          }
-        }
-      }
-      await expect(page.locator('body')).toBeVisible();
-    });
-
-    test('NEWS_FILTER_003: Click "Lưu bộ lọc" từ menu 3 chấm khi ĐÃ ĐĂNG NHẬP (Mở Modal Lưu bộ lọc thành công)', async ({ page }) => {
+    test('NEWS_FILTER_003: Click nút Bookmark (🔖) "Lưu bộ lọc" khi ĐÃ ĐĂNG NHẬP (Mở Modal Lưu bộ lọc thành công)', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i], button:has(i.fa-ellipsis-vertical)').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
-
-          const modalOrToast = page.locator('div[role="dialog"], text=/thành công|đã lưu|lưu bộ lọc/i').first();
-          if (await modalOrToast.isVisible().catch(() => false)) {
-            await expect(modalOrToast).toBeVisible();
-          }
+        const modalOrToast = page.locator('div[role="dialog"], text=/thành công|đã lưu|lưu bộ lọc/i').first();
+        if (await modalOrToast.isVisible().catch(() => false)) {
+          await expect(modalOrToast).toBeVisible();
         }
       }
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_FILTER_004: Click "Huỷ bộ lọc" từ menu 3 chấm (Xóa toàn bộ từ khóa, danh mục & khoảng thời gian về mặc định)', async ({ page }) => {
+    test('NEWS_FILTER_004: Click nút Reset (↺) "Xóa bộ lọc" (Xóa toàn bộ từ khóa, danh mục & khoảng thời gian về mặc định)', async ({ page }) => {
       // Select category filter first to make form dirty
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
       if (await categorySelect.isVisible().catch(() => false)) {
@@ -558,17 +527,11 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         }
       }
 
-      // Click 3-dots menu -> Huỷ bộ lọc
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
-
-        const cancelOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Huỷ bộ lọc|Hủy bộ lọc/i }).first();
-        if (await cancelOption.isVisible().catch(() => false)) {
-          await cancelOption.click({ force: true });
-          await page.waitForTimeout(1000);
-        }
+      // Click Reset/Rotate button (↺)
+      const resetBtn = page.locator('button:has(i.fa-rotate), button:has(i.fa-arrows-rotate), button:has(i.fa-sync), button:has(svg path[d*="rotate"]), [aria-label*="Xóa bộ lọc"i], [title*="Xóa bộ lọc"i]').first();
+      if (await resetBtn.isVisible().catch(() => false)) {
+        await resetBtn.click({ force: true });
+        await page.waitForTimeout(1000);
       }
 
       // Verify search form resets to default placeholders ("Chọn danh mục tìm kiếm", "Chọn khoảng thời gian")
@@ -583,28 +546,22 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_FILTER_005: Kiểm tra Popup "Lưu bộ lọc" khi chưa chọn tiêu chí nào (Hiển thị "Không có tiêu chí lọc nào được chọn" & Badge "Tìm chính xác")', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
+        const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+        if (await modal.isVisible().catch(() => false)) {
+          // Verify empty criteria subtext
+          const emptyText = modal.locator('text=/Không có tiêu chí lọc nào được chọn/i').first();
+          const exactBadge = modal.locator('text=/Tìm chính xác/i').first();
 
-          const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
-          if (await modal.isVisible().catch(() => false)) {
-            // Verify empty criteria subtext
-            const emptyText = modal.locator('text=/Không có tiêu chí lọc nào được chọn/i').first();
-            const exactBadge = modal.locator('text=/Tìm chính xác/i').first();
-
-            if (await emptyText.isVisible().catch(() => false)) {
-              await expect(emptyText).toBeVisible();
-            }
-            if (await exactBadge.isVisible().catch(() => false)) {
-              await expect(exactBadge).toBeVisible();
-            }
+          if (await emptyText.isVisible().catch(() => false)) {
+            await expect(emptyText).toBeVisible();
+          }
+          if (await exactBadge.isVisible().catch(() => false)) {
+            await expect(exactBadge).toBeVisible();
           }
         }
       }
@@ -612,7 +569,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_FILTER_006: Kiểm tra Popup "Lưu bộ lọc" khi chọn các thẻ danh mục (Hà Nội, Hồ Chí Minh, Đà Nẵng) & BẬT Toggle (Hiển thị danh sách thẻ & Badge "Tìm tương đối")', async ({ page }) => {
-      // Select multiple categories
+      // Select category filter
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
       if (await categorySelect.isVisible().catch(() => false)) {
         await categorySelect.click({ force: true });
@@ -637,24 +594,18 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
       await loginIfNeeded(page);
 
-      // Open 3-dots menu -> Lưu bộ lọc
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      // Open Bookmark "Lưu bộ lọc" modal
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
-
-          const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
-          if (await modal.isVisible().catch(() => false)) {
-            // Verify badge "Tìm tương đối" or "Tìm chính xác"
-            const modeBadge = modal.locator('text=/Tìm tương đối|Tìm chính xác/i').first();
-            if (await modeBadge.isVisible().catch(() => false)) {
-              await expect(modeBadge).toBeVisible();
-            }
+        const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+        if (await modal.isVisible().catch(() => false)) {
+          // Verify badge "Tìm tương đối" or "Tìm chính xác"
+          const modeBadge = modal.locator('text=/Tìm tương đối|Tìm chính xác/i').first();
+          if (await modeBadge.isVisible().catch(() => false)) {
+            await expect(modeBadge).toBeVisible();
           }
         }
       }
@@ -664,33 +615,27 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_FILTER_007: Kiểm tra Cảnh báo thông báo lỗi "Tên bộ lọc không được để trống" khi để trống ô Tên bộ lọc', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
+        const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+        if (await modal.isVisible().catch(() => false)) {
+          const nameInput = modal.locator('input[placeholder*="tên"i], input[name="name"]').first();
+          if (await nameInput.isVisible().catch(() => false)) {
+            await nameInput.fill('');
+          }
 
-          const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
-          if (await modal.isVisible().catch(() => false)) {
-            const nameInput = modal.locator('input[placeholder*="tên"i], input[name="name"]').first();
-            if (await nameInput.isVisible().catch(() => false)) {
-              await nameInput.fill('');
-            }
+          const submitSaveBtn = modal.locator('button:has-text("Lưu bộ lọc")').last();
+          if (await submitSaveBtn.isVisible().catch(() => false)) {
+            await submitSaveBtn.click({ force: true });
+            await page.waitForTimeout(500);
 
-            const submitSaveBtn = modal.locator('button:has-text("Lưu bộ lọc")').last();
-            if (await submitSaveBtn.isVisible().catch(() => false)) {
-              await submitSaveBtn.click({ force: true });
-              await page.waitForTimeout(500);
-
-              // Verify red validation message "Tên bộ lọc không được để trống"
-              const errorText = modal.locator('text=/Tên bộ lọc không được để trống/i').first();
-              if (await errorText.isVisible().catch(() => false)) {
-                await expect(errorText).toBeVisible();
-              }
+            // Verify red validation message "Tên bộ lọc không được để trống"
+            const errorText = modal.locator('text=/Tên bộ lọc không được để trống/i').first();
+            if (await errorText.isVisible().catch(() => false)) {
+              await expect(errorText).toBeVisible();
             }
           }
         }
@@ -701,42 +646,36 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_FILTER_008: Kiểm tra Toggle "Đăng ký nhận thông báo" (Tắt -> Bật) & Nhập tên bộ lọc ("bộ lọc 1") -> Bấm "Lưu bộ lọc" hiển thị nút "Đang lưu..."', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
+        const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+        if (await modal.isVisible().catch(() => false)) {
+          // Toggle notification switch
+          const notifySwitch = modal.locator('button[role="switch"], input[type="checkbox"]').first();
+          if (await notifySwitch.isVisible().catch(() => false)) {
+            await notifySwitch.click({ force: true }).catch(() => {});
+            await page.waitForTimeout(300);
+          }
 
-          const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
-          if (await modal.isVisible().catch(() => false)) {
-            // Toggle notification switch
-            const notifySwitch = modal.locator('button[role="switch"], input[type="checkbox"]').first();
-            if (await notifySwitch.isVisible().catch(() => false)) {
-              await notifySwitch.click({ force: true }).catch(() => {});
-              await page.waitForTimeout(300);
-            }
+          // Fill filter name "bộ lọc 1"
+          const nameInput = modal.locator('input[placeholder*="tên"i], input[name="name"]').first();
+          if (await nameInput.isVisible().catch(() => false)) {
+            await nameInput.fill('bộ lọc 1');
+          }
 
-            // Fill filter name "bộ lọc 1"
-            const nameInput = modal.locator('input[placeholder*="tên"i], input[name="name"]').first();
-            if (await nameInput.isVisible().catch(() => false)) {
-              await nameInput.fill('bộ lọc 1');
-            }
+          // Click submit button "Lưu bộ lọc"
+          const submitSaveBtn = modal.locator('button:has-text("Lưu bộ lọc")').last();
+          if (await submitSaveBtn.isVisible().catch(() => false)) {
+            await submitSaveBtn.click({ force: true });
+            await page.waitForTimeout(300);
 
-            // Click submit button "Lưu bộ lọc"
-            const submitSaveBtn = modal.locator('button:has-text("Lưu bộ lọc")').last();
-            if (await submitSaveBtn.isVisible().catch(() => false)) {
-              await submitSaveBtn.click({ force: true });
-              await page.waitForTimeout(300);
-
-              // Verify button changes text to "Đang lưu..."
-              const loadingBtn = modal.locator('button:has-text("Đang lưu")').first();
-              if (await loadingBtn.isVisible().catch(() => false)) {
-                await expect(loadingBtn).toBeVisible();
-              }
+            // Verify button changes text to "Đang lưu..."
+            const loadingBtn = modal.locator('button:has-text("Đang lưu")').first();
+            if (await loadingBtn.isVisible().catch(() => false)) {
+              await expect(loadingBtn).toBeVisible();
             }
           }
         }
@@ -747,26 +686,19 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_FILTER_009: Kiểm tra nút "Huỷ" và nút đóng "X" trên Popup "Lưu bộ lọc"', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const threeDotsBtn = page.locator('button:has(i.fa-ellipsis-vertical), button:has(i.fa-ellipsis-v), button:has(i.fa-ellipsis), [data-slot="popover-trigger"]').last();
-      if (await threeDotsBtn.isVisible().catch(() => false)) {
-        await threeDotsBtn.click({ force: true });
-        await page.waitForTimeout(500);
+      const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+      if (await bookmarkBtn.isVisible().catch(() => false)) {
+        await bookmarkBtn.click({ force: true });
+        await page.waitForTimeout(1000);
 
-
-        const saveOption = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Lưu bộ lọc/i }).first();
-        if (await saveOption.isVisible().catch(() => false)) {
-          await saveOption.click({ force: true });
-          await page.waitForTimeout(1000);
-
-          const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
-          if (await modal.isVisible().catch(() => false)) {
-            // Click "Huỷ" button inside modal
-            const cancelModalBtn = modal.locator('button:has-text("Huỷ"), button:has-text("Hủy")').first();
-            if (await cancelModalBtn.isVisible().catch(() => false)) {
-              await cancelModalBtn.click({ force: true });
-              await page.waitForTimeout(500);
-              await expect(modal).not.toBeVisible();
-            }
+        const modal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+        if (await modal.isVisible().catch(() => false)) {
+          // Click "Huỷ" button inside modal
+          const cancelModalBtn = modal.locator('button:has-text("Huỷ"), button:has-text("Hủy")').first();
+          if (await cancelModalBtn.isVisible().catch(() => false)) {
+            await cancelModalBtn.click({ force: true });
+            await page.waitForTimeout(500);
+            await expect(modal).not.toBeVisible();
           }
         }
       }
