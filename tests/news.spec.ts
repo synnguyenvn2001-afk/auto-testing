@@ -31,7 +31,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_HOME_002: Kiểm tra click Logo Landbase hoặc Tin nổi bật cuộn lên đầu trang hoặc quay lại trang chủ', async ({ page }) => {
-      await page.goto(BASE_URL).catch(() => {});
+      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 10000 }).catch(() => {});
       await skipOnboardingTour(page);
 
       const headerLink = page.locator('header a, header img, [class*="header"] a').first();

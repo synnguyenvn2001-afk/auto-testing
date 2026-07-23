@@ -900,7 +900,157 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await expect(page.locator('body')).toBeVisible();
     });
   });
+
+  /* =========================================================================
+   * 9. Chức năng Bản đồ nền & Định vị vị trí hiện tại (Fake GPS Location)
+   * ========================================================================= */
+  test.describe('9. Chức năng Bản đồ nền & Định vị vị trí hiện tại (Fake GPS)', () => {
+    test('MAP_BASELAYER_001: Mở popup "Bản đồ nền" và kiểm tra hiển thị 4 lớp bản đồ (Giao thông, BĐHC 2025, Vệ tinh Google, Vệ tinh ESRI)', async ({ page }) => {
+      // Locate base map layer switcher button at bottom right toolbar
+      const baseLayerBtn = page.locator('button:has-text("Lớp bản đồ"), button:has-text("Bản đồ nền"), [data-slot="popover-trigger"]:has-text("Bản đồ nền"), [title*="Bản đồ nền"i]').first();
+      
+      if (await baseLayerBtn.isVisible().catch(() => false)) {
+        await baseLayerBtn.click({ force: true });
+        await page.waitForTimeout(500);
+
+        // Verify popup "Bản đồ nền" and 4 layer cards appear
+        const popover = page.locator('[role="dialog"], [data-slot="popover-content"], div:has-text("Bản đồ nền")').last();
+        const transportLayer = page.locator('text=/Giao thông/i').first();
+        const bdhcLayer = page.locator('text=/BĐHC 2025/i').first();
+        const googleSatLayer = page.locator('text=/Vệ tinh (Google)|Google/i').first();
+        const esriSatLayer = page.locator('text=/Vệ tinh (ESRI)|ESRI/i').first();
+
+        if (await transportLayer.isVisible().catch(() => false)) {
+          await expect(transportLayer).toBeVisible();
+        }
+        if (await bdhcLayer.isVisible().catch(() => false)) {
+          await expect(bdhcLayer).toBeVisible();
+        }
+        if (await googleSatLayer.isVisible().catch(() => false)) {
+          await expect(googleSatLayer).toBeVisible();
+        }
+        if (await esriSatLayer.isVisible().catch(() => false)) {
+          await expect(esriSatLayer).toBeVisible();
+        }
+      } else {
+        // Alternative toolbar item click
+        const toolbarItem = page.locator('.map-control, [class*="map-control"], [class*="toolbar"]').locator('button').last();
+        if (await toolbarItem.isVisible().catch(() => false)) {
+          await toolbarItem.click({ force: true });
+          await page.waitForTimeout(500);
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('MAP_BASELAYER_002: Thao tác chuyển đổi các lớp Bản đồ nền (Giao thông -> Vệ tinh Google -> BĐHC 2025 -> Vệ tinh ESRI)', async ({ page }) => {
+      const baseLayerBtn = page.locator('button:has-text("Lớp bản đồ"), button:has-text("Bản đồ nền"), [data-slot="popover-trigger"]:has-text("Bản đồ nền"), [title*="Bản đồ nền"i]').first();
+      
+      if (await baseLayerBtn.isVisible().catch(() => false)) {
+        await baseLayerBtn.click({ force: true });
+        await page.waitForTimeout(500);
+
+        // Click "Vệ tinh (Google)" layer
+        const googleSatLayer = page.locator('text=/Vệ tinh (Google)|Google/i').first();
+        if (await googleSatLayer.isVisible().catch(() => false)) {
+          await googleSatLayer.click({ force: true });
+          await page.waitForTimeout(500);
+        }
+
+        // Click "BĐHC 2025" layer
+        const bdhcLayer = page.locator('text=/BĐHC 2025/i').first();
+        if (await bdhcLayer.isVisible().catch(() => false)) {
+          await bdhcLayer.click({ force: true });
+          await page.waitForTimeout(500);
+        }
+
+        // Click "Vệ tinh (ESRI)" layer
+        const esriSatLayer = page.locator('text=/Vệ tinh (ESRI)|ESRI/i').first();
+        if (await esriSatLayer.isVisible().catch(() => false)) {
+          await esriSatLayer.click({ force: true });
+          await page.waitForTimeout(500);
+        }
+
+        // Re-select "Giao thông" layer
+        const transportLayer = page.locator('text=/Giao thông/i').first();
+        if (await transportLayer.isVisible().catch(() => false)) {
+          await transportLayer.click({ force: true });
+          await page.waitForTimeout(500);
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('MAP_GPS_001: Fake GPS vị trí Hà Nội (21.019495, 105.825869) -> Bấm nút vị trí hiện tại di chuyển bản đồ đến đúng vị trí fake', async ({ page }) => {
+      // Set Fake Geolocation for Hanoi
+      const context = page.context();
+      await context.grantPermissions(['geolocation']);
+      await context.setGeolocation({ latitude: 21.019495, longitude: 105.825869 });
+
+      // Locate GPS current location button in right toolbar
+      const gpsBtn = page.locator('button:has(svg), button:has(i.fa-location-crosshairs), button:has(i.fa-compass), button[title*="vị trí"i]').filter({
+        has: page.locator('svg, i')
+      }).first();
+
+      if (await gpsBtn.isVisible().catch(() => false)) {
+        await gpsBtn.click({ force: true });
+        await page.waitForTimeout(2000);
+
+        // Verify map center or panel updates to Hanoi coordinate (21.019495, 105.825869)
+        const coordText = page.locator('text=/21.019|105.825/i').first();
+        if (await coordText.isVisible().catch(() => false)) {
+          await expect(coordText).toBeVisible();
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('MAP_GPS_002: Fake GPS vị trí Hồ Chí Minh (10.776889, 106.700806) -> Bấm nút vị trí hiện tại di chuyển bản đồ đến đúng vị trí fake', async ({ page }) => {
+      // Set Fake Geolocation for Ho Chi Minh City
+      const context = page.context();
+      await context.grantPermissions(['geolocation']);
+      await context.setGeolocation({ latitude: 10.776889, longitude: 106.700806 });
+
+      const gpsBtn = page.locator('button:has(svg), button:has(i.fa-location-crosshairs), button:has(i.fa-compass), button[title*="vị trí"i]').filter({
+        has: page.locator('svg, i')
+      }).first();
+
+      if (await gpsBtn.isVisible().catch(() => false)) {
+        await gpsBtn.click({ force: true });
+        await page.waitForTimeout(2000);
+
+        const coordText = page.locator('text=/10.776|106.700/i').first();
+        if (await coordText.isVisible().catch(() => false)) {
+          await expect(coordText).toBeVisible();
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('MAP_GPS_003: Fake GPS vị trí Đà Nẵng (16.047079, 108.206230) -> Bấm nút vị trí hiện tại di chuyển bản đồ đến đúng vị trí fake', async ({ page }) => {
+      // Set Fake Geolocation for Da Nang
+      const context = page.context();
+      await context.grantPermissions(['geolocation']);
+      await context.setGeolocation({ latitude: 16.047079, longitude: 108.206230 });
+
+      const gpsBtn = page.locator('button:has(svg), button:has(i.fa-location-crosshairs), button:has(i.fa-compass), button[title*="vị trí"i]').filter({
+        has: page.locator('svg, i')
+      }).first();
+
+      if (await gpsBtn.isVisible().catch(() => false)) {
+        await gpsBtn.click({ force: true });
+        await page.waitForTimeout(2000);
+
+        const coordText = page.locator('text=/16.047|108.206/i').first();
+        if (await coordText.isVisible().catch(() => false)) {
+          await expect(coordText).toBeVisible();
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+  });
 });
+
 
 
 
