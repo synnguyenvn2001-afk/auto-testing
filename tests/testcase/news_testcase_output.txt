@@ -1,0 +1,193 @@
+﻿node.exe : Giao diện trang chủ
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Giao diện trang chủ:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+"KỊCH BẢN KIỂM THỬ
+Dự án: <<Landbase>>",,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Số trường hợp kiểm thử đạt (Pass),,,,0,,,,,,
+Số trường hợp kiểm thử không đạt (Fail),,,,0,,,,,,
+Số trường hợp kiểm thử Không test(Pending),,,,0,,,,,,
+Tổng số trường hợp kiểm thử,,,,0,,,,,,
+,,,,,,,,,,
+Mã trường hợp kiểm thử,"Chức năng
+<<Liệt kê các chức năng cần kiểm thử>>","Mô tả
+<< Mô tả test case đáp ứng có kịch bản >>","Điều kiện tiên quyết
+<< Mô tả điều kiện cần đáp ứng >>","Các bước thực hiện
+<< Mô tả test case đáp ứng có kịch bản >>","Dữ liệu test
+<<Dữ liệu cần để thực hiện kịch bản>>","Kết quả mong muốn
+<< Mô tả kết quả mong muốn >>","Kết quả
+<<Trạng thái Test>>",Người thực hiện,Ngày thực hiện,"Ghi chú
+<< Bằng chứng lỗi, mã lỗi >>"
+Kiểm tra tổng quan giao diện,,,,,,,,,,
+,Kiểm tra giao diện chung,Kiểm tra bố cục layout cân đối ,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn.
+2. Kiểm tra bố cục, các chức năng, tin tức
+- Header: Logo Landbase, Tin nổi bật, Tin địa phương (mới/ cũ), Vĩ mô, Đấu giá, Quy hoạch, Khởi công, Bất động sản 360, Đăng ký Đăng nhập (khi chưa đăng nhập tài khoản), Tên và ảnh tài khoản (Khi đăng nhập)
+- Tìm kiếm: Tìm kiếm tin tức, Danh mục tìm kiếm, Toogle tim kiếm danh mục, Ngày bắt đầu, Ngày kết thúc, Nút xóa tất cả, Nút lưu bộ lọc, Nút tìm kiếm, Tìm kiếm nhanh(Chỉ khi đăng nhập và đã lưu bộ lọc)
+- Body: Tin mới nhất, Tin địa phương, Tin vĩ mô, Tin đấu giá, Tin quy hoạch, Tin khởi công, Tin giải phóng mặt bằng, Tin đền bù
+- Thông báo: Hiện chuông thông báo khi đăng nhập
+- Footer",,"Bố cục hiển thị cân đối, không bị tràn viền. Hiển thị đủ các chức năng của trang tin tức",,,,
+,Kiểm tra giao diện chung,Kiểm tra bố cục màn hình 1920 x 1080,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn.
+2. Kiểm tra bố cục, các chức năng, tin tức",,"Bố cục hiển thị cân đối, không bị tràn viền. Hiển thị đủ các chức năng của trang tin tức",,,,
+,Kiểm tra giao diện chung,Kiểm tra bố cục màn hình 1440 x 769,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn.
+2. Kiểm tra bố cục, các chức năng, tin tức",,"Bố cục hiển thị cân đối, không bị tràn viền. Hiển thị đủ các chức năng của trang tin tức",,,,
+,Kiểm tra giao diện chung,Kiểm tra bố cục màn hình 1280 x 720,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn.
+2. Kiểm tra bố cục, các chức năng, tin tức",,"Bố cục hiển thị cân đối, không bị tràn viền. Hiển thị đủ các chức năng của trang tin tức",,,,
+Kiểm tra nội dung màn hình,,,,,,,,,,
+Thanh header,,,,,,,,,,
+,Kiểm tra đường dẫn header,Logo Landbase,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Tại trang chính bấm vào logo Landbase ở header",,Không thay đổi,,,,
+,,Logo Landbase,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Kéo scrool chuột xuống dưới
+3. Bấm vào logo Landbase ở header",,Lên đầu trang của trang chủ,,,,
+,,Logo Landbase,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Mở một tin tức bất kỳ
+3. Bấm vào logo Landbase ở header",,Quay trở lại trang chủ,,,,
+,,Tin nổi bật,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Tại trang chính bấm vào Tin nổi bật ở header",,Không thay đổi,,,,
+,,Tin nổi bật,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Kéo scrool chuột xuống dưới
+3. Bấm vào Tin nổi bật ở header",,Lên đầu trang của trang chủ,,,,
+,Kiểm tra đường dẫn header,Tin nổi bật,,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Mở một tin tức bất kỳ
+3. Bấm vào logo Tin nổi bật ở header",,Quay trở lại trang chủ,,,,
+,Kiểm tra đường dẫn header,Tin địa phương (mới),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (mới)",,Hiện dropdown list của các tỉnh thành phố sau sát nhập,,,,
+,,Tin địa phương (mới),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (mới)
+3. Hover chuột vào dropdown list của Tin địa phương (mới) tại Miền Bắc, Miền Trung, Miền Nam",,"Hiện dropdown list chứa thành phố, tỉnh của khu vực đã chọn",,,,
+,,Tin địa phương (mới),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (mới)
+3. Hover chuột vào dropdown list của Tin địa phương (mới) tại Miền Bắc, Miền Trung, Miền Nam
+4. Chọn 1 thẻ tỉnh, thành phố trong dropdown list",,Mở màn tìm kiếm với thẻ thành phố/ tỉnh đã chọn,,,,
+,Kiểm tra đường dẫn header,Tin địa phương (cũ),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (cũ)",,Hiện dropdown list của các tỉnh thành phố sau sát nhập,,,,
+,,Tin địa phương (cũ),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (cũ)
+3. Hover chuột vào dropdown list của Tin địa phương (cũ) tại Miền Bắc, Miền Trung, Miền Nam",,"Hiện dropdown list chứa thành phố, tỉnh của khu vực đã chọn",,,,
+,,Tin địa phương (cũ),,"1. Mở trình duyệt, truy cập vào URL trang chủ news.landbase.vn
+2. Hover chuột vào Tin địa phương (cũ)
+3. Hover chuột vào dropdown list của Tin địa phương (cũ) tại Miền Bắc, Miền Trung, Miền Nam
+4. Chọn 1 thẻ tỉnh, thành phố trong dropdown list",,Mở màn tìm kiếm với thẻ thành phố/ tỉnh đã chọn,,,,
+,Kiểm tra đường dẫn header,Vĩ mô,,1. Bấm vào thẻ Vĩ mô trên header,,Mở màn tìm kiếm với thẻ Vĩ mô,,,,
+,Kiểm tra đường dẫn header,Đấu giá,,1. Bấm vào thẻ Đấu giá trên header,,Mở màn tìm kiếm với thẻ Đấu giá,,,,
+,Kiểm tra đường dẫn header,Quy hoạch,,1. Bấm vào thẻ Quy hoạch trên header,,Mở màn tìm kiếm với thẻ Quy hoạch,,,,
+,Kiểm tra đường dẫn header,Khởi công,,1. Bấm vào thẻ Khởi công trên header,,Mở màn tìm kiếm với thẻ Khởi công,,,,
+,Kiểm tra đường dẫn header,Bất động sản 360,,1. Bấm vào thẻ Bất động sản 360 trên header,,Mở liên kết đi đến trang https://bds360.landbase.vn/,,,,
+,Kiểm tra đường dẫn header,Tin hot trong ngày,Chưa đăng nhập,1. Bấm vào thẻ Tin hot trong ngày,,Mở màn hình đăng nhập,,,,
+,,Tin hot trong ngày,Đã đăng nhập tài khoản,1. Bấm vào thẻ Tin hot trong ngày,,Mở pop up tin nóng BĐS trong ngày,,,,
+,Kiểm tra phím chức năng,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Bấm vào nguồn tin,,Mở tin tức nguồn đó ở tab mới,,,,
+,,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Bấm vào chỉa sẻ lên facebook,,Mở tab chia sẻ tin lên facebook,,,,
+,,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Bấm sao chép liên kết,,"Sao chiếp liên kết vào clipboard và hiện popup ""Sao chéo url thành công""",,,,
+,,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Bấm phím múi tên ->,,Đi đến nhóm tin tiếp theo,,,,
+,,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Bấm phím múi tên <-,,Đi đến nhóm tin ở trước,,,,
+,,Tin hot trong ngày,Đã mở pop up tin hot trong ngày,1. Đợi 5-10s,,Tự động chuyển đến nhóm tin tức tiếp theo,,,,
+,,Đăng nhập,Chưa đăng nhập,1. Bấm vào nút đăng nhập,,Chuyển sang màn đăng nhập,,,,
+,,Đăng ký,Chưa đăng nhập,1. Bấm vào nút đăng ký,,Chuyển sang màn đăng ký,,,,
+,,Kiểm tra hiển thị avatar và tên người dùng sau khi đăng nhập.,Đã đăng nhập tài khoản,"1. Kiểm tra xem avatar của người dùng có hiển thị trên header hay không.
+2. Kiểm tra xem tên của người dùng có hiển thị chính xác bên cạnh avatar hay không.",,Avatar và tên người dùng hiển thị chính xác trên header.,,,,
+,,Kiểm tra droplist khi click vào avatar.,Người dùng đã đăng nhập thành công và avatar/tên hiển thị trên header.,"1. Click vào avatar trên header.
+2. Kiểm tra xem một droplist có các mục 'Thông tin tài khoản', 'Đăng xuất', 'Tài khoản chuyên gia' (nếu có) hiển thị hay không.",,Droplist hiển thị đầy đủ các mục như mô tả.,,,,
+,,Kiểm tra chức năng 'Thông tin tài khoản'.,Người dùng đã đăng nhập thành công và droplist đã hiển thị.,"1. Click vào avatar trên header.
+2. Click vào mục 'Thông tin tài khoản'.",,Hệ thống chuyển đến trang 'Thông tin tài khoản'.,,,,
+,,Kiểm tra chức năng 'Đăng xuất'.,Người dùng đã đăng nhập thành công và droplist đã hiển thị.,"1. Click vào avatar trên header.
+2. Click vào mục 'Đăng xuất'.",,Người dùng được đăng xuất khỏi hệ thống và chuyển về trang chủ ,,,,
+,,Kiểm tra hiển thị mã QR Business card khi đăng ký tài khoản nhà cung cấp,Người dùng đã đăng nhập thành công và đã đăng ký tài khoản nhà cung cấp,"1. Click vào avatar trên header.
+2. Kiểm tra xem mã QR Business card có hiển thị hay không.",,Mã QR Business card hiển thị.,,,,
+Trang tin tức,,,,,,,,,,
+,Kiểm tra giao diện,Kiểm tra hiển thị danh sách tin mới nhất trên trang chủ ,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin mới nhất"".
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.
+",,"Khu vực ""Tin mới nhất"" hiển thị đầy đủ. Hiển thị 4 tin tức mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị danh sách tin mới nhất trên trang chủ ,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin mới nhất"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với tất cả các tin tức.,,,,
+,,Kiểm tra hiển thị  Tin địa phương trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News 360 trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin địa phương'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin địa phương"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ địa phương mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị  Tin địa phương trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News 360 trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin địa phương'.
+3. Người dùng cho phép lấy vị trí định vị
+4. Kiểm tra thẻ tin và vị trí người dùng.",,Thẻ trong tin địa phương khớp với định vị của người dùng,,,,
+,,Kiểm tra hiển thị  Tin địa phương trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News 360 trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin địa phương'.
+3. Người dùng cho phép lấy vị trí định vị
+4. Kiểm tra thẻ tin và vị trí người dùng.",,Thẻ trong tin địa phương mặc định có Hà Nội,,,,
+,,Kiểm tra hiển thị  Tin địa phương trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin địa phương"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ của tin địa phương,,,,
+,,Kiểm tra hiển thị Tin vĩ mô trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin vĩ mô'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin vĩ mô"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ vĩ mô mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị Tin vĩ mô trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin vĩ mô"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Vĩ mô,,,,
+,,Kiểm tra hiển thị Tin đấu giá trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin đấu giá'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin đấu giá"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ đấu giá mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị Tin đấu giá trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin đấu giá"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Đấu giá,,,,
+,,Kiểm tra hiển thị Tin quy hoạch trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin quy hoạch́'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin quy hoạch"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ quy hoạch mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị Tin quy hoạch trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin quy hoạch"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Quy hoạch,,,,
+,,Kiểm tra hiển thị Tin khởi công trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin khởi công'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin khởi công"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ quy hoạch mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị Tin khởi công trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin khởi công"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Khởi công,,,,
+,,Kiểm tra hiển thị Tin giải phóng mặt bằng trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin giải phóng mặt bằng'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin giải phóng mặt bằng"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ giải phóng mặt bằng mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,Kiểm tra hiển thị Tin giải phóng mặt bằng trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin giải phóng mặt bằng"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Giải phóng mặt bằng,,,,
+,,Kiểm tra hiển thị Tin đền bù mặt bằng trên PC,Người dùng truy cập trang chủ News,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Cuộn xuống mục 'Tin đền bù'.
+3. Kiểm tra số lượng tin hiển thị.
+4. Kiểm tra các thông tin hiển thị của mỗi tin.",,"Khu vực ""Tin đền bù"" hiển thị đầy đủ. Hiển thị 4 tin tức có thẻ đền bù mới nhất. Mỗi tin hiển thị đầy đủ: Ảnh, Tiêu đề, Thời gian đăng bài, Thẻ.",,,,
+,,,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực ""Tin đền bù"".
+3 Nhấn nút xem tất cả",,Hệ thống điều hướng đến trang kết quả tìm kiếm với thẻ Đền bù,,,,
+,Kiểm tra Phím chức năng,Kiểm tra chức năng cửa phím Lưu tin ,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Hover chuột trên nút Lưu tin",,Hiện chú thích Lưu tin,,,,
+,,Kiểm tra chức năng cửa phím Lưu tin ,Người dùng chưa đăng nhập,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Bấm nút Lưu tin",,"Hiển thị popup ""Vui lòng đăng nhập để có thể lưu tin tức"" ",,,,
+,,,Người dùng đã đăng nhập tài khoản,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3. Chọn bài viết chưa được lưu
+4. Bấm nút Lưu tin",,"Hiên popup ""Lưu tin tức thành công"" và lưu tin trong tài khoản",,,,
+,,,Người dùng đã đăng nhập tài khoản,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3. Chọn bài viết đã được lưu
+4. Bấm nút Lưu tin",,"Hiên popup ""Bỏ lưu tin tức thành công"" và lưu tin trong tài khoản",,,,
+,,Kiểm tra chức năng cửa phím Chia sẻ lên facebook,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Hover chuột trên nút Chia sẻ lên facebook",,Hiện chú thích Chia sẻ lên facebook,,,,
+,,Kiểm tra chức năng cửa phím Chia sẻ lên facebook,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Bấm nút Chia sẻ lên facebook",,Mở tab chia sẻ bài viết trên facebook,,,,
+,,,,,,,,,,
+,,Kiểm tra chức năng cửa phím Copy đường dẫn,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Hover chuột trên nút Copy đường dẫn",,Hiện chú thích Copy đường dẫn,,,,
+,,Kiểm tra chức năng cửa phím Copy đường dẫn,,"1. Truy cập trang chủ News trên trình duyệt PC.
+2. Scrool vị trí khu vực có bài viết
+3 Bấm nút Copy đường dẫn",,Copy đường dẫn của bài viết,,,,

@@ -1,0 +1,107 @@
+﻿node.exe : Tin rao vặt
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Tin rao vặt:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+"KỊCH BẢN KIỂM THỬ
+Dự án: <<Tên dự án>>",,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+Số trường hợp kiểm thử đạt (Pass),,,x,34,,,,,,,
+Số trường hợp kiểm thử không đạt (Fail),,,,2,,,,,,,
+Số trường hợp kiểm thử Không test(Pending),,,,0,,,,,,,
+Tổng số trường hợp kiểm thử,,,,43,,,,,,,
+,,,,,,,,,,,
+Mã trường hợp kiểm thử,"Chức năng
+<<Liệt kê các chức năng cần kiểm thử>>","Mô tả
+<< Mô tả test case đáp ứng có kịch bản >>","Điều kiện tiên quyết
+<< Mô tả điều kiện cần đáp ứng >>","Các bước thực hiện
+<< Mô tả test case đáp ứng có kịch bản >>","Dữ liệu test
+<<Dữ liệu cần để thực hiện kịch bản>>","Kết quả mong muốn
+<< Mô tả kết quả mong muốn >>","Kết quả
+<<Trạng thái Test>>",Người thực hiện,Ngày thực hiện,"Ghi chú
+<< Bằng chứng lỗi, mã lỗi >>",
+UI,,,,,,,,,,,
+UI_TINRAO_001,Màn danh sách tin rao vặt,Kiểm tra giao diện danh sách tin rao vặt hiển thị đúng bố cục,Có dữ liệu tin rao,"1. Truy cập màn Tin rao vặt
+2. Quan sát giao diện danh sách",Danh sách nhiều tin rao,"Hiển thị tiêu đề khu vực, các tin dạng card theo lưới, card không bị lệch/vỡ layout",Pass,TBD,TBD,Happy case,
+UI_TINRAO_002,Card tin rao,Kiểm tra thông tin hiển thị trên card tin rao,Có dữ liệu tin rao,"1. Quan sát từng card tin
+2. Kiểm tra các thông tin hiển thị","Tin có ảnh, tiêu đề, mô tả, diện tích, giá","Card hiển thị đầy đủ ảnh, tiêu đề, mô tả ngắn, diện tích, giá/m², icon lưu",Pass,TBD,TBD,Happy case,
+UI_TINRAO_003,Card tin rao,Kiểm tra toàn bộ card có trạng thái có thể click,Có dữ liệu tin rao,"1. Di chuột vào ảnh, tiêu đề, mô tả, giá, diện tích trên card
+2. Quan sát trạng thái hover",Card bất kỳ,"Toàn bộ vùng card thể hiện là có thể click; cursor/hover thống nhất, không gây hiểu nhầm vùng click",Pass,TBD,TBD,Đã xác nhận: click vùng nào cũng mở chi tiết,
+UI_TINRAO_004,Card tin rao,Kiểm tra tiêu đề/mô tả dài không làm vỡ giao diện card,Có tin rao tiêu đề hoặc mô tả dài,"1. Truy cập danh sách
+2. Quan sát card có nội dung dài",Tiêu đề dài nhiều ký tự,Nội dung được xuống dòng hoặc giới hạn dòng hợp lý; không tràn khỏi card; không đè lên giá/diện tích,Chưa test,TBD,TBD,Expectation case,Lúc nào thấy mô tả dài xem n hiển thị sao
+UI_TINRAO_005,Phân trang,Kiểm tra giao diện phân trang,Danh sách có nhiều trang,"1. Cuộn xuống cuối danh sách
+2. Quan sát phân trang","Trang 1, 2, …, 348, Sau, Trước",Trang hiện tại được highlight; nút “Trước” disable tại trang đầu; nút “Sau” hiển thị rõ,Pass,TBD,TBD,Happy case,
+UI_TINRAO_006,Phân trang danh sách tin rao,Kiểm tra mặc định mỗi trang hiển thị tối đa 6 tin rao,Hệ thống có từ 7 tin rao trở lên,"1. Truy cập màn Tin rao vặt
+2. Quan sát số lượng card tin rao trên trang đầu tiên",Danh sách > 6 tin,Màn hình mặc định hiển thị đúng 6 tin rao / 1 trang; không hiển thị thừa quá 6 tin,Pass,TBD,TBD,Happy case,
+UI_TINRAO_007,Phân trang danh sách tin rao,Kiểm tra bố cục 6 tin trên 1 trang hiển thị đúng layout,Hệ thống có từ 6 tin rao trở lên,"1. Truy cập màn Tin rao vặt
+2. Quan sát bố cục danh sách tin",6 tin rao trên trang,"6 tin hiển thị theo dạng lưới, mỗi hàng 3 tin như ảnh; khoảng cách giữa các card đồng đều; không bị lệch/vỡ layout",Pass,TBD,TBD,Happy case,
+UI_TINRAO_008,Phân trang danh sách tin rao,Kiểm tra UI phân trang hiển thị khi tổng số tin lớn hơn 6,Hệ thống có nhiều hơn 6 tin rao,"1. Truy cập màn Tin rao vặt
+2. Cuộn xuống cuối danh sách
+3. Quan sát khu vực phân trang",Tổng số tin > 6,"Khu vực phân trang hiển thị ở cuối danh sách; có nút “Trước”, số trang, dấu “…”, trang cuối và nút “Sau”",Pass,TBD,TBD,Happy case,
+UI_TINRAO_009,Phân trang danh sách tin rao,Kiểm tra UI phân trang khi tổng số tin nhỏ hơn hoặc bằng 6,Hệ thống có tối đa 6 tin rao,"1. Truy cập màn Tin rao vặt
+2. Quan sát danh sách và khu vực cuối trang",Tổng số tin ≤ 6,Hiển thị tối đa 6 tin; phân trang nên được ẩn hoặc chỉ hiển thị trang 1 theo thiết kế; không hiển thị nút phân trang dư thừa gây nhầm lẫn,Chưa test,TBD,TBD,Expectation case - cần xác nhận thiết kế ẩn hay hiện phân trang,
+UI_TINRAO_010,Phân trang danh sách tin rao,Kiểm tra trạng thái trang hiện tại,Đang ở trang đầu tiên,"1. Truy cập màn Tin rao vặt
+2. Quan sát phân trang",Trang 1,"Số trang hiện tại được highlight nổi bật,người dùng nhận biết đang ở trang nào",Pass,TBD,TBD,Happy case,
+UI_TINRAO_011,Phân trang danh sách tin rao,Kiểm tra trạng thái nút “Trước” ở trang đầu tiên,Đang ở trang 1,"1. Truy cập màn Tin rao vặt
+2. Quan sát nút “Trước”",Trang 1,Nút “Trước” hiển thị trạng thái disabled/mờ; không gây hiểu nhầm là có thể quay về trang trước,Pass,TBD,TBD,Happy case,
+UI_TINRAO_012,Phân trang danh sách tin rao,Kiểm tra trạng thái nút “Sau” ở trang đầu tiên,Hệ thống có từ 7 tin rao trở lên,"1. Truy cập màn Tin rao vặt
+2. Quan sát nút “Sau”","Trang 1, tổng số trang > 1",Nút “Sau” : Enable,Pass,TBD,TBD,Happy case,
+UI_TINRAO_013,Phân trang danh sách tin rao,Kiểm tra UI sau khi chuyển sang trang 2,Hệ thống có từ 7 tin rao trở lên,"1. Truy cập màn Tin rao vặt
+2. Click nút “Sau” hoặc số trang 2
+3. Quan sát danh sách và phân trang",Trang 2,Trang 2 được highlight; danh sách vẫn hiển thị tối đa 6 tin; layout card không bị thay đổi bất thường,Pass,TBD,TBD,Happy case,
+UI_TINRAO_014,Phân trang danh sách tin rao,Kiểm tra click số trang bất kỳ trên phân trang,Hệ thống có nhiều trang,"1. Truy cập màn Tin rao vặt
+2. Click số trang 2 hoặc trang cuối
+3. Quan sát UI phân trang","Trang 2, trang 348","Số trang được chọn chuyển sang trạng thái active; các nút phân trang vẫn căn giữa, không bị nhảy layout",Pass,TBD,TBD,Happy case,
+UI_TINRAO_015,Phân trang danh sách tin rao,Kiểm tra UI dấu “…” khi có nhiều trang,"Hệ thống có nhiều trang, ví dụ 348 trang",1. Truy cập màn Tin rao vặt2. Quan sát khu vực phân trang,"Trang 1, 2, …, 348","Dấu “…” hiển thị hợp lý giữa các nhóm trang; không chiếm quá nhiều không gian; người dùng vẫn nhìn được trang đầu, trang gần hiện tại và trang cuối",Pass,TBD,TBD,Happy case,
+UI_TINRAO_016,Phân trang danh sách tin rao,Kiểm tra UI trang cuối khi số tin không chia hết cho 6,Tổng số tin không chia hết cho 6,"1. Truy cập danh sách
+2. Click đến trang cuối
+3. Quan sát số lượng card",Ví dụ tổng 20 tin → trang cuối có 2 tin,Trang cuối hiển thị số tin còn lại nhỏ hơn 6; các card vẫn căn chỉnh đẹp; không xuất hiện card trắng hoặc khoảng trống gây lỗi layout,Pass,TBD,TBD,Expectation case,
+UI_TINRAO_017,Phân trang danh sách tin rao,Kiểm tra trạng thái nút “Sau” ở trang cuối,Đang ở trang cuối,"1. Truy cập trang cuối danh sách
+2. Quan sát nút “Sau”","Trang cuối, ví dụ 348",Nút “Sau” hiển thị trạng thái disabled/mờ; không gây hiểu nhầm là còn trang tiếp theo,Pass,TBD,TBD,Happy case,
+UI_TINRAO_018,Phân trang danh sách tin rao,Kiểm tra trạng thái nút “Trước” khi không ở trang đầu,Đang ở trang 2 trở đi,"1. Chuyển sang trang 2
+2. Quan sát nút “Trước”",Trang 2,Nút “Trước” : Enable,Pass,TBD,TBD,Happy case,
+UI_TINRAO_019,Phân trang danh sách tin rao,Kiểm tra vị trí phân trang sau khi danh sách có đúng 6 tin,Hệ thống có đúng 6 tin trên trang hiện tại,"1. Truy cập màn danh sách
+2. Quan sát cuối danh sách",6 tin/trang,K hiển thị PHÂN TRANG,Pass,TBD,TBD,Happy case,
+UI_TINRAO_020,Phân trang danh sách tin rao,Kiểm tra responsive phân trang trên mobile/tablet,Có nhiều hơn 6 tin rao,1. Mở màn Tin rao vặt2. Chuyển viewport sang tablet/mobile3. Quan sát phân trang,"375px, 768px","Phân trang không bị tràn ngang; các nút đủ lớn để bấm; số trang/dấu “…” hiển thị gọn, dễ thao tác",Chưa test,TBD,TBD,Expectation case,
+UI_TINRAO_021,Phân trang danh sách tin rao,Kiểm tra UI loading khi chuyển trang,"Có nhiều hơn 6 tin rao, mạng chậm hoặc mô phỏng loading","1. Truy cập danh sách
+2. Click “Sau” hoặc số trang
+3. Quan sát trạng thái trong lúc tải",Chuyển từ trang 1 sang trang 2,Có trạng thái loading/skeleton/spinner phù hợp nếu dữ liệu chưa tải xong; không hiển thị lẫn dữ liệu cũ và mới gây nhầm lẫn,Chưa test,TBD,TBD,Expectation case,
+UI_TINRAO_022,Phân trang danh sách tin rao,Kiểm tra UI khi tổng số trang ít,Hệ thống có dữ liệu chỉ 1–2 trang,"1. Truy cập danh sách có ít trang
+2. Quan sát phân trang",Tổng 1 trang hoặc 2 trang,"Nếu chỉ có 1 trang, phân trang  ẩn nếu có 2 trang, không hiển thị dấu “…” thừa",Pass,TBD,TBD,Expectation case,
+UI_TINRAO_023,Màn chi tiết bất động sản,Kiểm tra giao diện chi tiết sau khi click card,Có ít nhất 1 tin rao,"1. Click vào card bất kỳ
+2. Quan sát màn chi tiết",Tin rao bất kỳ,"Hiển thị tiêu đề “Chi tiết bất động sản”, khối “Tổng quan bất động sản”, thông tin không bị vỡ layout",Chưa test,TBD,TBD,Happy case,
+UI_TINRAO_024,Tổng quan BĐS - user đã đăng nhập,Kiểm tra UI hiển thị SĐT và Nguồn khi user đã đăng nhập,User đã đăng nhập,"1. Đăng nhập hệ thống
+2. Mở chi tiết tin rao
+3. Quan sát mục Tổng quan/Thông tin chi tiết",User hợp lệ,Số điện thoại và Nguồn hiển thị đầy đủ như ảnh; không bị che/mask; layout rõ ràng,Pass,TBD,TBD,Happy case,
+UI_TINRAO_025,Tổng quan BĐS - user chưa đăng nhập,Kiểm tra UI ẩn/mask SĐT và Nguồn khi user chưa đăng nhập,User chưa đăng nhập,"1. Mở chi tiết tin rao
+2. Quan sát SĐT và Nguồn",User anonymous,SĐT và Nguồn bị ẩn/mask bằng icon con mắt; không hiển thị thông tin thật,Pass,TBD,TBD,Đã xác nhận,
+UI_TINRAO_026,Icon con mắt,Kiểm tra icon con mắt hiển thị dễ hiểu với thông tin bị ẩn,User chưa đăng nhập,1. Mở chi tiết tin rao2. Quan sát icon con mắt tại SĐT/Nguồn,SĐT/Nguồn bị ẩn,"Icon con mắt hiển thị rõ, đúng vị trí, người dùng hiểu có thể bấm để xem thêm",Pass,TBD,TBD,Expectation case,
+UI_TINRAO_027,Responsive,Kiểm tra giao diện danh sách và chi tiết trên màn hình nhỏ,Có thiết bị mobile/tablet hoặc devtools,1. Mở danh sách/chi tiết2. Chuyển viewport mobile/tablet3. Quan sát layout,"375px, 768px, 1366px","Không có scroll ngang; card và thông tin chi tiết tự co giãn; icon con mắt, Lưu, Quay lại vẫn thao tác được",Chưa test,TBD,TBD,Expectation case,
+FUNC,,,,,,,,,,,
+FUNC_TINRAO_001,Danh sách tin rao vặt,Kiểm tra load danh sách tin rao thành công,Hệ thống có dữ liệu tin rao,"1. Truy cập màn Tin rao vặt
+2. Chờ dữ liệu tải xong",Danh sách tin rao,Danh sách tin rao hiển thị thành công; không báo lỗi; mỗi tin có dữ liệu cơ bản,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_002,Danh sách tin rao vặt,Kiểm tra trường hợp không có dữ liệu,API trả danh sách rỗng hoặc không có tin phù hợp,1. Truy cập danh sách2. Mô phỏng dữ liệu rỗng,[],"Hệ thống hiển thị "" image và text nội dung "" Không tìm thấy tin rao vặt nào phù hợp""; không hiển thị card lỗi hoặc màn trắng",Pass,TBD,TBD,Expectation case,
+FUNC_TINRAO_003,Click card tin rao,Kiểm tra click vào ảnh trên card mở chi tiết,Có ít nhất 1 tin rao,1. Truy cập danh sách2. Click vào ảnh của card,Card bất kỳ,Hệ thống điều hướng sang màn chi tiết đúng tin đã chọn,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_004,Click card tin rao,Kiểm tra click vào tiêu đề trên card mở chi tiết,Có ít nhất 1 tin rao,"1. Truy cập danh sách
+2. Click vào tiêu đề card",Card bất kỳ,Hệ thống điều hướng sang màn chi tiết đúng tin đã chọn,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_007,Dữ liệu chi tiết,Kiểm tra dữ liệu chi tiết khớp với card đã click,Có tin rao trên danh sách,"1. Ghi nhận tiêu đề, giá, diện tích trên card
+2. Click card
+3. So sánh thông tin ở chi tiết","Tin giá 25 triệu, diện tích 100m²","Tiêu đề, giá, diện tích, ảnh chính ở chi tiết khớp với card đã chọn",Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_008,Chi tiết BĐS - user đã đăng nhập,Kiểm tra user đã đăng nhập xem đầy đủ thông tin chi tiết,User đã đăng nhập,"1. Đăng nhập
+2. Mở chi tiết tin rao
+3. Kiểm tra SĐT và Nguồn",User hợp lệ,SĐT và Nguồn hiển thị đầy đủ; không bị che; các thông tin khác hiển thị như ảnh,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_009,Chi tiết BĐS - user chưa đăng nhập,Kiểm tra user chưa đăng nhập bị ẩn SĐT và Nguồn,User chưa đăng nhập,1. Mở chi tiết tin rao2. Kiểm tra SĐT và Nguồn,User anonymous,SĐT và Nguồn không hiển thị trực tiếp; thay bằng icon con mắt hoặc trạng thái bị ẩn,Pass,TBD,TBD,Expectation case,
+FUNC_TINRAO_010,Xem SĐT khi chưa đăng nhập,Kiểm tra user chưa đăng nhập bấm xem SĐT bị điều hướng đăng nhập,User chưa đăng nhập,1. Mở chi tiết tin rao2. Click icon con mắt tại SĐT,SĐT bị ẩn,Hệ thống điều hướng đến màn Đăng nhập; không hiển thị SĐT trước khi đăng nhập,Pass,TBD,TBD,Đã xác nhận,
+FUNC_TINRAO_011,Xem Nguồn khi chưa đăng nhập,Kiểm tra user chưa đăng nhập bấm xem Nguồn bị điều hướng đăng nhập,User chưa đăng nhập,1. Mở chi tiết tin rao2. Click icon con mắt tại Nguồn,Nguồn bị ẩn,Hệ thống điều hướng đến màn Đăng nhập; không hiển thị Nguồn trước khi đăng nhập,Pass,TBD,TBD,Đã xác nhận,
+FUNC_TINRAO_012,Lưu tin khi chưa đăng nhập,Kiểm tra user chưa đăng nhập bấm Lưu tin bị điều hướng đăng nhập,User chưa đăng nhập,1. Mở danh sách hoặc chi tiết tin rao2. Click nút/icon Lưu tin,Tin rao bất kỳ,Hệ thống điều hướng đến màn Đăng nhập; tin chưa được lưu,Pass,TBD,TBD,Đã xác nhận,
+FUNC_TINRAO_013,Lưu tin khi đã đăng nhập,Kiểm tra user đã đăng nhập lưu tin thành công,User đã đăng nhập,1. Đăng nhập2. Mở danh sách hoặc chi tiết3. Click Lưu tin,"User hợp lệ, tin rao bất kỳ",Tin được lưu thành công; trạng thái icon Lưu thay đổi; nếu có thông báo thì hiển thị thông báo thành công,Fail,TBD,TBD,Happy case,
+FUNC_TINRAO_014,Bỏ lưu tin,Kiểm tra user đã đăng nhập bỏ lưu tin đã lưu,"User đã đăng nhập, tin đã được lưu",1. Mở tin đã lưu2. Click lại icon/nút Lưu,Tin đã lưu,Tin được bỏ lưu; trạng thái icon cập nhật lại; dữ liệu lưu được cập nhật đúng,Fail,TBD,TBD,Happy case,
+FUNC_TINRAO_015,Quay lại,Kiểm tra nút Quay lại từ chi tiết về danh sách,Đã mở chi tiết từ danh sách,"1. Click card bất kỳ từ danh sách2. Tại chi tiết, click Quay lại",Tin rao bất kỳ,Hệ thống quay về màn danh sách; không mất trạng thái trang hiện tại nếu có phân trang,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_016,Phân trang,Kiểm tra chuyển sang trang tiếp theo,Danh sách có nhiều trang,"1. Ở trang 1, click “Sau”2. Quan sát dữ liệu",Trang 1 → Trang 2,Danh sách tải dữ liệu trang 2; trang active đổi sang 2,Pass,TBD,TBD,Happy case,
+FUNC_TINRAO_017,Phân trang,Kiểm tra nút “Trước” tại trang đầu,Đang ở trang 1,1. Truy cập trang 12. Click hoặc quan sát nút “Trước”,Trang 1,Nút “Trước” bị disable hoặc không thực hiện hành động; không gọi page âm,Pass,TBD,TBD,Expectation case,
+FUNC_TINRAO_018,Chi tiết tin không tồn tại,Kiểm tra mở URL chi tiết với tin không tồn tại,Có URL/ID không tồn tại,1. Nhập URL chi tiết với ID sai2. Truy cập,ID không tồn tại,Hiển thị thông báo không tìm thấy tin hoặc trang lỗi thân thiện; không trắng màn,Pass,TBD,TBD,Expectation case,
+FUNC_TINRAO_019,Lỗi tải dữ liệu,Kiểm tra khi API danh sách/chi tiết lỗi,Có thể mô phỏng lỗi server/network,1. Truy cập danh sách hoặc chi tiết2. Mô phỏng lỗi 500/timeout,API lỗi,Hiển thị thông báo lỗi không hiển thị dữ liệu sai; không crash trang,Chưa test,TBD,TBD,Expectation case,
+,,,,,,,,,,,

@@ -1,0 +1,570 @@
+﻿node.exe : Đăng ký
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Đăng ký:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+"KỊCH BẢN KIỂM THỬ
+Dự án: <<Tên dự án>>",,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Số trường hợp kiểm thử đạt (Pass),,,x,116,,,,,,
+Số trường hợp kiểm thử không đạt (Fail),,,,0,,,,,,
+Số trường hợp kiểm thử Không test(Pending),,,,0,,,,,,
+Tổng số trường hợp kiểm thử,,,,116,,,,,,
+,,,,,,,,,,
+Mã trường hợp kiểm thử,"Chức năng
+<<Liệt kê các chức năng cần kiểm thử>>","Mô tả
+<< Mô tả test case đáp ứng có kịch bản >>","Điều kiện tiên quyết
+<< Mô tả điều kiện cần đáp ứng >>","Các bước thực hiện
+<< Mô tả test case đáp ứng có kịch bản >>","Dữ liệu test
+<<Dữ liệu cần để thực hiện kịch bản>>","Kết quả mong muốn
+<< Mô tả kết quả mong muốn >>","Kết quả
+<<Trạng thái Test>>",Người thực hiện,Ngày thực hiện,"Ghi chú
+<< Bằng chứng lỗi, mã lỗi >>"
+Kiểm tra giao diện màn Đăng ký,,,,,,,,,,
+,Kiểm tra giao diện chung,Kiểm tra bố cục layout cân đối ,Ngươi dùng chưa đăng nhập tk,"1. Mở trình duyệt web trên PC
+2. Truy cập URL màn hình Đăng ký.
+3. Kiểm tra các thành phần giao diện
+4. Kiểm tra kích thước và vị trí các thành phần, đảm bảo hiển thị đầy đủ và không bị che khuất.",,Màn hình Đăng ký hiển thị đầy đủ và chính xác các thành phần giao diện trên PC,,,,
+,,,,"1. Mở trình duyệt web trên PC với độ phân giải màn hình 1920x1080.
+2. Truy cập URL màn hình Đăng ký.
+3. Kiểm tra các thành phần giao diện
+4. Kiểm tra kích thước và vị trí các thành phần, đảm bảo hiển thị đầy đủ và không bị che khuất.",,Màn hình Đăng ký hiển thị đầy đủ và chính xác các thành phần giao diện trên PC với độ phân giải 1920x1080.,,,,
+,,,,"1. Mở trình duyệt web trên PC với độ phân giải màn hình 1440x769.
+2. Truy cập URL màn hình Đăng ký.
+3. Kiểm tra các thành phần giao diện
+4. Kiểm tra kích thước và vị trí các thành phần, đảm bảo hiển thị đầy đủ và không bị che khuất.",,Màn hình Đăng ký hiển thị đầy đủ và chính xác các thành phần giao diện trên PC với độ phân giải 1440x769.,,,,
+,,,,"1. Mở trình duyệt web trên PC với độ phân giải màn hình 1280x720.
+2. Truy cập URL màn hình Đăng ký.
+3. Kiểm tra các thành phần giao diện
+4. Kiểm tra kích thước và vị trí các thành phần, đảm bảo hiển thị đầy đủ và không bị che khuất.",,Màn hình Đăng ký hiển thị đầy đủ và chính xác các thành phần giao diện trên PC với độ phân giải 1280x720.,,,,
+Kiểm tra chức năng màn đăng ký,,,,,,,,,,
+Tên đăng nhập,,,,,,,,,,
+,Kiểm tra nhập tên đăng nhập hợp lệ,Xác minh người dùng có thể nhập tên đăng nhập hợp lệ vào ô nhập liệu tên đăng nhập.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập hợp lệ (chỉ chữ và số) vào ô 'Tên đăng nhập'.
+3. Quan sát phản hồi của hệ thống.",user1788,Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký full chữ cái hoa/ thường,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký full chữ cái,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""username""
+""THANHTHUY""",Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký full chữ cái mix ký tự hoa và thường,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký full chữ cái,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","
+""Thanhthaoo""",Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký full chữ số,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký full chữ cái,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""222222232""",Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra nhập tên đăng nhập là chuỗi full ký tự đặc biệt,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký tự đặc biệt.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập chứa ký tự đặc biệt vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",!!!!!@@@##,"Hệ thống hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra nhập tên đăng nhập chứa ký tự đặc biệt,Xác minh hệ thống không cho phép nhập tên đăng nhập chứa ký tự đặc biệt.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập chứa ký tự đặc biệt vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",user78!,"Hệ thống hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra nhập tên đăng nhập chứa khoảng trắng,Xác minh hệ thống không cho phép nhập tên đăng nhập chứa khoảng trắng.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập chứa khoảng trắng vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",user name,"Hệ thống hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra tên đăng nhập không trùng lặp,Xác minh hệ thống ngăn chặn việc tạo tài khoản với tên đăng nhập đã tồn tại.,Đã có tài khoản được tạo,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập một tên đăng nhập đã tồn tại trong cơ sở dữ liệu.
+3. Nhập các thông tin khác hợp lệ (mật khẩu, ...).
+4. Nhấn Đăng ký.",user178,"Hệ thống hiển thị popub thông báo lỗi cho biết ""Tên đăng nhập đã được sử dụng"".",Pass,Pass,,
+,Kiểm tra cảnh báo tên đăng nhập trống,Xác minh hệ thống hiển thị cảnh báo khi bỏ trống trường tên đăng nhập.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Bỏ trống trường Tên đăng nhập.
+3. Nhập các thông tin khác hợp lệ.
+4. Nhấn Đăng ký.",,"Hệ thống show inline:
+Vui lòng điền tên đăng nhập",Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự all sapce ,Xác minh hệ thống không cho phép nhập tên đăng nhập chứa ký tự all sapce,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""              ""","Hệ thống tự đọng trim dữ liệu
+ - hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký chữ cái và ký tự đặc biệt,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký chữ cái và ký tự đặc biệt,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""user^78""","Hệ thống tự đọng trim dữ liệu
+ - hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký chữ số và ký tự đặc biệt,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký chữ cái và ký tự đặc biệt,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""^^78""","Hệ thống tự đọng trim dữ liệu
+ - hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự có chứa dấu tiếng việt,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự có chứa dấu tiếng việt,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",Đặng thị 234,"Hệ thống tự đọng trim dữ liệu
+ - hiển thị thông báo lỗi 'Vui lòng nhập đúng định dạng. Ví dụ: anhnv, anhnv123""",Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái < 100 ký tự (=1 ký tự),Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái < 100 ký tự ,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""u""",Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái < 100 ký tự (=1 ký tự),Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái < 100 ký tự ,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.","""user23""",Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái = 100 ký tự ,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái = 100 ký tự ,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",Abc123Abc123Abc123Abc123Abc123Abc123Abc123Abc123XYZAbc123Abc123Abc123Abc123Abc123Abc123Abc123Abc1236,Hệ thống chấp nhận tên đăng nhập hợp lệ,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự hợp lệ chứa space ở đầu/cuối,Xác minh hệ thống không cho phép nhập tên đăng nhập là chuỗi ký tự hợp lệ chứa space ở đầu/cuối,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát thông báo lỗi.",""" thanhnha""
+""thanhthuy ""
+"" thanhthuy """,Hệ thống hiển thị thông báo lỗi 'Tên đăng nhập không được chứa khoảng trắng'. Không cho phép tiếp tục cho đến khi tên đăng nhập hợp lệ.,Pass,,,
+,Kiểm tra khi nhập tên đăng nhập là chuỗi ký tự hợp lệ với độ dái > 100 ký tự ,Xác minh hệ thống giới hạn độ dài tối đa của tên đăng nhập.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập  vào ô 'Tên đăng nhập'.
+3. Quan sát phản hồi của hệ thống.","""user34263274763558....""",Hệ thống hiển thị thông báo lỗi 'Tên đăng nhập không được vượt quá 100ký tự' ,Pass,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Mật khẩu + Nhập lại mật khẩu,,,,,,,,,,
+,Kiểm tra hiển thị khi nhập dữ liệu vào trường Mật khẩu,Xác minh trường Mật khẩu được mã hóa sau khi nhập data,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập một chuỗi bất kỳ vào trường Mật khẩu.
+3. Quan sát ký tự hiển thị.",,Các ký tự nhập vào trường Mật khẩu được mã hóa và hiển thị dạng *******,Pass,,,
+,Đăng ký thành công với mật khẩu hợp lệ,Kiểm tra đăng ký thành công khi nhập đầy đủ các điều kiện của mật khẩu,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
+4. Nhập XNMK khớp với MK
+5.Nhấn Đăng ký.","Tên đăng nhập:user1788
+MK: User12345%^@
+XNMK: User12345%^@",Hệ thống đăng ký thành công và chuyển hướng đến trang chủ hoặc trang xác nhận tài khoản.,Pass,,,
+,Kiểm tra khi nhập dữ liệu hợp lệ ,Xác minh người dùng có thể nhập MK hợp lệ vào ô nhập liệu Mật khẩu.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập mật khẩu có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
+3. Quan sát ký tự hiển thị",User12345%,Hệ thống chấp nhận MK  hợp lệ,Pass,,,
+,Kiểm tra khi nhập dữ liệu với độ dài < minlength ( 8 ký tự),Xác minh hệ thống không cho phép nhập dữ liệu với độ dài < minlength ( 8 ký tự) ,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có 6 ký tự.
+4. Nhấn nút Đăng ký.",User2%,"Hệ thống show inline:
+Tối thiểu 8 ký tự. Bao gồm chữ in hoa, chữ thường, số và ký tự đặc biệt",Pass,,,
+,Kiểm tra khi nhập dữ liệu hợp lệ với độ dài = minlength ( 8 ký tự),Xác minh hệ thống cho phép  nhập mật khẩu có độ dài = 8 ký tự.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có độ dài = 8 ký tự.
+4. Nhấn Đăng ký.",User69^^,Hệ thống chấp nhận MK  hợp lệ,Pass,,,
+,Kiểm tra mật khẩu là chuỗi  7 ký tự,Mật khẩu dưới 8 ký tự không được chấp nhận.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có 7 ký tự.
+4. Nhấn nút Đăng ký.",User26%,"Hệ thống show inline:
+Tối thiểu 8 ký tự. Bao gồm chữ in hoa, chữ thường, số và ký tự đặc biệt",Pass,,,
+,Kiểm tra mật khẩu là chuỗi  9 ký tự,Xác minh hệ thống cho phép  nhập mật khẩu có độ dài = 9 ký tự.,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có 9 ký tự.
+4. Nhấn nút Đăng ký.",User2338%,Hệ thống chấp nhận MK  hợp lệ,Pass,,,
+,Kiểm tra khi nhập dữ liệu với độ dài > minlength ( 8 ký tự),Xác minh hệ thống không cho phép nhập dữ liệu với độ dài >  minlength ( 8 ký tự) ,,"1. Truy cập trang đăng ký.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có 15ký tự.
+4. Nhấn nút Đăng ký.",Usermember2038%,Hệ thống chấp nhận MK  hợp lệ,Pass,,,
+,Kiểm tra ký tự viết hoa trong mật khẩu,Xác minh hệ thống yêu cầu mật khẩu phải chứa ít nhất một chữ viết hoa.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập tên đăng nhập hợp lệ.
+3. Nhập mật khẩu chỉ chứa chữ thường, số và ký tự đặc biệt
+4. Nhấn Đăng ký.",abcdefg1!,"Hệ thống hiển thị thông báo lỗi yêu cầu ""Mật khẩu phải có ít nhất 1 ký tự viết hoa""",Pass,,,
+,Kiểm tra mật khẩu không có chữ viết thường,Xác minh hệ thống hiển thị thông báo lỗi khi mật khẩu không chứa ít nhất một chữ viết thường.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu chỉ chứa chữ hoa, số và ký tự đặc biệt 4. Nhấn Đăng ký.
+5. Quan sát thông báo lỗi.",ABHFD21!,Hệ thống hiển thị thông báo lỗi: 'Mật khẩu phải chứa ít nhất một chữ viết thường'.,Pass,,,
+,Kiểm tra mật khẩu không có chữ số,Xác minh hệ thống hiển thị thông báo lỗi khi mật khẩu không chứa ít nhất một chữ số.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu chỉ chứa chữ hoa, chữ thường và ký tự đặc biệt
+4. Nhấn Đăng ký.
+5. Quan sát thông báo lỗi.",Abcdgh%%,Hệ thống hiển thị thông báo lỗi: 'Mật khẩu phải chứa ít nhất một chữ số'.,Pass,,,
+,Kiểm tra mật khẩu không có ký tự đặc biệt,Xác minh hệ thống hiển thị thông báo lỗi khi mật khẩu không chứa ít nhất một ký tự đặc biệt.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu chỉ chứa chữ hoa, chữ thường và số
+4. Nhấn Đăng ký.
+5. Quan sát thông báo lỗi.",AbcDef123,Hệ thống hiển thị thông báo lỗi: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt'.,Pass,,,
+,Kiểm tra thông báo lỗi khi để trống mật khẩu,Xác minh hệ thống hiển thị thông báo lỗi khi người dùng cố gắng đăng ký mà không nhập mật khẩu.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Để trống trường mật khẩu.
+4. Nhấn Đăng ký.
+5. Quan sát thông báo lỗi.",,Hệ thống hiển thị thông báo lỗi: 'Vui lòng điền mật khẩu'.,Pass,,,
+,Kiểm tra khi nhập textbox Mật khẩu hợp lệ chứa space ở giữa,Xác minh hệ thống hiển thị thông báo lỗi khi mật khẩu  chứa chứa space ở giữa,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập chuỗi ký tự chứa dấu cách ở giữa vào trường mật khẩu.
+4. Nhấn Đăng ký.
+5. Quan sát thông báo lỗi.",Username 435523%,"Hệ thống tự động trim dữ liệu.
+- hệ thống chấp nhận MK  hợp lệ",Pass,,,
+,Kiểm tra khi nhập textbox Mật khẩu hợp lệ chứa space ở đầu/cuối,Xác minh hệ thống hiển thị thông báo lỗi khi mật khẩu  hợp lệ chứa space ở đầu/cuối,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập chuỗi ký tự chứa dấu cách ở đầu/cuối vào trường mật khẩu.
+4. Nhấn Đăng ký.
+5. Quan sát .",""" Thanhthuy6577%""
+""Thanhthuy6787% ""
+""  Thanhthuy677899% ""","Hệ thống tự động trim dữ liệu.
+- hệ thống chấp nhận MK  hợp lệ",Pass,,,
+,Kiểm tra khi nhập textbox Mật khẩu chứa chuỗi ký tự all space ,Xác minh hệ thống hiển thị thông báo lỗi khi  Mật khẩu chứa chuỗi ký tự all space ,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập chuỗi ký tự chứa all spcae vào trường mật khẩu.
+4. Nhấn Đăng ký.
+5. Quan sát .","""                        """,Hệ thống tự động trim dữ liệu và  hiển thị thông báo lỗi: 'Vui lòng điền mật khẩu'.,Pass,,,
+,Kiểm tra trường Nhập lại mật khẩu khớp với mật khẩu đã nhập,Xác minh hệ thống cho phép đăng ký khi trường 'Nhập lại mật khẩu' khớp với mật khẩu đã nhập.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu hợp lệ
+4. Nhập lại mật khẩu giống như ở bước 3 vào trường 'Nhập lại mật khẩu'.
+5. Nhấn Đăng ký.",User12345%,Hệ thống chấp nhận XNMK và tiếp tục quá trình,Pass,,,
+,Kiểm tra trường Nhập lại mật khẩu không khớp với mật khẩu đã nhập,Xác minh hệ thống hiển thị thông báo lỗi khi trường 'Nhập lại mật khẩu' không khớp với mật khẩu đã nhập.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu hợp lệ (ví dụ: Abc123!@#).
+4. Nhập một mật khẩu khác với ở bước 3 vào trường 'Nhập lại mật khẩu' (ví dụ: Def456$%^).
+5. Nhấn Đăng ký.",User123685^,"Hệ thống hiển thị thông báo lỗi :""Mật khẩu không khớp""
+",Pass,,,
+,Kiểm tra độ dài nhỏ hơn độ dài tối thiểu của mật khẩu,Xác minh hệ thống hiển thị thông báo khi mật khẩu nhỏ hơn 8 ký tự.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có độ dài 7 ký tự
+4. Nhấn Đăng ký.",User87^,"Hệ thống hiển thị thông báo lỗi :""Mật khẩu không khớp""
+",Pass,,,
+,"Kiểm tra độ dài tối thiểu của mật khẩu, và trùng khớp với MK",Xác minh hệ thống hiển thị thông báo khi mật khẩu = 8 ký tự.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu có độ dài 8 ký tự 
+4. Nhấn Đăng ký.",User60^^,Hệ thống chấp nhận XNMK và tiếp tục quá trình,Pass,,,
+,Kiểm tra cảnh báo khi bỏ trống ô nhập lại mật khẩu,Xác minh hệ thống hiển thị cảnh báo khi người dùng bỏ trống ô 'Nhập lại mật khẩu'.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu vào ô 'Mật khẩu'.
+4. Bỏ trống ô 'Nhập lại mật khẩu'.
+5. Nhấn Đăng ký.",,"Hệ thống hiển thị thông báolỗi 
+'Vui lòng xác nhận mật khẩu'.",Pass,,,
+,Kiểm tra cảnh báo khi nhập chuỗi ký tự all space,Xác minh hệ thống hiển thị cảnh báo khi người dùng nhập chuỗi ký tự all sapce,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Tên đăng nhập hợp lệ.
+3. Nhập mật khẩu vào ô 'Mật khẩu'.
+4. Nhập lại mật khẩu = Data Test
+5. Nhấn Đăng ký.","""                    ""","Hệ thống hiển thị thông báo lỗi :
+""Mật khẩu không khớp""
+",Pass,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Màn Cập nhật thông tin tài khoản,,,,,,,,,,
+,Kiểm tra tiêu đề màn hình Hoàn thiện hồ sơ,Xác minh rằng tiêu đề trên màn hình xác minh đăng ký hiển thị chính xác 'Cập nhật thông tin Hoàn thiện thông tin cá nhân của bạn'.,"Đã qua bước Tạo tài khoản
+Người dùng đang ở trên màn hình Cập nhật thông tin","1. Truy cập màn hình Xác minh đăng ký (sau khi đăng ký thành công).
+2. Kiểm tra tiêu đề hiển thị trên màn hình.",,"Tiêu đề hiển thị chính xác là ''Hoàn thiện hồ sơ""
+- Text nội dung :"" Hãy để chúng tôi giúp bạn tìm kiếm khách hàng bằng việc cung cấp thêm thông tin"".",Pass,,,
+,"Kiểm tra hiển thị màn
+Hoàn thiện hồ sơ",Kiểm tra giao diện chung MH Hoàn thiện hồ sơ,,"1. Truy cập màn hình Xác minh đăng ký (sau khi Tạo tài khoản  thành công).
+2. Kiểm tra  hiển thị giao diện chung trên màn hình.",,"Hiển thị các trường:
+ Họ và Tên * , Email*,
+Số điện thoại, Mã giới thiệu,
+nút Tiếp tục, , nút X",Pass,,,
+,Kiểm tra khi click vào textbox 'Họ và tên' trên màn hình xác minh,Kiểm tra  chức năng của textbox 'Họ và tên' trên màn hình xác minh đăng ký.,,"1. Truy cập màn hình Xác minh đăng ký.
+2. Xác minh sự tồn tại của textbox 'Họ và tên'.
+3. Nhập dữ liệu vào Textbox 'Họ và tên'.",,Textbox 'Họ và tên' hiển thị và cho phép người dùng nhập dữ liệu.,Pass,,,
+,Kiểm tra giới hạn ký tự đặc biệt trong Textbox 'Họ và tên',Kiểm tra rằng Textbox 'Họ và tên' không chấp nhận ký tự đặc biệt.,,"1. Truy cập màn hình Xác minh đăng ký.
+2. Nhập các ký tự đặc biệt vào Textbox 'Họ và tên'.
+3. Nhấn submit.",!@#$%^&*,"Hệ thống thông báo lỗi
+ ""Vui lòng nhập đúng định dạng"".",Pass,,,
+,Kiểm tra giới hạn ký tự chữ số trong Textbox 'Họ và tên',Kiểm tra rằng Textbox 'Họ và tên' không chấp nhận kýchữ số,,"1. Truy cập màn hình Xác minh đăng ký.
+2. Nhập các ký tự chữ số vào fillbox 'Họ và tên'.
+3. Nhấn submit.",233563,"Hệ thống không cho phép ký chữ số và hiển thị thông báo lỗi ""Vui lòng nhập đúng định dạng"".",Pass,,,
+,Kiểm tra fillbox 'Họ và tên' chỉ nhận chữ hoa và chữ thường,"Xác minh rằng fillbox 'Họ và tên' chỉ chấp nhận chữ hoa và chữ thường, không chấp nhận số và ký tự đặc biệt.",,"1. Truy cập màn hình Xác minh đăng ký.
+2. Nhập số vào fillbox 'Họ và tên'.
+3. Quan sát kết quả.
+4. Nhập ký tự đặc biệt vào fillbox 'Họ và tên'.
+5. Quan sát kết quả.","Vũ Thanh Thúyy
+NGUYỄN VĂN BA
+nguyen thi thanh",Fillbox 'Họ và tên' chỉ chấp nhận chữ hoa và chữ thường,Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài <70 ký tự,Kiểm tra nhập textbox Họ và tên với độ dài < minlength (<70 ký tự),,"1. Truy cập màn hình Xác minh đăng ký.
+2. Nhập data test trường 'Họ và tên'.
+3. Quan sát kết quả.",NTTT,Hệ thống cho phép nhập dữ liệu < 70 ký tự,Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài < maxlength (= 69 ký tự),Kiểm tra nhập textbox Họ và tên với độ dài < minlength (= 69 ký tự),,"1. Truy cập màn hình Xác minh đăng ký.
+2. Nhập data test trường 'Họ và tên'.
+3. Quan sát kết quả.",Nguyenthiabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcfjjee,Hệ thống cho phép nhập dữ liệu < 70 ký tự,Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài = maxlength (= 70 ký tự),Kiểm tra nhập textbox Họ và tên với độ dài = maxlength (=70 ký tự),,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với đúng 70 ký tự.
+3. Nhấn Đăng ký.",Nguyenthiabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcfjjeer,Hệ thống chấp nhận Họ và Tên có độ dài 70 ký tự và tiếp tục quá trình đăng ký.,Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài > maxlength ,Kiểm tra nhập textbox Họ và tên với độ dài > maxlength (80 ký tự),,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với đúng 80 ký tự.
+3. Nhấn Đăng ký.",Nguyenthiabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcfjjfeadhvdfwwwwe,"Hệ thống hiển thị thông báo ""Vui lòng không nhập quá 70 kí tự""",Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài > maxlength ( 71 ký tự),Kiểm tra nhập textbox Họ và tên với độ dài > maxlength (71 ký tự),,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với đúng 71 ký tự.
+3. Nhấn Đăng ký.",,Hệ thống không chấp nhận,Pass,,,
+,Kiểm tra nhập textbox Họ và tên với độ dài quá lớn,Kiểm tra nhập textbox Họ và tên với độ dài quá lớn,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với đúng 1000 ký tự.
+3. Nhấn Đăng ký.",,"Hệ thống hiển thị thông báo ""Vui lòng không nhập quá 70 kí tự""",Pass,,,
+,Kiểm tra Họ và tên - Trường hợp để trống,Kiểm tra hệ thống hiển thị cảnh báo khi bỏ trống trường Họ và Tên.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Bỏ trống trường Họ và Tên.
+3. Nhấn Đăng ký.",,Hệ thống hiển thị cảnh báo 'Vui lòng điền Họ Tên'.,Pass,,,
+,Kiểm tra Họ và tên khi nhập full  chuỗi space,Kiểm tra Họ và tên khi nhập full  chuỗi space,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập trường Họ và Tên = Data Test
+3. Nhấn Đăng ký.","""               ""","Hệ thống tự động trim dữ liệu.
+-  hiển thị cảnh báo 'Vui lòng điền Họ Tên'.",Pass,,,
+,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự chữ số,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự chữ số,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với data test
+3. Nhấn Đăng ký.",Nguyen Van A1235,"Hệ thống k cho phép.Hiển thị lỗi:
+- Vui lòng nhập đúng định dạng",Pass,,,
+,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự đặc biệt,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự đặc biệt,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với data test
+3. Nhấn Đăng ký.",Nguyen @Van A,"Hệ thống k cho phép.Hiển thị lỗi:
+- Vui lòng nhập đúng định dạng",Pass,,,
+,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự đặc biệt và chữ số,Kiểm tra khi nhập data vào Textbox Họ và tên chứa ký tự đặc biệt và chữ số,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với data test
+3. Nhấn Đăng ký.",Nguyen @Van A 123,"Hệ thống k cho phép.Hiển thị lỗi:
+- Vui lòng nhập đúng định dạng ",Pass,,,
+,Kiểm tra Họ và tên khi nhập dữ liệu hợp lệ có chứa dấu cách ở đầu cuối,Kiểm tra Họ và tên khi nhập dữ liệu có chứa dấu cách ở đầu cuối,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Họ và Tên với data test
+3. Nhấn Đăng ký.",""" Trần Thị Huyền""
+""Trần Văn B ""
+"" Đặng Thị Minh Anh ""","Hệ thống tự động trim dữ liệu.
+-  Hệ thống chấp nhận tên hợp lệ",Pass,,,
+,,,,,,,,,,
+,Kiểm tra Địa chỉ Email - Định dạng hợp lệ đúng định dạng,"Kiểm tra hệ thống chấp nhận địa chỉ email hợp lệ với đầy đủ chữ cái, chữ số, @ và .",,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập địa chỉ email hợp lệ
+3. Nhấn Đăng ký.",thaopham89@gmail.com,Hệ thống chấp nhận địa chỉ email và tiếp tục quá trình đăng ký.,Pass,,,
+,Kiểm tra Địa chỉ Email - Không có ký tự @,Kiểm tra hệ thống từ chối địa chỉ email không có ký tự @.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập địa chỉ email thiếu ký tự @
+3. Nhấn Đăng ký.",ngoclangmail.com,"Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Địa chỉ Email - Không có ký tự .,Kiểm tra hệ thống từ chối địa chỉ email không có ký tự . (chấm).,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập địa chỉ email thiếu ký tự
+3. Nhấn Đăng ký.",testemail@examplecom,"Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Địa chỉ Email - Email có khoảng trắng,Kiểm tra hệ thống từ chối địa chỉ email có chứa khoảng trắng.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập địa chỉ email có chứa khoảng trắng
+3. Nhấn Đăng ký.",test email@example.com,"Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Textbox email khi nhập email trùng với email đã tồn tại,Kiểm tra hệ thống nhận diện email đã đăng ký,Email đã được tạo trên hệ thống,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập địa chỉ email đã dùng để đăng ký
+3. Nhấn Đăng ký.",thanhthuy@gmail.com,Hệ thống báo email đã được sử dụng,Pass,,,
+,Kiểm tra Textbox email khi nhập  email thiếu tên miền,Kiểm tra hệ thống từ chối địa chỉ email thiếu tên miền,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Textbox = Data Test
+3. Nhấn Đăng ký.",thanhthu@,"Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Textbox email khi nhập  email thiếu username,Kiểm tra hệ thống từ chối địa chỉ email thiếu username,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Textbox = Data Test
+3. Nhấn Đăng ký.","""@gmail.com""","Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,"Kiểm tra Textbox email khi nhập email chứa
+@ @","Kiểm tra hệ thống từ chối địa chỉ email chứa
+@ @",,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Textbox = Data Test
+3. Nhấn Đăng ký.",ngoclan@@gmail.com,"Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Textbox email khi nhập chuỗi all space,Kiểm tra hệ thống từ chối địa chỉ email nhập chuỗi all space,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập Textbox = Data Test
+3. Nhấn Đăng ký.","""                      ""","Hệ thống hiển thị thông báo lỗi ""Email không hợp lệ""",Pass,,,
+,Kiểm tra Textbox email khi bỏ trống,Xác minh hệ thống hiển thị cảnh báo khi người dùng bỏ trống trường địa chỉ email trên màn hình xác minh đăng ký.,,"1. Truy cập màn hình xác minh đăng ký.
+2. Bỏ trống trường địa chỉ email.
+3. Nhấn vào nút tiếp tục hoặc thực hiện hành động để kích hoạt kiểm tra trường email.
+4. Quan sát thông báo hiển thị.",,Hệ thống hiển thị cảnh báo 'Vui lòng điền email'.,Pass,,,
+,"Kiểm tra Hoàn thiện hồ sơ thành công, TH:
+- Nhập data hợp lệ và đủ các trường bắt buộc","Kiểm tra Hoàn thiện hồ sơ thành công, TH:
+- Nhập data hợp lệ và đủ các trường bắt buộc",,"1. Truy cập màn hình xác minh đăng ký.
+2. Nhập data hợp lệ trường Họ và tên và địa chỉ email.
+3. Nhấn vào nút tiếp tục hoặc thực hiện hành động để kích hoạt kiểm tra trường email.
+4. Quan sát thông báo hiển thị.","Nguyễn Văn A
+nguyenvana@gmail.com","Hoàn thiện hồ sơ thành công.
+Điều hướng sang màn  Nhập OTP",Pass,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,Kiểm tra  Bỏ trống SĐT ( Trường không bắt buộc),Kiểm tra bỏ trống trường không bắt buộc,Đang ở màn Hoàn thiện hồ sơ,"1. Để trống SĐT
+2. Nhập các trường bắt buộc
+3. Nhấn “Tiếp tục”","Nguyễn Văn A
+nguyenvana@gmail.com
+Phone: Blank","Hệ thống  cho phép bỏ trống trường SDT
+- cho phép tiếp tục  thực hiện quy trình, điều hướng sang màn Nhập OTP",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT là chuỗi full chữ cái ,Kiểm tra hệ thống từ chối SDT là chuỗi full chữ cái ,Đang ở màn Hoàn thiện hồ sơ,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",Khongchinsaumot,"Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT là chuỗi full KTDB,Kiểm tra hệ thống từ chối SDT là chuỗi full KTDB,Đang ở màn Hoàn thiện hồ sơ,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",%$$$$$$$$$,"Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT là chuỗi chứa ký tự chữ cái,Kiểm tra bỏ trống trường không bắt buộc,Đang ở màn Hoàn thiện hồ sơ,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",09abc12345,"Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT là chuỗi chứa KTDB,Kiểm tra bỏ trống trường không bắt buộc,Đang ở màn Hoàn thiện hồ sơ,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",09^^12346,"Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT < 10 chữ số,Kiểm tra  khi nhập Textbox SĐT < 10 chữ số,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""09534","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT = 9 chữ số ,Kiểm tra  khi nhập Textbox SĐT =  9 chữ số,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""096474564""","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT > 10 chữ số,Kiểm tra  khi nhập Textbox SĐT > 10 chữ số,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""096474568577""","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT= 11 chữ số,Kiểm tra  khi nhập Textbox SĐT= 11 chữ số,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""096474568099""","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra  khi nhập Textbox SĐT với giá trị quá lớn,Kiểm tra  khi nhập Textbox SĐT= 1000 chữ số,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0964745680999999999999999999999999999999999999999999999999999999""","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,"Kiểm tra nhập data có dấu chấm ""."" trong SDT","Kiểm tra nhập data có dấu chấm ""."" trong SDT",,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0912.345678","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra nhập data chứa dấu cách ở giữa SĐT,Kiểm tra nhập data chứa dấu cách ở giữa SĐT,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0912 345678","Hệ thống show inline:
+""Số điện thoại k hợp lệ""",Pass,,,
+,Kiểm tra nhập data chứa dấu cách ở đầu/ cuối SĐT,Kiểm tra nhập data chứa dấu cách ở đầu SĐT,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",""" 0912345679""
+""0912345678 ""
+"" 0912345678 """,Hệ thống không tự trim để hợp lệ; phải chặn nhập hoặc hiển thị lỗi định dạng SĐT,Pass,,,
+,"Copy/Paste SĐT hợp lệ
+chứa dấu cách","Copy/Paste SĐT hợp lệ
+chứa dấu cách",,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",""" 0912345678""
+""0912345678 ""
+"" 0912345678 """,Hệ thống không tự trim để hợp lệ; phải chặn nhập hoặc hiển thị lỗi định dạng SĐT,Pass,,,
+,,,,,,,,,,
+,Kiểm tra nhập số điện thoại  bắt đầu != 0,Xác minh hệ thống không cho phép người dùng nhập số điện thoại không bắt đầu bằng 0 vào trường số điện thoại trên màn hình xác minh đăng ký.,,"1. Truy cập màn hình xác minh đăng ký.
+2. Nhập số điện thoại có 10 chữ số nhưng không bắt đầu bằng 0.
+3. Quan sát giá trị nhập vào trường số điện thoại.",1264647884,Hệ thống không cho phép nhập số điện thoại không bắt đầu bằng 0.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 00",Kiểm tra xem hệ thống từ chối số điện thoại không hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0045768956",Hệ thống hiển thị thông báo lỗi cho biết số điện thoại không hợp lệ.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 01",Kiểm tra xem hệ thống từ chối số điện thoại không hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0145768957",Hệ thống hiển thị thông báo lỗi cho biết số điện thoại không hợp lệ.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 02",Kiểm tra xem hệ thống từ chối số điện thoại không hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0245768958",Hệ thống hiển thị thông báo lỗi cho biết số điện thoại không hợp lệ.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 04",Kiểm tra xem hệ thống từ chối số điện thoại không hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0445768959",Hệ thống hiển thị thông báo lỗi cho biết số điện thoại không hợp lệ.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 06",Kiểm tra xem hệ thống từ chối số điện thoại không hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”","""0645768960",Hệ thống hiển thị thông báo lỗi cho biết số điện thoại không hợp lệ.,Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 03",Kiểm tra xem hệ thống chấp nhận số điện thoại  hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",,"Hệ thống chấp nhận SDT hợp lệ
+- Điều hướng sang MH nhập OTP",Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 05",Kiểm tra xem hệ thống chấp nhận số điện thoại  hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",,"Hệ thống chấp nhận SDT hợp lệ
+- Điều hướng sang MH nhập OTP",Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 07",Kiểm tra xem hệ thống chấp nhận số điện thoại  hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",,"Hệ thống chấp nhận SDT hợp lệ
+- Điều hướng sang MH nhập OTP",Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 08",Kiểm tra xem hệ thống chấp nhận số điện thoại  hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",,"Hệ thống chấp nhận SDT hợp lệ
+- Điều hướng sang MH nhập OTP",Pass,,,
+,"Kiểm tra nhập Textbox SDT, TH:
+- độ dài = 10 chữ số
+- Bắt đầu = 09",Kiểm tra xem hệ thống chấp nhận số điện thoại  hợp lệ ,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test
+3.Nhấn “Tiếp tục”",,"Hệ thống chấp nhận SDT hợp lệ
+- Điều hướng sang MH nhập OTP",Pass,,,
+,Kiểm tra Coppy/paste + Nhập SĐT có mã quốc gia +84,Kiểm tra Coppy/paste + Nhập SĐT có mã quốc gia +84,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test hợp lệ
+3.Nhấn “Tiếp tục”
+4. Refresh trang
+5. Quan sát",+84912345678,Hiển thị lỗi “Số điện thoại không đúng định dạng”,Pass,,,
+,Kiểm tra Coppy/paste + Nhập  SĐT dạng có ngoặc mã vùng,Kiểm tra Coppy/paste + Nhập  SĐT dạng có ngoặc mã vùng,,"1. Nhập các trường bắt buộc
+2. Nhập trường SDT = Data Test hợp lệ
+3.Nhấn “Tiếp tục”
+4. Refresh trang
+5. Quan sát","""(091)2345678",Hiển thị lỗi “Số điện thoại không đúng định dạng”,Pass,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,Kiểm tra bỏ trống Mã giới thiệu ,Kiểm tra hệ thống chấp nhận bỏ trống mã giới thiệu,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập thông tin đăng ký hợp lệ.
+3. Không nhập mã giới thiệu hợp lệ vào Textbox.
+4. Nhấn nút Đăng ký.",refCode: blank,"Hệ thống cho phép bỏ trống
+- Tiếp tục hành trình",Pass,,,
+1,Kiểm tra Mã giới thiệu - Nhập mã giới thiệu hợp lệ,Kiểm tra việc nhập mã giới thiệu hợp lệ vào fillbox.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập thông tin đăng ký hợp lệ.
+3. Nhập mã giới thiệu hợp lệ vào fillbox.
+4. Nhấn nút Đăng ký.",,Hệ thống chấp nhận mã giới thiệu và tiếp tục quá trình đăng ký.,Pass,,,
+,Kiểm tra Mã giới thiệu - Nhập mã giới thiệu không tồn tại,Kiểm tra việc hệ thống kiểm tra mã giới thiệu có tồn tại trong hệ thống hay không.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập thông tin đăng ký hợp lệ.
+3. Nhập mã giới thiệu không tồn tại vào fillbox.
+4. Nhấn nút Đăng ký.",INVALID999,"Hệ thống hiển thị thông báo lỗi ""Mã giới thiệu không tồn tại. Vui lòng kiểm tra lại mã giới thiệu hoặc liên hệ hỗ trợ.""",Pass,,,
+,Kiểm tra Mã giới thiệu - Nhập mã giới thiệu không hợp lệ (ký tự đặc biệt),Kiểm tra việc hệ thống từ chối mã giới thiệu chứa ký tự đặc biệt.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập thông tin đăng ký hợp lệ.
+3. Nhập mã giới thiệu chứa ký tự đặc biệt vào fillbox.
+4. Nhấn nút Đăng ký.",,Hệ thống hiển thị thông báo lỗi yêu cầu mã giới thiệu chỉ chứa chữ và số.,Pass,,,
+,Kiểm tra Mã giới thiệu - Nhập mã giới thiệu dài hơn 9 ký tự,Kiểm tra giới hạn ký tự tối đa của mã giới thiệu.,,"1. Truy cập màn hình Đăng ký tài khoản.
+2. Nhập thông tin đăng ký hợp lệ.
+3. Nhập mã giới thiệu dài hơn 10 ký tự vào fillbox.
+4. Nhấn nút Đăng ký.",,Hệ thống chặn hơn 09 ký tự,Pass,,,
+,Auto fill điền Mã giới thiệu khi mà gửi link bằng REF,,,"1. Truy cập hệ thống bằng link REF
+2. Nhập thông tin đăng ký hợp lệ.
+3. Hệ thống tự auto fill mã giới thiệu vào fillbox.
+4. Nhấn nút Đăng ký.",,Hệ thống chấp nhận mã giới thiệu và tiếp tục quá trình đăng ký.,Pass,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Màn Xác thực OTP,,,,,,,,,,
+,Kiểm tra giao diện màn hình xác thực OTP,Kiểm tra bố cục màn xác minh,Người dùng đã cập nhật thông tin thành công,"1. Truy cập màn hình Xác thực OTP.
+2. Quan sát màn xác minh email",,Màn hình xác minh email hiển thị đầy đủ và chính xác các thành phần giao diện trên PC,Pass,,,
+,Kiểm tra chấp nhận mã xác minh chỉ chứa chữ số,Kiểm tra hệ thống chỉ chấp nhận mã xác minh là chữ số.,,"1. Truy cập màn hình Xác minh email.
+2. Nhập mã xác minh chứa ký tự chữ cái hoặc ký tự đặc biệt/ all sapce
+3. Nhấn nút 'Xác minh'.","ABCJDE
+!!!!!!!!!@","Hệ thống chặn, k cho phép nhập ký tự ngoài ký tự số",Pass,,,
+,Kiểm tra cảnh báo khi không nhập mã xác minh,Xác minh hệ thống hiển thị cảnh báo khi người dùng cố gắng xác minh mà không nhập mã.,,"1. Truy cập màn hình Xác minh email.
+2. Để trống ô nhập mã xác minh.
+3. Nhấn nút 'Xác minh'.",,Nút Tiếp tục :Disable,Pass,,,
+,Kiểm tra khi không nhập đủ 6 số vào box,,,"1. Truy cập màn hình Xác minh email.
+2. Để trống ô nhập mã xác minh.
+3. Nhấn nút 'Xác minh'.",,Nút Tiếp tục :Disable,Pass,,,
+,,,,,,,,,,
+,Kiểm tra nhập mã OTP còn thời hạn nhưng của email khác,,,"1. Truy cập màn hình Xác minh email.
+2. Để trống ô nhập mã xác minh.
+3. Nhấn nút 'Xác minh'.",,"Hiển thị thông báo ""Mã kích hoạt không chính xác""",Pass,,,
+,Kiểm tra khi nhập mã OTP sai,Xác minh hệ thống xử lý đúng khi người dùng nhập sai mã xác minh.,,"1. Truy cập màn hình Xác minh email.
+2. Nhập một mã xác minh không đúng.
+3. Nhấn nút 'Tiếp tục'.",,"Hiển thị ""Mã kích hoạt không hợp lệ"". Tăng bộ đếm thất bại ",Pass,,,
+Chưa,Kiểm tra khi nhập mã OTP hợp lệ  tại  phút 15,,,"1. Truy cập màn hình Xác minh email.
+2. Yêu cầu gửi mã xác minh.
+3. Đúng phút 15.
+4. Nhập mã xác minh đã nhận.
+5. Nhấn nút 'Tiếp tục'.",,Điều hướng sang MH chọn Role,Pass,,,
+Chưa,Kiểm tra hiệu lực của mã xác minh sau 15 phút,Xác nhận mã xác minh chỉ có hiệu lực trong vòng 15 phút.,,"1. Truy cập màn hình Xác minh email.
+2. Yêu cầu gửi mã xác minh.
+3. Chờ 16 phút.
+4. Nhập mã xác minh đã nhận.
+5. Nhấn nút 'Tiếp tục'.",,Hệ thống hiển thị thông báo lỗi 'Mã kích hoạt không chính xác' ,Pass,,,
+ass,Kiểm tra gửi lại mã xác minh,Xác minh chức năng gửi lại mã xác minh hoạt động chính xác.,,"1. Truy cập màn hình Xác thực OTP
+2. Nhấn nút 'Gửi lại mã '.
+3. Kiểm tra email.",,Một email mới chứa mã xác minh mới được gửi đến địa chỉ email đã đăng ký.,Pass,,,
+ass,Vô hiệu hóa mã kích hoạt cũ khi nhận mã kích hoạt mới,Kiểm tra mã kích hoạt cũ bị vô hiệu hóa khi người dùng yêu cầu nhận mã kích hoạt mới trong quá trình xác minh email.,,"1. Truy cập màn hình xác minh email sau khi đăng ký.
+2. Nhập mã kích hoạt đã được gửi trước đó (mã cũ).
+3. Yêu cầu nhận mã kích hoạt mới.
+4. Nhập lại mã kích hoạt cũ.
+5. Nhấn Xác nhận.",,Hệ thống thông báo mã kích hoạt không hợp lệ hoặc đã hết hạn.,Pass,,,
+,,,,,,,,,,
+,Kiểm tra thời gian chờ 60 giây trước khi gửi lại mã kích hoạt,Xác minh người dùng phải đợi ít nhất 60 giây trước khi có thể yêu cầu gửi lại mã kích hoạt email.,,"1. Truy cập màn hình xác minh email.
+2. Yêu cầu gửi mã kích hoạt.
+3. Chờ 59 giây.
+4. Yêu cầu gửi lại mã kích hoạt.
+5. Chờ thêm 1 giây.
+6. Yêu cầu gửi lại mã kích hoạt.",,"Trong vòng 60 giây đầu tiên, hệ thống hiển thị thông báo yêu cầu chờ trước khi gửi lại mã. Sau 60 giây, hệ thống cho phép gửi lại mã.
+Nút bị disable, hiển thị thời gian còn lại ",Pass,,,
+,Kích hoạt tài khoản thành công khi nhập đúng mã xác minh,Kiểm tra tài khoản được kích hoạt thành công và chuyển hướng đến màn hình đăng nhập khi người dùng nhập đúng mã xác minh.,,"1. Truy cập màn hình xác minh email.
+2. Nhập đúng mã xác minh đã được gửi đến email.
+3. Nhấn nút 'Xác nhận'.",,Hệ thống hiển thị thông báo 'Kích hoạt tài khoản thành công' và tự động chuyển hướng đến màn hình ChọnRole,Pass,,,
+,Thử lại sau 60s khi nhấn liên tục nút 'Nhận lại mã',Kiểm tra hệ thống chặn việc nhấn liên tục nút 'Nhận lại mã' trước khi hết thời gian chờ.,,"1. Truy cập màn hình xác minh email.
+2. Nhấn nút 'Nhận lại mã'.
+3. Nhấn liên tục nút 'Nhận lại mã' trong vòng 60 giây.",,"Hệ thống gửi OTP mới, reset đếm ngược",Pass,,,
+,Kiểm tra OTP sau khi xác thực không được tái sử dụng,,OTP đã dùng,Nhập lại OTP cũ,OTP đã dùng,Hiển thị OTP không hợp lệ,Pass,,,

@@ -1,0 +1,225 @@
+﻿"KỊCH BẢN KIỂM THỬ
+Dự án: <<Tên dự án>>",,,,,,,,,,
+,,,,,,,,,,
+,,,,,,,,,,
+Số trường hợp kiểm thử đạt (Pass),,,x,0,,,,,,
+Số trường hợp kiểm thử không đạt (Fail),,,,0,,,,,,
+Số trường hợp kiểm thử Không test(Pending),,,,0,,,,,,
+Tổng số trường hợp kiểm thử,,,,0,,,,,,
+,,,,,,,,,,
+Mã trường hợp kiểm thử,"Chức năng
+<<Liệt kê các chức năng cần kiểm thử>>","Mô tả
+<< Mô tả test case đáp ứng có kịch bản >>","Điều kiện tiên quyết
+<< Mô tả điều kiện cần đáp ứng >>","Các bước thực hiện
+<< Mô tả test case đáp ứng có kịch bản >>","Dữ liệu test
+<<Dữ liệu cần để thực hiện kịch bản>>","Kết quả mong muốn
+<< Mô tả kết quả mong muốn >>","Kết quả
+<<Trạng thái Test>>",Người thực hiện,Ngày thực hiện,"Ghi chú
+<< Bằng chứng lỗi, mã lỗi >>"
+Chức năng Tìm kiếm,,,,,,,,,,
+,Kiểm tra hiển thị,Kiểm tra hiển thị mặc định của tab 'Tìm kiếm tổng hợp' và placeholder trong ô nhập liệu.,Người dùng đã truy cập trang Bất động sản 360.,"1. Truy cập vào trang Bất động sản 360.
+2. Kiểm tra tab 'Tìm kiếm tổng hợp' có được chọn mặc định hay không.
+3. Kiểm tra ô nhập liệu có hiển thị placeholder đúng như mô tả hay không.",,Tab 'Tìm kiếm tổng hợp' được chọn mặc định. Ô nhập liệu hiển thị placeholder chính xác,,,,
+,,Kiểm tra hiển thị dòng ghi chú pháp lý ở footer tìm kiếm.,,"1. Truy cập trang Bất động sản 360.
+2. Kiểm tra footer của trang tìm kiếm có hiển thị dòng 'Dữ liệu tham khảo...' hay không.",,"Dòng 'Dữ liệu tham khảo, vui lòng liên hệ cơ quan chức năng...' hiển thị đầy đủ và chính xác ở footer trang tìm kiếm.",,,,
+,,Kiểm tra hiển thị tag 'Mới'/'Cũ' cạnh địa chỉ hành chính.,,"1. Truy cập trang Bất động sản 360.
+2. Tìm kiếm một địa điểm có cả địa chỉ hành chính mới và cũ.
+3. Kiểm tra tag 'Mới' và 'Cũ' có hiển thị đúng màu (xanh/xám) cạnh địa chỉ hay không.",,"Tag 'Mới' hiển thị màu xanh, tag 'Cũ' hiển thị màu xám cạnh địa chỉ hành chính tương ứng.",,,,
+,,Kiểm tra hiển thị dòng ghi chú pháp lý có bị che khuất bởi các phần tử khác không.,,"1. Truy cập trang Bất động sản 360.
+2. Thực hiện tìm kiếm với thông tin bất kỳ.
+3. Kiểm tra dòng ghi chú pháp lý có bị che khuất bởi các phần tử khác không.",,"Dòng ghi chú pháp lý hiển thị đầy đủ, không bị che khuất bởi các phần tử khác.",,,,
+,,Kiểm tra hiển thị thông báo lỗi khi nhập liệu không hợp lệ.,,"1. Truy cập trang Bất động sản 360.
+2. Thực hiện tìm kiếm với thông tin không hợp lệ (ví dụ: ký tự đặc biệt).
+3. Kiểm tra thông báo lỗi có hiển thị hay không.",,Thông báo lỗi không tìm thấy địa điểm,,,,
+,,Kiểm tra dòng ghi chú pháp lý không hiển thị khi không có kết quả tìm kiếm.,,"1. Truy cập trang Bất động sản 360.
+2. Thực hiện tìm kiếm với thông tin không tồn tại.
+3. Kiểm tra dòng ghi chú pháp lý có hiển thị khi không có kết quả hay không.",,Dòng ghi chú pháp lý vẫn hiển thị khi không có kết quả tìm kiếm.,,,,
+Chức năng Tìm kiếm - Tìm kiếm Tổng hợp,,,,,,,,,,
+,Kiể̉m tra hiển thị,Kiểm tra hiển thị gợi ý khi nhập từ khóa,Người dùng đã truy cập trang Bất động sản 360 và ở tab tìm kiếm Tổng hợp.,"1. Truy cập trang Bất động sản 360.
+2. Nhập một vài ký tự (ví dụ: 'Hà N') vào ô tìm kiếm tổng hợp.
+3. Chờ hệ thống hiển thị gợi ý.",,"Hệ thống hiển thị dropdown gợi ý chứa các địa điểm (nhóm hành chính, địa danh) phù hợp với từ khóa đã nhập.",,,,
+,,Kiểm tra gợi ý địa danh,,"1. Truy cập trang Bất động sản 360.
+2. Nhập một vài ký tự của một địa danh phổ biến (ví dụ: 'Landmark') vào ô tìm kiếm tổng hợp.
+3. Quan sát các gợi ý hiển thị.",,"Hệ thống hiển thị các gợi ý địa danh liên quan đến từ khóa 'Landmark' (ví dụ: Landmark 81, Vinhomes Landmark Central Park, etc.).",,,,
+,,Kiểm tra gợi ý nhóm hành chính,,"1. Truy cập trang Bất động sản 360.
+2. Nhập một vài ký tự của một tỉnh/thành phố (ví dụ: 'Hà N') vào ô tìm kiếm tổng hợp.
+3. Quan sát các gợi ý hiển thị.",,"Hệ thống hiển thị các gợi ý nhóm hành chính liên quan đến từ khóa 'Hà N' (ví dụ: Hà Nội, Hà Nam, etc.).",,,,
+,,Kiểm tra hiển thị gợi ý tìm kiếm khi nhập từ khóa,,"1. Truy cập trang Bất động sản 360.
+2. Nhập một vài ký tự vào ô tìm kiếm tổng hợp.
+3. Quan sát danh sách gợi ý hiển thị.",,"Danh sách gợi ý hiển thị các địa điểm, khu vực liên quan đến từ khóa đã nhập.",,,,
+,,Kiểm tra tìm kiếm khi để trống ô nhập liệu,,"1. Truy cập trang Bất động sản 360.
+2. Nhập vào ô tìm kiếm tổng hợp.
+3. Không nhập bất kỳ ký tự nào, để trống hoàn toàn.
+4. Nhấn phím Enter hoặc click vào biểu tượng tìm kiếm.",,"Hệ thống không thực hiện tìm kiếm và hiển thị thông báo yêu cầu người dùng nhập thông tin tìm kiếm, hoặc bản đồ tự động chọn vị trí hiện tại.",,,,
+,,Kiểm tra tìm kiếm với số lượng ký tự vượt quá giới hạn cho phép,,"1. Truy cập trang Bất động sản 360.
+2. Nhập một chuỗi ký tự dài vào ô tìm kiếm tổng hợp, vượt quá giới hạn cho phép.
+3. Nhấn phím Enter hoặc click vào biểu tượng tìm kiếm.",,"Hệ thống giới hạn số lượng ký tự nhập vào, hoặc hệ thống hiển thị thông báo lỗi và không thực hiện tìm kiếm, hoặc cắt chuỗi nhập vào về số lượng ký tự tối đa cho phép.",,,,
+,,Kiểm tra tìm kiếm với các ký tự đặc biệt,,"1. Truy cập trang Bất động sản 360.
+2. Nhập các ký tự đặc biệt (@, #, $, %, ^, etc.) vào ô tìm kiếm tổng hợp.
+3. Nhấn phím Enter hoặc click vào biểu tượng tìm kiếm.",,"Hệ thống thực hiện tìm kiếm an toàn và không bị crash. Kết quả trả về có thể không có, hoặc hiển thị các địa điểm chứa các ký tự đặc biệt (nếu có).",,,,
+,,Kiểm tra tìm kiếm với XSS injection,,"1. Truy cập trang Bất động sản 360.
+2. Nhập đoạn mã XSS (ví dụ: <script>alert(1)</script>) vào ô tìm kiếm tổng hợp.
+3. Nhấn phím Enter hoặc click vào biểu tượng tìm kiếm.",,"Hệ thống sanitize input, loại bỏ hoặc vô hiệu hóa đoạn mã XSS, và không thực thi script. Giao diện hiển thị bình thường, không bị ảnh hưởng bởi XSS.",,,,
+,,Kiểm tra tìm kiếm với từ khóa không tồn tại,,"1. Truy cập trang Bất động sản 360.
+2. Nhập một từ khóa không tồn tại (ví dụ: 'abcxyz123') vào ô tìm kiếm tổng hợp.
+3. Nhấn phím Enter hoặc click vào biểu tượng tìm kiếm.",,"Hệ thống hiển thị thông báo 'Không tìm thấy vị trí này' hoặc một thông báo tương tự, và có thể tự động chọn vị trí hiện tại của người dùng.",,,,
+,,Kiểm tra chức năng click vào gợi ý tìm kiếm,Người dùng đã truy cập trang Bất động sản 360 và có lịch sử tìm kiếm hiển thị.,"1. Truy cập trang Bất động sản 360.
+2. Nhập một vài ký tự vào ô tìm kiếm tổng hợp để hiển thị gợi ý.
+3. Click vào một gợi ý trong danh sách.",,"Bản đồ di chuyển đến vị trí đã chọn trong gợi ý, hiển thị pin đánh dấu vị trí và zoom đến mức phù hợp.",,,,
+,,Kiểm tra hiển thị lịch sử tìm kiếm,Người dùng đã truy cập trang Bất động sản 360 và đã thực hiện tìm kiếm trước đó.,"1. Truy cập trang Bất động sản 360.
+2. Thực hiện một vài tìm kiếm.
+3. Click vào ô tìm kiếm tổng hợp.",,Hiển thị danh sách các địa điểm đã tìm kiếm trước đó trong lịch sử tìm kiếm.,,,,
+,,Kiểm tra chức năng click vào lịch sử tìm kiếm,Người dùng đã truy cập trang Bất động sản 360 và có lịch sử tìm kiếm hiển thị.,"1. Truy cập trang Bất động sản 360.
+2. Hiển thị lịch sử tìm kiếm.
+3. Click vào một địa điểm trong lịch sử tìm kiếm.",,"Bản đồ di chuyển đến vị trí đã chọn trong lịch sử tìm kiếm, hiển thị pin đánh dấu vị trí và zoom đến mức phù hợp.",,,,
+Chức năng Tìm kiếm - Tìm kiếm Hành chính,,,,,,,,,,
+,Kiể̉m tra hiển thị,Kiểm tra hiển thị dropdown khi chọn '63 tỉnh',Người dùng đã truy cập trang Bất động sản 360.,"1. Truy cập trang Bất động sản 360.
+2. Chọn tab 'Tìm kiếm hành chính'.
+3. Chọn radio button '63 tỉnh'.",,"Hiển thị 3 dropdown: Tỉnh/Thành phố, Quận/Huyện, Phường/Xã.",,,,
+,,Kiểm tra hiển thị dropdown khi chọn '34 tỉnh',,"1. Truy cập trang Bất động sản 360.
+2. Chọn tab 'Tìm kiếm hành chính'.
+3. Chọn radio button '34 tỉnh'.",,"Ẩn dropdown 'Quận/Huyện', chỉ hiển thị dropdown 'Tỉnh/Thành phố' và 'Phường/Xã'.",,,,
+,,Kiểm tra dropdown Quận/Huyện disable khi chưa chọn Tỉnh/Thành phố,,"1. Chọn tab 'Tìm kiếm hành chính'.
+2. Kiểm tra trạng thái dropdown 'Quận/Huyện' khi chưa chọn 'Tỉnh/Thành phố'.",,Dropdown 'Quận/Huyện' phải ở trạng thái disable hoặc hiển thị thông báo yêu cầu chọn 'Tỉnh/Thành phố' trước.,,,,
+,,Kiểm tra thông báo lỗi khi submit form thiếu thông tin Tỉnh.,Người dùng chưa chọn 'Tỉnh/Thành phố'.,"1. Chọn tab 'Tìm kiếm hành chính'.
+2. Bỏ trống trường 'Tỉnh/Thành phố'.
+3. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị thông báo lỗi 'MSG003' yêu cầu chọn 'Tỉnh/Thành phố'.,,,,
+,,Kiểm tra logic cascading dropdown khi chọn Tỉnh,Người dùng đã truy cập trang Bất động sản 360.,"1. Truy cập trang Bất động sản 360.
+2. Chọn tab 'Tìm kiếm hành chính'.
+3. Chọn một Tỉnh/Thành phố.
+4. Kiểm tra danh sách Quận/Huyện hiển thị.",,Danh sách Quận/Huyện hiển thị tương ứng với Tỉnh/Thành phố đã chọn.,,,,
+,,Kiểm tra reset giá trị khi thay đổi Tỉnh,"Người dùng đã truy cập trang Bất động sản 360 và đã chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã.","1. Truy cập trang Bất động sản 360.
+2. Chọn tab 'Tìm kiếm hành chính'.
+3. Chọn một Tỉnh/Thành phố.
+4. Chọn một Quận/Huyện và Phường/Xã.
+5. Thay đổi Tỉnh/Thành phố.",,Giá trị Quận/Huyện và Phường/Xã được reset về trạng thái mặc định (trống).,,,,
+,,Kiểm tra chức năng tìm kiếm thành công và bản đồ zoom đến khu vực.,Người dùng đã chọn đầy đủ thông tin hành chính hợp lệ.,"1. Chọn tab 'Tìm kiếm hành chính'.
+2. Chọn 'Tỉnh/Thành phố', 'Quận/Huyện', 'Phường/Xã' hợp lệ.
+3. Nhấn nút 'Tìm kiếm'.",,"Bản đồ phải zoom đến ranh giới hành chính đã chọn (Phường/Xã, Quận/Huyện, hoặc Tỉnh/Thành phố).",,,,
+Chức năng Tìm kiếm - Tìm kiếm Tờ / Thửa,,,,,,,,,,
+,Kiểm tra hiển thị,Kiểm tra việc chặn nhập chữ và ký tự đặc biệt vào ô Số tờ bản đồ.,Người dùng đang ở tab 'Tìm kiếm tờ / thửa'.,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập chữ cái hoặc ký tự đặc biệt vào ô 'Số tờ bản đồ'.",,Hệ thống phải chặn không cho nhập chữ cái hoặc ký tự đặc biệt vào ô 'Số tờ bản đồ',,,,
+,,Kiểm tra thông báo khi nhập số âm vào Số tờ bản đồ.,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số âm vào ô 'Số tờ bản đồ'.
+3. Nhấn nút 'Tìm kiếm'.",,Hệ thống phải chặn không cho nhập chữ cái hoặc ký tự đặc biệt vào ô 'Số tờ bản đồ',,,,
+,,Kiểm tra việc chặn nhập chữ và ký tự đặc biệt vào ô Số thửa đất.,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập chữ cái hoặc ký tự đặc biệt vào ô 'Số thửa đất'.",,Hệ thống phải chặn không cho nhập chữ cái hoặc ký tự đặc biệt vào ô 'Số thửa đất',,,,
+,,Kiểm tra tìm kiếm with số tờ and số thửa là số âm,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ là '-123'.
+3. Nhập số thửa đất là '-456'.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống phải chặn không cho nhập chữ cái hoặc ký tự đặc biệt vào ô ,,,,
+,,Kiểm tra tìm kiếm with số tờ and số thửa là 0,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ là '0'.
+3. Nhập số thửa đất là '0'.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị thông báo lỗi yêu cầu nhập số lớn hơn 0 cho số tờ và số thửa, hoặc không thực hiện tìm kiếm.",,,,
+,,Kiểm tra tìm kiếm khi bỏ trống số tờ bản đồ,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Để trống trường 'Số tờ bản đồ'.
+3. Nhập số thửa đất hợp lệ.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị thông báo lỗi 'Số tờ bản đồ là bắt buộc'.,,,,
+,,Kiểm tra tìm kiếm khi bỏ trống số thửa đất,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ hợp lệ.
+3. Để trống trường 'Số thửa đất'.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị thông báo lỗi 'Số thửa đất là bắt buộc'.,,,,
+,,Kiểm tra tìm kiếm with số tờ bản đồ and số thửa đất là giá trị số cực lớn,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ là '999999999999999'.
+3. Nhập số thửa đất là '999999999999999'.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+node.exe : Tìm kiếm
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Tìm kiếm:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+5. Nhấn nút 'Tìm kiếm'.",,"Hệ thống không bị crash. Hiển thị thông báo lỗi nếu giá trị quá lớn không hợp lệ, hoặc thực hiện tìm kiếm nếu giá trị nằm trong khoảng cho phép.",,,,
+,,Kiểm tra tìm kiếm khi chưa chọn Tỉnh/Thành phố,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ hợp lệ.
+3. Nhập số thửa đất hợp lệ.
+4. Không chọn Tỉnh/Thành phố.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị thông báo lỗi yêu cầu chọn Tỉnh/Thành phố.,,,,
+,,Kiểm tra tìm kiếm khi nhập đầy đủ thông tin nhưng không có dữ liệu,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ không tồn tại.
+3. Nhập số thửa đất không tồn tại.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị popup MSG001 'Không tìm thấy dữ liệu phù hợp'.,,,,
+,,Kiểm tra tìm kiếm số tờ thửa có ký tự đặc biệt,,"1. Chọn tab 'Tìm kiếm tờ / thửa'.
+2. Nhập số tờ bản đồ chứa ký tự đặc biệt.
+3. Nhập số thửa đất chứa ký tự đặc biệt.
+4. Chọn Tỉnh/Thành phố, Quận/Huyện, Phường/Xã bất kỳ.
+5. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị thông báo lỗi yêu cầu nhập số cho số tờ và số thửa, hoặc loại bỏ ký tự đặc biệt và thực hiện tìm kiếm.",,,,
+Chức năng Tìm kiếm - Tìm kiếm theo Lat/Lon,,,,,,,,,,
+,Kiểm tra hiển thị,Kiểm tra nhập sai định dạng vĩ độ (dấu phẩy thay vì chấm),Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập vĩ độ với dấu phẩy (ví dụ: 21,021719).
+3. Nhập kinh độ hợp lệ (ví dụ: 105.820288).
+4. Nhấn nút 'Tìm kiếm'.",,Hệ thống hiển thị thông báo lỗi định dạng không hợp lệ cho trường Vĩ độ và không thực hiện tìm kiếm.,,,,
+,,Kiểm tra nhập sai định dạng kinh độ (nhiều dấu chấm),Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập vĩ độ hợp lệ (ví dụ: 21.021719).
+3. Nhập kinh độ với nhiều dấu chấm (ví dụ: 105..820288).
+4. Nhấn nút 'Tìm kiếm'.",,Hệ thống tự động xóa chỗ bị sai,,,,
+,,Kiểm tra tọa độ ngoài phạm vi Việt Nam,Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập vĩ độ và kinh độ nằm ngoài lãnh thổ Việt Nam (ví dụ: Vĩ độ: 0, Kinh độ: 0).
+3. Nhấn nút 'Tìm kiếm'.",,Đi đến tọa độ tìm kiếm,,,,
+,,Kiểm tra nhập chữ cái vào trường vĩ độ,Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập chữ cái vào trường Vĩ độ (ví dụ: abc).
+3. Nhập kinh độ hợp lệ (ví dụ: 105.820288).
+4. Nhấn nút 'Tìm kiếm'.",,Hệ thống tự động xóa ký tự đặc biệt,,,,
+,,Kiểm tra nhập ký tự đặc biệt vào trường kinh độ,Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập vĩ độ hợp lệ (ví dụ: 21.021719).
+3. Nhập ký tự đặc biệt vào trường Kinh độ (ví dụ: !@#).
+4. Nhấn nút 'Tìm kiếm'.",,Hệ thống tự động xóa ký tự đặc biệt,,,,
+,,Kiểm tra nhập tọa dộ không tồn tại,Người dùng ở tab Tìm kiếm Lat/Lon.,"1. Chọn tab 'Tìm kiếm Lat/Lon'.
+2. Nhập vĩ độ (ví dụ: 29999999).
+3. Nhập Kinh độ (ví dụ: 9999999999).
+4. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị lỗi ""không tìm thấy kết quả phù hợp""",,,,
+Chức năng Tìm kiếm - Tìm kiếm VN2000,,,,,,,,,,
+,Kiểm tra hiển thị,Kiểm tra nhập số âm vào tọa độ X,Người dùng ở tab Tìm kiếm VN2000.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Chọn một tỉnh bất kỳ.
+3. Nhập số âm vào trường 'Tọa độ X (m)' (ví dụ: -100).
+4. Nhập giá trị hợp lệ vào trường 'Tọa độ Y (m)'.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống tự động xóa ký tự đặc biệt,,,,
+,,Kiểm tra nhập chữ vào tọa độ X,Người dùng ở tab Tìm kiếm VN2000.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Chọn một tỉnh bất kỳ.
+3. Nhập chữ vào trường 'Tọa độ X (m)' (ví dụ: abc).
+4. Nhập giá trị hợp lệ vào trường 'Tọa độ Y (m)'.
+5. Nhấn nút 'Tìm kiếm'.",,Hệ thống tự động xóa,,,,
+,,Kiểm tra tìm kiếm VN2000 khi bỏ trống tọa độ X,Người dùng đã truy cập vào màn hình Bất động sản 360 và chọn tab 'Tìm kiếm VN2000'.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Chọn một tỉnh/thành phố.
+3. Để trống trường 'Tọa độ X (m)'.
+4. Nhập giá trị hợp lệ vào trường 'Tọa độ Y (m)'.
+5. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị thông báo lỗi ""Không tìm thấy thông tin tỉnh. Vui lòng chọn lại tỉnh.""",,,,
+,,Kiểm tra tìm kiếm VN2000 khi bỏ trống tọa độ Y,Người dùng đã truy cập vào màn hình Bất động sản 360 và chọn tab 'Tìm kiếm VN2000'.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Chọn một tỉnh/thành phố.
+3. Nhập giá trị hợp lệ vào trường 'Tọa độ X (m)'.
+4. Để trống trường 'Tọa độ Y (m)'.
+5. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị thông báo lỗi ""Không tìm thấy thông tin tỉnh. Vui lòng chọn lại tỉnh.""",,,,
+,,Kiểm tra tìm kiếm VN2000 khi chưa chọn tỉnh/thành phố,Người dùng đã truy cập vào màn hình Bất động sản 360 và chọn tab 'Tìm kiếm VN2000'.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Để trống trường 'Tỉnh/Thành phố'.
+3. Nhập giá trị hợp lệ vào trường 'Tọa độ X (m)' và 'Tọa độ Y (m)'.
+4. Nhấn nút 'Tìm kiếm'.",,"Hệ thống hiển thị thông báo lỗi ""Không tìm thấy thông tin tỉnh. Vui lòng chọn lại tỉnh.""",,,,
+,,Kiểm tra tìm kiếm VN2000 with tọa độ and tỉnh không khớp,Người dùng đã truy cập vào màn hình Bất động sản 360 và chọn tab 'Tìm kiếm VN2000'.,"1. Chọn tab 'Tìm kiếm VN2000'.
+2. Chọn một tỉnh/thành phố.
+3. Nhập tọa độ X and Y không thuộc tỉnh đã chọn.
+4. Nhấn nút 'Tìm kiếm'.",,Đi đến tọa độ tìm kiếm,,,,
+,,Kiểm tra hiển thị loading khi mạng chậm trong quá trình tìm kiếm,Người dùng đã truy cập Bất động sản 360 và có kết nối mạng chậm.,"1. Truy cập vào Bất động sản 360.
+2. Mô phỏng kết nối mạng chậm (3G hoặc WiFi yếu).
+3. Thực hiện thao tác tìm kiếm một địa điểm.
+4. Kiểm tra xem loading indicator có hiển thị trong quá trình tìm kiếm hay không.",,Loading indicator phải hiển thị trong quá trình tìm kiếm khi kết nối mạng chậm.,,,,
+,,Kiểm tra hiển thị thông báo khi API tìm kiếm trả về lỗi 500,Người dùng đã truy cập màn hình tìm kiếm BĐS 360.,"1. Truy cập vào màn hình tìm kiếm BĐS 360.
+2. Nhập thông tin tìm kiếm hợp lệ.
+3. Giả lập lỗi 500 từ server khi API tìm kiếm được gọi.
+4. Thực hiện tìm kiếm.",,,,,,
+,,Kiểm tra hiển thị thông báo khi API tìm kiếm trả về lỗi 503,Người dùng đã truy cập màn hình tìm kiếm BĐS 360.,"1. Truy cập vào màn hình tìm kiếm BĐS 360.
+2. Nhập thông tin tìm kiếm hợp lệ.
+3. Giả lập lỗi 503 (Service Unavailable) từ server khi API tìm kiếm được gọi.
+4. Thực hiện tìm kiếm.",,,,,,
+,,Kiểm tra xử lý timeout khi request tìm kiếm vượt quá thời gian cho phép,Người dùng đã truy cập màn hình tìm kiếm BĐS 360.,"1. Truy cập vào màn hình tìm kiếm BĐS 360.
+2. Nhập thông tin tìm kiếm.
+3. Giả lập tình huống request tìm kiếm bị timeout (ví dụ: mất kết nối mạng hoặc server xử lý chậm).
+4. Thực hiện tìm kiếm.",,Hiển thị thông báo lỗi timeout cho người dùng,,,,
+,,Kiểm tra ngăn chặn double click nút Tìm kiếm,Người dùng đã truy cập màn hình tìm kiếm BĐS 360.,"1. Truy cập vào màn hình tìm kiếm BĐS 360.
+2. Nhập thông tin tìm kiếm hợp lệ.
+3. Click đúp (double click) liên tục vào nút ""Tìm kiếm"".",,Chỉ có một request tìm kiếm được gửi đi. Các click sau đó trong một khoảng thời gian ngắn bị bỏ qua hoặc request cũ bị hủy trước khi gửi request mới.,,,,

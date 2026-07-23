@@ -1,0 +1,26 @@
+{
+  "name": "laand-test-suite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node run-tests.js",
+    "test:all": "npx playwright test --project=chromium --headed --workers=1",
+    "test:headless": "npx playwright test --project=chromium --workers=1",
+    "test:ui": "npx playwright test --ui",
+    "test:news": "npx playwright test tests/news.spec.ts --project=chromium --headed --workers=1",
+    "test:map": "npx playwright test tests/map.spec.ts --project=chromium --headed --workers=1",
+    "test:security": "npx playwright test tests/security.spec.ts --project=chromium --headed --workers=1",
+    "test:ads": "npx playwright test tests/classified-ads.spec.ts --project=chromium --headed --workers=1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Playwright E2E Automated Test Suite for Laand.vn",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.0"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

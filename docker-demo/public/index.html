@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Container Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent-color: #818cf8;
+      --accent-glow: rgba(129, 140, 248, 0.3);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background blobs for premium look */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.5;
+      animation: float 10s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+      width: 400px;
+      height: 400px;
+      background: #4f46e5;
+      top: -10%;
+      left: -10%;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: #06b6d4;
+      bottom: -15%;
+      right: -10%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 30px) scale(1.1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 90%;
+      max-width: 600px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 48px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .icon-container {
+      width: 96px;
+      height: 96px;
+      background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+      border-radius: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 32px;
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .icon-container svg {
+      width: 50px;
+      height: 50px;
+      fill: #fff;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.025em;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+      text-align: left;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(129, 140, 248, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="container">
+    <div class="badge">Running inside Docker Container</div>
+    <div class="icon-container">
+      <svg viewBox="0 0 24 24">
+        <path d="M13.983 11.078h2.119c.602 0 1.09-.488 1.09-1.09V7.869c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm-3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V7.869c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm-3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V7.869c0-.602-.488-1.09-1.09-1.09H7.481c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm-3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V7.869c0-.602-.488-1.09-1.09-1.09H4.23c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm3.251-3.251h2.119c.602 0 1.09-.488 1.09-1.09V4.618c0-.602-.488-1.09-1.09-1.09H7.481c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V4.618c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V4.618c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm3.251 0h2.119c.602 0 1.09-.488 1.09-1.09V4.618c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zm-6.502-3.251h2.119c.602 0 1.09-.488 1.09-1.09V1.367c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09zM23.99 13.79c-.53-.41-1.42-.91-2.91-.91-.32 0-.64.02-.95.06-.72-2.31-2.88-4.01-5.46-4.01-.2 0-.39.01-.58.03V7.869c0-.602-.488-1.09-1.09-1.09h-2.119c-.602 0-1.09.488-1.09 1.09v2.119c0 .602.488 1.09 1.09 1.09h1.16c-.03.14-.05.28-.05.43 0 2.92 2.37 5.29 5.29 5.29.62 0 1.21-.11 1.76-.31.85.79 1.96 1.22 3.12 1.22 1.34 0 2.52-.77 2.91-2.09.05-.15.02-.31-.08-.43zm-8.83.6c-1.58 0-2.86-1.28-2.86-2.86s1.28-2.86 2.86-2.86 2.86 1.28 2.86 2.86-1.28 2.86-2.86 2.86z"/>
+      </svg>
+    </div>
+    <h1>Hello from Docker!</h1>
+    <p>Gửi lời chào từ ứng dụng web Node.js hoàn toàn mới được khởi tạo và chạy thành công bên trong một Docker Container siêu nhẹ.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-label">Môi Trường</div>
+        <div class="info-value">Node.js (Alpine)</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Cổng Mạng</div>
+        <div class="info-value">8080 (Mapped)</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Nền Tảng</div>
+        <div class="info-value">Docker Compose</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Trạng Thế</div>
+        <div class="info-value" style="color: #34d399;">Active</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Được thiết kế cho Docker Container Demo &bull; 2026
+    </div>
+  </div>
+</body>
+</html>

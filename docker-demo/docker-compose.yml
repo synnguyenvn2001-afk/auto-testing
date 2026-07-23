@@ -1,0 +1,7 @@
+services:
+  web-demo:
+    build: .
+    container_name: node-docker-demo
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
