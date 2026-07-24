@@ -34,3 +34,27 @@ export async function loginIfNeeded(page: Page) {
     await skipOnboardingTour(page);
   }
 }
+/**
+ * Sets up strict API response status checking for all test cases.
+ * Listens for all HTTP responses from backend API endpoints.
+ */
+export function setupStrictApiCheck(page: Page) {
+  const apiErrors: string[] = [];
+
+  page.on('response', (res) => {
+    const url = res.url();
+    const status = res.status();
+    // Track API endpoint failures (HTTP 500+ Server Errors or unexpected 400+ failures)
+    if (status >= 500 && (url.includes('/api/') || url.includes('/graphql') || url.includes('laand.vn'))) {
+      const errDetail = `[HTTP ${status}] ${url}`;
+      console.error(`❌ Phát hiện lỗi Backend API: ${errDetail}`);
+      apiErrors.push(errDetail);
+    }
+  });
+
+  return {
+    verifyNoApiFailures: () => {
+      expect(apiErrors, `Lỗi API Backend trả về HTTP 5xx Server Error:\n${apiErrors.join('\n')}`).toEqual([]);
+    }
+  };
+}

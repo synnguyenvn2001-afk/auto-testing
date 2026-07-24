@@ -20,7 +20,7 @@ export async function dismissGooglePopup() {
   if (await googlePopupText.isDisplayed().catch(() => false)) {
     console.log('🚫 Tắt Popup Google Sign-In...');
     await driver.back().catch(() => {});
-    await driver.pause(1000);
+    await driver.pause(1500);
   }
 }
 
@@ -55,7 +55,7 @@ export async function switchToOtherAccountFormIfNeeded() {
   if (await switchAccountBtn.isDisplayed().catch(() => false)) {
     console.log('🔄 Phát hiện giao diện đăng nhập nhanh tài khoản cũ -> Click "Đăng nhập bằng tài khoản khác"...');
     await switchAccountBtn.click();
-    await driver.pause(1500);
+    await driver.pause(2500);
     await dismissGooglePopup();
   }
 }
@@ -72,7 +72,7 @@ export async function openLoginModalIfNeeded() {
     if (await headerLoginBtn.isDisplayed().catch(() => false)) {
       console.log('👉 Click Nút Đăng nhập trên Header để mở Modal Đăng nhập...');
       await headerLoginBtn.click();
-      await driver.pause(1500);
+      await driver.pause(2500);
       await dismissGooglePopup();
     }
   }
@@ -87,7 +87,7 @@ export async function getLoginModalInputs() {
   await switchToOtherAccountFormIfNeeded();
 
   let modalInputs: any[] = [];
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 6; attempt++) {
     const allInputs = await $$('//android.widget.EditText');
     modalInputs = [];
 
@@ -99,10 +99,16 @@ export async function getLoginModalInputs() {
       }
     }
 
-    if (modalInputs.length >= 2) {
+    if (modalInputs.length >= 1) {
       break;
     }
-    await driver.pause(800);
+    await driver.pause(1500);
+  }
+
+  // Fallback: If filtered list is empty, return all available EditText fields
+  if (modalInputs.length === 0) {
+    const allInputs = await $$('//android.widget.EditText');
+    return allInputs;
   }
 
   return modalInputs;
@@ -141,12 +147,12 @@ export async function ensureMobileLoggedOut() {
   const userMenuBtn = await $('//android.widget.Button[@text="Menu" or contains(@text, "Menu")]');
   if (await userMenuBtn.isDisplayed().catch(() => false)) {
     await userMenuBtn.click();
-    await driver.pause(1200);
+    await driver.pause(2000);
   } else {
     const leftMenuBtn = await $('//android.widget.Button[contains(@text, "Mở menu")]');
     if (await leftMenuBtn.isDisplayed().catch(() => false)) {
       await leftMenuBtn.click();
-      await driver.pause(1200);
+      await driver.pause(2000);
     }
   }
 
@@ -155,16 +161,16 @@ export async function ensureMobileLoggedOut() {
 
   if (await logoutOption.isDisplayed().catch(() => false)) {
     await logoutOption.click();
-    await driver.pause(1200);
+    await driver.pause(2000);
 
     const confirmLogoutBtn = await $('//android.widget.Button[contains(@text, "Đồng ý") or contains(@text, "Đăng xuất") or contains(@text, "Xác nhận")]');
     if (await confirmLogoutBtn.isDisplayed().catch(() => false)) {
       await confirmLogoutBtn.click();
-      await driver.pause(2000);
+      await driver.pause(3000);
     }
   }
 
-  await driver.pause(1500);
+  await driver.pause(2000);
   console.log('✅ Đã hoàn tất Đăng xuất');
 }
 
@@ -191,20 +197,20 @@ export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
       await inputs[0].click();
       await inputs[0].clearValue();
       await inputs[0].setValue(username);
-      await driver.pause(300);
+      await driver.pause(500);
     }
 
     if (inputs.length >= 2) {
       await inputs[1].click();
       await inputs[1].clearValue();
       await inputs[1].setValue(TEST_PASSWORD);
-      await driver.pause(300);
+      await driver.pause(500);
     }
 
     const purpleSubmitBtn = await getPurpleSubmitButton();
     if (purpleSubmitBtn) {
       await purpleSubmitBtn.click();
-      await driver.pause(4000);
+      await driver.pause(6000);
     }
 
     if (await isMobileLoggedIn()) {

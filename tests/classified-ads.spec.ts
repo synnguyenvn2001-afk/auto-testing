@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
 
 test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao vặt.xlsx)', () => {
+  let apiChecker: ReturnType<typeof setupStrictApiCheck>;
+
   test.beforeEach(async ({ page }) => {
+    apiChecker = setupStrictApiCheck(page);
+
     // Grant geolocation permissions for Hanoi coordinates
     const context = page.context();
     await context.grantPermissions(['geolocation']);
@@ -11,6 +15,10 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
     await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
+  });
+
+  test.afterEach(async () => {
+    apiChecker?.verifyNoApiFailures();
   });
 
   // =========================================================================

@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour } from './helpers';
+import { skipOnboardingTour, setupStrictApiCheck } from './helpers';
 
 test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
+  let apiChecker: ReturnType<typeof setupStrictApiCheck>;
+
   test.beforeEach(async ({ page }) => {
+    apiChecker = setupStrictApiCheck(page);
+
     // Grant geolocation permissions for map testing
     const context = page.context();
     await context.grantPermissions(['geolocation']);
@@ -11,6 +15,10 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     await page.goto('https://dev-webapp.laand.vn/ban-do');
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
+  });
+
+  test.afterEach(async () => {
+    apiChecker?.verifyNoApiFailures();
   });
 
   /* =========================================================================

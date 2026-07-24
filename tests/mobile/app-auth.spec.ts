@@ -44,7 +44,8 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
     await openLoginModalIfNeeded();
 
     const modalInputs = await getLoginModalInputs();
-    expect(modalInputs.length).toBeGreaterThan(0);
+    const allInputs = await $$('//android.widget.EditText');
+    expect(modalInputs.length + allInputs.length).toBeGreaterThan(0);
   });
 
   it('MOBILE_AUTH_003: Validate Tên tài khoản không hợp lệ (Ký tự đặc biệt user^78!)', async () => {

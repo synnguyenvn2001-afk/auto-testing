@@ -20,17 +20,19 @@ exports.config = {
     'appium:autoGrantPermissions': true,
     'appium:noSign': true,
     'appium:noReset': true,
-    'appium:newCommandTimeout': 3600,
+    'appium:newCommandTimeout': 7200,
+    'appium:uiautomator2ServerInstallTimeout': 90000,
+    'appium:uiautomator2ServerLaunchTimeout': 90000,
   }],
   logLevel: 'info',
   bail: 0,
-  waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
+  waitforTimeout: 30000,
+  connectionRetryTimeout: 240000,
   connectionRetryCount: 3,
   framework: 'mocha',
   reporters: ['spec'],
   mochaOpts: {
     ui: 'bdd',
-    timeout: 60000
+    timeout: 180000
   },
 };

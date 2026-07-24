@@ -1,11 +1,14 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
 
 test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () => {
   const PROFILE_URL = 'https://dev-webapp.laand.vn/tong-quan-tai-khoan';
+  let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    apiChecker = setupStrictApiCheck(page);
+
     await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await skipOnboardingTour(page);
     await loginIfNeeded(page);
@@ -14,6 +17,10 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded' });
       await skipOnboardingTour(page);
     }
+  });
+
+  test.afterEach(async () => {
+    apiChecker?.verifyNoApiFailures();
   });
 
   /* =========================================================================

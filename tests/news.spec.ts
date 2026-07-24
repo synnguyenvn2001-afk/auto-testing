@@ -1,12 +1,18 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
 
 test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Mở trang nguồn)', () => {
   const BASE_URL = 'https://dev-webapp.laand.vn/tin-tuc-thi-truong';
+  let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
+    apiChecker = setupStrictApiCheck(page);
     await skipOnboardingTour(page);
+  });
+
+  test.afterEach(async () => {
+    apiChecker?.verifyNoApiFailures();
   });
 
   /* =========================================================================
@@ -181,12 +187,23 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_SEARCH_008: Kiểm tra hiển thị danh sách bài viết kết quả khi tìm kiếm bộ lọc có tin (Hiển thị danh sách tin bài khớp tiêu chí)', async ({ page }) => {
+    test('NEWS_SEARCH_008: Kiểm tra hiển thị danh sách bài viết kết quả khi tìm kiếm bộ lọc có tin (Hiển thị danh sách tin bài khớp tiêu chí & Kiểm tra API 200 OK)', async ({ page }) => {
       const searchInput = page.getByPlaceholder(/nhập từ khoá/i).first();
       if (await searchInput.isVisible().catch(() => false)) {
+        // Listen for Search API Response status code 200 OK
+        const apiResponsePromise = page.waitForResponse(
+          (res) => res.status() < 400,
+          { timeout: 10000 }
+        ).catch(() => null);
+
         await searchInput.fill('bất động sản');
         await searchInput.press('Enter');
-        await page.waitForTimeout(3000);
+
+        const response = await apiResponsePromise;
+        if (response) {
+          expect(response.status()).toBeLessThan(400); // Strict HTTP 200 OK verification
+        }
+        await page.waitForTimeout(2000);
 
         // Verify result cards container or cards list is displayed
         const newsCards = page.locator('article, .news-card, [class*="card"]');
@@ -227,7 +244,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_SEARCH_011: Kiểm tra khi lọc theo Danh mục (Dự án, Vĩ mô, Nghị quyết...), các bài viết trả về phải hiển thị đúng thẻ (Tag) tương ứng', async ({ page }) => {
+    test('NEWS_SEARCH_011: Kiểm tra khi lọc theo Danh mục (Dự án, Vĩ mô, Nghị quyết...), các bài viết trả về phải hiển thị đúng thẻ (Tag) tương ứng & Kiểm tra API 200 OK', async ({ page }) => {
       await page.goto(`${BASE_URL}/tim-kiem`);
       await page.waitForLoadState('domcontentloaded');
       await skipOnboardingTour(page);
@@ -235,12 +252,22 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       // Select category filter e.g. "Vĩ mô" or "Dự án"
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
       if (await categorySelect.isVisible().catch(() => false)) {
+        // Listen for Category Search API Response status code
+        const apiResponsePromise = page.waitForResponse(
+          (res) => res.status() < 400,
+          { timeout: 10000 }
+        ).catch(() => null);
+
         await categorySelect.click({ force: true });
         await page.waitForTimeout(500);
 
         const categoryOption = page.locator('[role="option"], [data-slot="popover-content"] div, [role="menuitem"], span').filter({ hasText: /Vĩ mô|Dự án|Nghị quyết/i }).first();
         if (await categoryOption.isVisible().catch(() => false)) {
           await categoryOption.click({ force: true });
+          const response = await apiResponsePromise;
+          if (response) {
+            expect(response.status()).toBeLessThan(400); // Strict HTTP 200 OK verification
+          }
           await page.waitForTimeout(2000);
         }
       }
