@@ -10,7 +10,15 @@
     "test:news": "npx playwright test tests/news.spec.ts --project=chromium --headed --workers=1",
     "test:map": "npx playwright test tests/map.spec.ts --project=chromium --headed --workers=1",
     "test:security": "npx playwright test tests/security.spec.ts --project=chromium --headed --workers=1",
-    "test:ads": "npx playwright test tests/classified-ads.spec.ts --project=chromium --headed --workers=1"
+    "test:ads": "npx playwright test tests/classified-ads.spec.ts --project=chromium --headed --workers=1",
+    "test:mobile": "npx wdio run wdio.conf.js",
+    "test:mobile:auth": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-auth.spec.ts",
+    "test:mobile:profile": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-profile.spec.ts",
+    "test:mobile:news": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-news.spec.ts",
+    "test:mobile:ads": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-classified-ads.spec.ts",
+    "test:mobile:tools": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-tools.spec.ts",
+    "test:mobile:handbook": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-handbook.spec.ts",
+    "test:mobile:security": "npx wdio run wdio.conf.js --spec ./tests/mobile/app-security.spec.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +26,17 @@
   "description": "Playwright E2E Automated Test Suite for Laand.vn",
   "devDependencies": {
     "@playwright/test": "^1.61.1",
-    "@types/node": "^26.1.0"
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.1.0",
+    "@wdio/cli": "^8.46.0",
+    "@wdio/local-runner": "^8.38.0",
+    "@wdio/mocha-framework": "^8.38.0",
+    "@wdio/spec-reporter": "^8.38.0",
+    "appium": "^2.11.3",
+    "appium-uiautomator2-driver": "^3.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4",
+    "webdriverio": "^8.38.0"
   },
   "dependencies": {
     "xlsx": "^0.18.5"

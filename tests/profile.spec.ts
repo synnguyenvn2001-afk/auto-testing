@@ -137,23 +137,21 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       const fileInput = page.locator('input[type="file"]').first();
       await expect(fileInput).toBeAttached({ timeout: 10000 });
 
+      // Listen for Avatar Update API response
+      const apiResponsePromise = page.waitForResponse(
+        (res) => res.url().includes('update-avatar') || res.url().includes('avatar'),
+        { timeout: 10000 }
+      ).catch(() => null);
+
       // Trigger click on avatar label/button if available
       const avatarBtn = page.locator('label:has(input[type="file"]), button:has(svg), button:has(i), [class*="avatar"]').first();
       if (await avatarBtn.isVisible().catch(() => false)) {
         await avatarBtn.click({ force: true }).catch(() => { });
       }
 
-      // Valid 100x100 PNG image buffer
-      const sampleImage = Buffer.from(
-        'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAOSURBVHhe7cEBDQAAAMKg909tDjegAAAAAIADFUAAAR7y52AAAAAASUVORK5CYII=',
-        'base64'
-      );
-
-      await fileInput.setInputFiles({
-        name: 'avatar-test.png',
-        mimeType: 'image/png',
-        buffer: sampleImage,
-      });
+      // Use fixture image file
+      const avatarFilePath = 'tests/fixtures/sample-avatar.png';
+      await fileInput.setInputFiles(avatarFilePath);
       await fileInput.dispatchEvent('change').catch(() => { });
       await fileInput.dispatchEvent('input').catch(() => { });
       await page.waitForTimeout(1000);
@@ -163,10 +161,30 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       if (await saveBtn.isVisible().catch(() => false)) {
         if (await saveBtn.isEnabled().catch(() => false)) {
           await saveBtn.click({ force: true });
-          await page.waitForTimeout(1500);
         }
       }
-      await expect(page.locator('body')).toBeVisible();
+
+      // Check API Response: verify status < 400 and response code is not error
+      const response = await apiResponsePromise;
+      if (response) {
+        const resBody = await response.json().catch(() => ({}));
+        if (response.status() >= 400 || (resBody && (resBody.code === '400' || resBody.code === 400 || resBody.status === 0))) {
+          console.log(`\n❌ [API ERROR] Endpoint: ${response.url()}`);
+          console.log(`   HTTP Status: ${response.status()}`);
+          console.log(`   Response JSON:`, resBody);
+        }
+        expect(response.status()).toBeLessThan(400);
+        if (resBody && (resBody.code === '400' || resBody.code === 400 || resBody.status === 0)) {
+          throw new Error(`API Upload Avatar báo lỗi (code 400 / status 0): "${resBody.message || 'Lỗi upload ảnh'}"`);
+        }
+      }
+
+      // Verify no error toast / warning notification appears on UI
+      const errorToast = page.locator('text=/không được quá|tải ảnh thất bại|lỗi tải lên|file upload|400/i').first();
+      if (await errorToast.isVisible().catch(() => false)) {
+        const errorText = await errorToast.innerText();
+        throw new Error(`Giao diện báo lỗi khi upload avatar: "${errorText}"`);
+      }
     });
 
     test('PROFILE_004: Kiểm tra nút "Sao chép" đường dẫn giới thiệu (Referral Link)', async ({ page }) => {
