@@ -19,18 +19,22 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await expect(loginTrigger).toBeVisible();
       await loginTrigger.click({ force: true });
 
-      const dialogModal = page.locator('div[role="dialog"]').first();
+      const dialogModal = page.locator('div[role="dialog"], [class*="modal"], [class*="dialog"]').first();
       await expect(dialogModal).toBeVisible();
 
-      const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+      const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
       await expect(submitBtn).toBeVisible();
       await submitBtn.click({ force: true });
 
-      // Modal remains open on empty credentials submit
       await page.waitForTimeout(1000);
+
+      // Verify inline red error messages under empty inputs
+      const usernameError = page.locator('text=/Vui lòng điền tên đăng nhập|bắt buộc|không được để trống/i').first();
+      const passwordError = page.locator('text=/Vui lòng điền mật khẩu|bắt buộc|không được để trống/i').first();
+
+      await expect(usernameError).toBeVisible({ timeout: 10000 });
+      await expect(passwordError).toBeVisible({ timeout: 10000 });
       await expect(dialogModal).toBeVisible();
-      const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
-      await expect(usernameInput).toBeVisible();
     });
 
     test('AUTH_VAL_002: Kiểm tra validate Tên đăng nhập chứa ký tự đặc biệt hoặc khoảng trắng', async ({ page }) => {
@@ -47,7 +51,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
       await passwordInput.fill('ValidPass123!');
 
-      const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+      const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
       await submitBtn.click({ force: true });
 
       // Modal remains open on invalid username format
@@ -101,7 +105,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await expect(passwordInput).toBeVisible();
       await passwordInput.fill('abcdefg123'); // missing uppercase and special char
 
-      const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+      const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
       await submitBtn.click({ force: true });
 
       await page.waitForTimeout(1000);
@@ -127,7 +131,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await usernameInput.fill('usert1');
       await passwordInput.fill('WrongPassword999!');
 
-      const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+      const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
       await submitBtn.click({ force: true });
 
       await page.waitForTimeout(2000);
