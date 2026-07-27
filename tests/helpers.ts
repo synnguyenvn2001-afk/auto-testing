@@ -32,7 +32,7 @@ export async function loginIfNeeded(page: Page) {
     const dialogModal = page.locator('div[role="dialog"]').first();
     const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
     const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
-    const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+    const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
 
     if (await usernameInput.isVisible().catch(() => false)) {
       await usernameInput.fill('usert1').catch(() => {});

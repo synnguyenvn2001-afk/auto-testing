@@ -182,14 +182,14 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await page.waitForTimeout(1500);
 
       // Tìm mục gợi ý xuất hiện trong danh sách "Gợi ý"
-      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|Xã Hương Sơn|Bắc Giang|Gợi ý/i }).first();
+      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|nhà ở|Xã|Huyện|Tỉnh|Thành phố|Gợi ý/i }).first();
       if (await suggestionItem.isVisible({ timeout: 5000 }).catch(() => false)) {
         await suggestionItem.click({ force: true });
         await page.waitForTimeout(1000);
 
         // Khẳng định Prompt Đăng nhập (Modal Dialog) hiển thị đối với Guest user
-        const loginModal = page.locator('div[role="dialog"]').filter({ hasText: /Đăng nhập/i }).first();
-        await expect(loginModal).toBeVisible({ timeout: 10000 });
+        const loginPromptHeader = page.locator('h1, h2, h3, div, p, [role="dialog"]').filter({ hasText: /Mở khóa dữ liệu thị trường|Đăng nhập Landbase/i }).first();
+        await expect(loginPromptHeader).toBeVisible({ timeout: 10000 });
       } else {
         await expect(searchInput).toBeVisible();
       }
@@ -210,14 +210,14 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await page.waitForTimeout(1500);
 
       // Tìm mục gợi ý xuất hiện trong danh sách "Gợi ý"
-      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|Xã Hương Sơn|Bắc Giang|Gợi ý/i }).first();
+      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|nhà ở|Xã|Huyện|Tỉnh|Thành phố|Gợi ý/i }).first();
       if (await suggestionItem.isVisible({ timeout: 5000 }).catch(() => false)) {
         await suggestionItem.click({ force: true });
         await page.waitForTimeout(1500);
 
         // Khẳng định KHÔNG hiển thị Prompt Đăng nhập đối với Logged-in user
-        const loginModal = page.locator('div[role="dialog"]').filter({ hasText: /Đăng nhập/i }).first();
-        await expect(loginModal).toBeHidden();
+        const loginPromptHeader = page.locator('h1, h2, h3, div, p, [role="dialog"]').filter({ hasText: /Mở khóa dữ liệu thị trường|Đăng nhập Landbase/i }).first();
+        await expect(loginPromptHeader).toBeHidden();
       } else {
         await expect(searchInput).toBeVisible();
       }

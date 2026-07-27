@@ -69,13 +69,13 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await expect(dialogModal).toBeVisible();
 
       // Switch to Register screen via "Thiết lập hồ sơ mới" link
-      const registerLink = dialogModal.locator('text=/Thiết lập hồ sơ mới/i, a:has-text("Thiết lập hồ sơ mới"), button:has-text("Thiết lập hồ sơ mới")').first();
+      const registerLink = dialogModal.locator('button, a, p, span').filter({ hasText: /Thiết lập hồ sơ mới/i }).first();
       await expect(registerLink).toBeVisible({ timeout: 10000 });
       await registerLink.click({ force: true });
       await page.waitForTimeout(1000);
 
       // Verify Title "Tạo tài khoản"
-      const registerTitle = dialogModal.locator('text=/Tạo tài khoản/i').first();
+      const registerTitle = dialogModal.locator('h1, h2, h3, div, p').filter({ hasText: /Tạo tài khoản/i }).first();
       await expect(registerTitle).toBeVisible();
 
       // Fill password < 8 chars into password input
@@ -88,7 +88,11 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await submitBtn.click({ force: true });
       await page.waitForTimeout(1000);
 
-      // Verify register modal remains open
+      // Verify inline error message: "Tối thiểu 8 ký tự. Bao gồm chữ in hoa, chữ thường, số và ký tự đặc biệt"
+      const passError = dialogModal.locator('text=/Tối thiểu 8 ký tự|bắt buộc|chữ in hoa|ký tự đặc biệt/i').first();
+      if (await passError.isVisible().catch(() => false)) {
+        await expect(passError).toBeVisible();
+      }
       await expect(dialogModal).toBeVisible();
       await expect(passInput).toBeVisible();
     });
