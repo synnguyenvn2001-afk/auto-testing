@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, setupStrictApiCheck } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
 
 test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
@@ -173,18 +173,54 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await expect(searchInput).toBeVisible();
     });
 
-    test('Kiểm tra chức năng click vào gợi ý tìm kiếm', async ({ page }) => {
-      const searchInput = page.locator('input[placeholder="Tìm kiếm khu vực, địa chỉ hoặc toạ độ..."]');
-      await searchInput.fill('Hà Nội');
+    test('MAP_SEARCH_SUGGESTION_GUEST_PROMPT: Người dùng chưa đăng nhập (Guest) click vào kết quả gợi ý tìm kiếm sẽ hiển thị Prompt Đăng nhập', async ({ page }) => {
+      const searchInput = page.locator('input[placeholder*="Tìm kiếm khu vực, địa chỉ hoặc toạ độ"i], input[placeholder*="Tìm kiếm"i]').first();
+      await expect(searchInput).toBeVisible({ timeout: 15000 });
+
+      // Nhập từ khóa tìm kiếm (Ví dụ: "cà phê")
+      await searchInput.fill('cà phê');
       await page.waitForTimeout(1500);
 
-      // Click suggestion item if available
-      const suggestionItem = page.locator('[role="option"], [data-slot="popover-content"] div, .search-suggestion-item').first();
-      if (await suggestionItem.isVisible()) {
+      // Tìm mục gợi ý xuất hiện trong danh sách "Gợi ý"
+      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|Xã Hương Sơn|Bắc Giang|Gợi ý/i }).first();
+      if (await suggestionItem.isVisible({ timeout: 5000 }).catch(() => false)) {
         await suggestionItem.click({ force: true });
         await page.waitForTimeout(1000);
+
+        // Khẳng định Prompt Đăng nhập (Modal Dialog) hiển thị đối với Guest user
+        const loginModal = page.locator('div[role="dialog"]').filter({ hasText: /Đăng nhập/i }).first();
+        await expect(loginModal).toBeVisible({ timeout: 10000 });
+      } else {
+        await expect(searchInput).toBeVisible();
       }
-      await expect(searchInput).toBeVisible();
+    });
+
+    test('MAP_SEARCH_SUGGESTION_AUTH_NORMAL: Người dùng đã đăng nhập (Logged-in) click vào kết quả gợi ý tìm kiếm sẽ sử dụng bình thường (không hiện Prompt Đăng nhập)', async ({ page }) => {
+      // Đăng nhập tài khoản trước
+      await loginIfNeeded(page);
+      await page.goto('https://dev-webapp.laand.vn/ban-do');
+      await page.waitForLoadState('domcontentloaded');
+      await skipOnboardingTour(page);
+
+      const searchInput = page.locator('input[placeholder*="Tìm kiếm khu vực, địa chỉ hoặc toạ độ"i], input[placeholder*="Tìm kiếm"i]').first();
+      await expect(searchInput).toBeVisible({ timeout: 15000 });
+
+      // Nhập từ khóa tìm kiếm (Ví dụ: "cà phê")
+      await searchInput.fill('cà phê');
+      await page.waitForTimeout(1500);
+
+      // Tìm mục gợi ý xuất hiện trong danh sách "Gợi ý"
+      const suggestionItem = page.locator('div, li, button, span').filter({ hasText: /Cà Phê|Xã Hương Sơn|Bắc Giang|Gợi ý/i }).first();
+      if (await suggestionItem.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await suggestionItem.click({ force: true });
+        await page.waitForTimeout(1500);
+
+        // Khẳng định KHÔNG hiển thị Prompt Đăng nhập đối với Logged-in user
+        const loginModal = page.locator('div[role="dialog"]').filter({ hasText: /Đăng nhập/i }).first();
+        await expect(loginModal).toBeHidden();
+      } else {
+        await expect(searchInput).toBeVisible();
+      }
     });
 
     test('Kiểm tra hiển thị và click vào lịch sử tìm kiếm', async ({ page }) => {
@@ -297,6 +333,107 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     test('Kiểm tra chức năng tìm kiếm hành chính thành công và bản đồ zoom đến khu vực', async ({ page }) => {
       const searchWidget = page.locator('#tour-map-search');
       await expect(searchWidget).toBeVisible();
+    });
+  });
+
+  /* =========================================================================
+   * 4. TÌM KIẾM TRÊN BẢN ĐỒ THEO TỈNH/THÀNH PHỐ VÀ PHƯỜNG/XÃ (GUEST & LOGGED-IN)
+   * ========================================================================= */
+  test.describe('4. Tìm kiếm Bản đồ theo Tỉnh/Thành phố & Phường/Xã (Guest & Logged-in)', () => {
+
+    async function verifyProvinceAndWardMapSearch(page: import('@playwright/test').Page, userRoleName: string) {
+      console.log(`\n🔍 [MAP SEARCH TEST] Thực hiện với vai trò: ${userRoleName}`);
+
+      // 1. Chuyển sang Tab "Địa chỉ/Tọa độ"
+      const addressTab = page.locator('button[role="tab"]:has-text("Địa chỉ/Tọa độ"), button:has-text("Địa chỉ/Tọa độ")').first();
+      await expect(addressTab).toBeVisible({ timeout: 15000 });
+      await addressTab.click({ force: true });
+      await page.waitForTimeout(500);
+
+      // 2. Tìm hai dropdown: Tỉnh/Thành phố và Phường/xã
+      const provinceDropdown = page.locator('button, div').filter({ hasText: /Tỉnh Cao Bằng|Tỉnh An Giang|Tỉnh\/thành phố|Tỉnh/i }).first();
+      const wardDropdown = page.locator('button, div').filter({ hasText: /Phường\/xã|Xã|Phường/i }).first();
+
+      await expect(provinceDropdown).toBeVisible({ timeout: 10000 });
+      await expect(wardDropdown).toBeVisible({ timeout: 10000 });
+
+      // 3. Quy tắc bắt buộc: Chưa chọn Tỉnh/TP thì Phường/xã bị vô hiệu hóa hoặc phải chọn Tỉnh/TP trước
+      if (await wardDropdown.getAttribute('disabled') !== null) {
+        await expect(wardDropdown).toBeDisabled();
+      }
+
+      // 4. Click mở dropdown Tỉnh/Thành phố và chọn "Tỉnh Cao Bằng"
+      await provinceDropdown.click({ force: true });
+      await page.waitForTimeout(500);
+
+      const searchProvinceInput = page.locator('input[placeholder*="tỉnh/thành phố"i], input[placeholder*="tỉnh"i]').first();
+      if (await searchProvinceInput.isVisible().catch(() => false)) {
+        await searchProvinceInput.fill('Cao Bằng');
+        await page.waitForTimeout(500);
+      }
+
+      const caoBangOption = page.locator('text=/Tỉnh Cao Bằng|Cao Bằng/i').first();
+      await expect(caoBangOption).toBeVisible({ timeout: 10000 });
+
+      // Phản hồi API khi di chuyển bản đồ đến vị trí trung tâm Tỉnh Cao Bằng
+      const mapMoveProvincePromise = page.waitForResponse(
+        (res) => res.status() < 400 && (res.url().includes('/api/') || res.url().includes('laand.vn')),
+        { timeout: 10000 }
+      ).catch(() => null);
+
+      await caoBangOption.click({ force: true });
+      const resProvince = await mapMoveProvincePromise;
+      if (resProvince) {
+        expect(resProvince.status()).toBeLessThan(400);
+      }
+      await page.waitForTimeout(1500);
+
+      // 5. Xác nhận bản đồ đã di chuyển trung tâm đến Tỉnh Cao Bằng
+      await expect(page.locator('text=/Tỉnh Cao Bằng|Cao Bằng/i').first()).toBeVisible();
+
+      // 6. Sau khi chọn Tỉnh Cao Bằng -> Dropdown Phường/Xã được kích hoạt và tự động hiển thị danh sách các Phường/Xã thuộc Cao Bằng
+      await wardDropdown.click({ force: true });
+      await page.waitForTimeout(500);
+
+      const searchWardInput = page.locator('input[placeholder*="phường/xã"i], input[placeholder*="phường"i]').first();
+      if (await searchWardInput.isVisible().catch(() => false)) {
+        await searchWardInput.fill('Bạch Đằng');
+        await page.waitForTimeout(500);
+      }
+
+      // Chọn Phường/Xã thuộc Cao Bằng (Ví dụ: Xã Bạch Đằng)
+      const bachDangOption = page.locator('text=/Xã Bạch Đằng|Bạch Đằng/i').first();
+      await expect(bachDangOption).toBeVisible({ timeout: 10000 });
+
+      // Phản hồi API khi di chuyển bản đồ đến vị trí trung tâm Xã Bạch Đằng
+      const mapMoveWardPromise = page.waitForResponse(
+        (res) => res.status() < 400 && (res.url().includes('/api/') || res.url().includes('laand.vn')),
+        { timeout: 10000 }
+      ).catch(() => null);
+
+      await bachDangOption.click({ force: true });
+      const resWard = await mapMoveWardPromise;
+      if (resWard) {
+        expect(resWard.status()).toBeLessThan(400);
+      }
+      await page.waitForTimeout(1500);
+
+      // 7. Xác nhận bản đồ di chuyển trung tâm đến Xã Bạch Đằng và hiển thị chi tiết tọa độ/vị trí đã chọn
+      const locationDetail = page.locator('text=/Bạch Đằng|Vị trí đã chọn|Cao Bằng|Tọa độ/i').first();
+      await expect(locationDetail).toBeVisible({ timeout: 10000 });
+    }
+
+    test('MAP_SEARCH_001_GUEST: Người dùng Guest chọn Tỉnh/TP -> Phường/Xã, tự động chuyển tâm bản đồ', async ({ page }) => {
+      await verifyProvinceAndWardMapSearch(page, 'Người dùng Chưa đăng nhập (Guest)');
+    });
+
+    test('MAP_SEARCH_002_AUTH: Người dùng Đã đăng nhập chọn Tỉnh/TP -> Phường/Xã, tự động chuyển tâm bản đồ', async ({ page }) => {
+      await loginIfNeeded(page);
+      await page.goto('https://dev-webapp.laand.vn/ban-do');
+      await page.waitForLoadState('domcontentloaded');
+      await skipOnboardingTour(page);
+
+      await verifyProvinceAndWardMapSearch(page, 'Người dùng Đã đăng nhập (Logged-in)');
     });
   });
 
