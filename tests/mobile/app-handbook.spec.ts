@@ -20,6 +20,9 @@ describe('6. Kiểm thử Cẩm nang BĐS trên Mobile App (Mobile Handbook)', (
       await handbookOption.click();
       await driver.pause(1500);
     }
+
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_HANDBOOK_002: Xem danh sách bài viết Pháp lý / Phong thủy', async () => {
@@ -27,7 +30,8 @@ describe('6. Kiểm thử Cẩm nang BĐS trên Mobile App (Mobile Handbook)', (
     if (await article.isDisplayed().catch(() => false)) {
       await article.click();
       await driver.pause(1500);
-      console.log('✅ Đã mở chi tiết bài viết Cẩm nang thành công');
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });

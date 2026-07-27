@@ -10,27 +10,28 @@ test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => 
 
     // Verify main header or content exists
     const header = page.locator('text=Cẩm nang').first();
-    if (await header.isVisible()) {
-      await expect(header).toBeVisible();
-    }
+    await expect(header).toBeVisible({ timeout: 15000 });
 
     // Verify search input
     const searchInput = page.locator('input[placeholder*="Tìm"], input').first();
-    await expect(searchInput).toBeVisible();
+    await expect(searchInput).toBeVisible({ timeout: 10000 });
     await searchInput.fill('quy trình');
     await searchInput.press('Enter');
     await page.waitForTimeout(2000);
 
-    // Click on the first handbook article to view details
-    const firstArticle = page.locator('a[href*="/cam-nang/"], div.cursor-pointer').first();
-    if (await firstArticle.isVisible()) {
-      await firstArticle.click();
-      await page.waitForTimeout(2000);
+    // Assert search result container or list is updated
+    await expect(page.locator('main')).toBeVisible();
 
-      // Verify detail page has content
-      const detailTitle = page.locator('h1, h2, .font-bold').first();
-      await expect(detailTitle).toBeVisible();
-    }
+    // Click on the first handbook article to view details
+    const firstArticle = page.locator('a[href*="/cam-nang/"], div.cursor-pointer, main article').first();
+    await expect(firstArticle).toBeVisible({ timeout: 10000 });
+    await firstArticle.click({ force: true });
+    await page.waitForTimeout(2000);
+
+    // Verify detail page has title content and URL
+    const detailTitle = page.locator('h1, h2, .font-bold').first();
+    await expect(detailTitle).toBeVisible({ timeout: 10000 });
+    expect(page.url()).toMatch(/\/cam-nang|\/tai-lieu/);
   });
 
   test('should load expert documents page', async ({ page }) => {
@@ -46,14 +47,14 @@ test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => 
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
 
-    // Verify that the page loads
+    // Verify that the page loads with header
     const docHeader = page.locator('text=Tài liệu, text=Tài liệu chuyên gia').first();
-    if (await docHeader.isVisible()) {
-      await expect(docHeader).toBeVisible();
-    }
+    await expect(docHeader).toBeVisible({ timeout: 15000 });
 
-    // Check for document list items or download links
-    const docItems = await page.locator('a[href*="download"], button:has-text("Tải"), .cursor-pointer').all();
-    console.log(`Document items found: ${docItems.length}`);
+    // Check for document list items or download links and assert presence
+    const docItems = page.locator('a[href*="download"], button:has-text("Tải"), .cursor-pointer, main article');
+    await expect(docItems.first()).toBeVisible({ timeout: 15000 });
+    const count = await docItems.count();
+    expect(count).toBeGreaterThan(0);
   });
 });

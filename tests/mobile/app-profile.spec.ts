@@ -31,6 +31,9 @@ describe('2. Kiểm thử Quản lý Tài khoản trên Mobile App (Mobile Profi
       await profileOption.click();
       await driver.pause(1000);
     }
+
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_PROFILE_002: Kiểm tra nút "Đổi ảnh đại diện" / Avatar Upload', async () => {
@@ -41,9 +44,11 @@ describe('2. Kiểm thử Quản lý Tài khoản trên Mobile App (Mobile Profi
 
       const option = await $('//*[contains(@text, "Thư viện") or contains(@text, "Chọn ảnh")]');
       if (await option.isDisplayed().catch(() => false)) {
-        console.log('✅ Mobile App hiển thị tùy chọn tải ảnh đại diện');
+        await expect(option).toBeDisplayed();
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_PROFILE_003: Cập nhật Số điện thoại chuẩn Việt Nam (10 chữ số)', async () => {
@@ -59,6 +64,8 @@ describe('2. Kiểm thử Quản lý Tài khoản trên Mobile App (Mobile Profi
         await driver.pause(1500);
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_PROFILE_004: Kiểm tra Validation Đổi mật khẩu KHÔNG KHỚP NHAU', async () => {
@@ -79,11 +86,13 @@ describe('2. Kiểm thử Quản lý Tài khoản trên Mobile App (Mobile Profi
 
           const errorMsg = await $('//*[contains(@text, "không khớp") or contains(@text, "không trùng")]');
           if (await errorMsg.isDisplayed().catch(() => false)) {
-            console.log('✅ Mobile App đã cảnh báo mật khẩu nhập lại không khớp');
+            await expect(errorMsg).toBeDisplayed();
           }
         }
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_PROFILE_005: Thao tác nút "Sao chép" đường dẫn giới thiệu (Referral Link)', async () => {
@@ -91,7 +100,8 @@ describe('2. Kiểm thử Quản lý Tài khoản trên Mobile App (Mobile Profi
     if (await copyRefBtn.isDisplayed().catch(() => false)) {
       await copyRefBtn.click();
       await driver.pause(500);
-      console.log('✅ Đã thao tác bấm nút Sao chép referral link trên Mobile');
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });

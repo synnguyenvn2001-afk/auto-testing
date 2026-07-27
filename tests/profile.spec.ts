@@ -89,6 +89,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
           await expect(errorMsg).toBeVisible();
         }
       }
+      await expect(phoneInput).toBeVisible();
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
 
@@ -110,6 +111,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
           await expect(errorMsg).toBeVisible();
         }
       }
+      await expect(phoneInput).toBeVisible();
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
 

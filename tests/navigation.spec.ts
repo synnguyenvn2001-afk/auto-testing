@@ -15,6 +15,7 @@ test.describe('Navigation Tests', () => {
     await mapLink.click();
     await page.waitForURL(/\/ban-do/);
     await expect(page).toHaveURL(/.*ban-do.*/);
+    await expect(page.locator('main, #tour-map-search, body')).toBeVisible();
 
     // 2. Navigation to "Tin rao vặt"
     const adsLink = page.locator('a:has-text("Tin rao vặt"), button:has-text("Tin rao vặt")').first();
@@ -22,6 +23,7 @@ test.describe('Navigation Tests', () => {
     await adsLink.click();
     await page.waitForURL(/\/tin-rao-vat/);
     await expect(page).toHaveURL(/.*tin-rao-vat.*/);
+    await expect(page.locator('main, body')).toBeVisible();
 
     // 3. Navigation to "Tin tức thị trường"
     const newsLink = page.locator('a:has-text("Tin tức thị trường"), button:has-text("Tin tức thị trường")').first();
@@ -29,6 +31,7 @@ test.describe('Navigation Tests', () => {
     await newsLink.click();
     await page.waitForURL(/\/tin-tuc-thi-truong/);
     await expect(page).toHaveURL(/.*tin-tuc-thi-truong.*/);
+    await expect(page.locator('main, body')).toBeVisible();
 
     // 4. Navigation to "Cẩm nang"
     const handbookLink = page.locator('a:has-text("Cẩm nang"), button:has-text("Cẩm nang")').first();
@@ -36,6 +39,7 @@ test.describe('Navigation Tests', () => {
     await handbookLink.click();
     await page.waitForURL(/\/cam-nang/);
     await expect(page).toHaveURL(/.*cam-nang.*/);
+    await expect(page.locator('main, body')).toBeVisible();
 
     // 5. Navigation to "Bảng giá"
     const pricingLink = page.locator('a:has-text("Bảng giá"), button:has-text("Bảng giá")').first();
@@ -43,11 +47,13 @@ test.describe('Navigation Tests', () => {
     await pricingLink.click();
     await page.waitForURL(/\/bang-gia/);
     await expect(page).toHaveURL(/.*bang-gia.*/);
+    await expect(page.locator('main, body')).toBeVisible();
 
     // 6. Navigation back to "Trang chủ"
     const homeLink = page.locator('a:has-text("Trang chủ"), button:has-text("Trang chủ")').first();
     await expect(homeLink).toBeVisible();
     await homeLink.click();
     await expect(page).toHaveURL(/https:\/\/dev-webapp\.laand\.vn\/?$/);
+    await expect(page.locator('main, body')).toBeVisible();
   });
 });

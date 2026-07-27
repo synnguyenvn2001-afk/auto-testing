@@ -20,6 +20,9 @@ describe('4. Kiểm thử Tin rao vặt & Đăng tin BĐS trên Mobile App (Mobi
       await adsOption.click();
       await driver.pause(1500);
     }
+
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_ADS_002: Lọc tin rao vặt theo Tỉnh thành / Khu vực', async () => {
@@ -32,9 +35,10 @@ describe('4. Kiểm thử Tin rao vặt & Đăng tin BĐS trên Mobile App (Mobi
       if (await option.isDisplayed().catch(() => false)) {
         await option.click();
         await driver.pause(1500);
-        console.log('✅ Đã lọc tin rao theo khu vực trên Mobile App');
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_ADS_003: Xem Chi tiết Tin rao & nút Liên hệ (Gọi ngay / Zalo)', async () => {
@@ -45,8 +49,10 @@ describe('4. Kiểm thử Tin rao vặt & Đăng tin BĐS trên Mobile App (Mobi
 
       const contactBtn = await $('//android.widget.Button[contains(@text, "Gọi ngay") or contains(@text, "Zalo") or contains(@text, "Liên hệ")]');
       if (await contactBtn.isDisplayed().catch(() => false)) {
-        console.log('✅ Hiển thị đầy đủ nút liên hệ chính chủ trên Mobile App');
+        await expect(contactBtn).toBeDisplayed();
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });

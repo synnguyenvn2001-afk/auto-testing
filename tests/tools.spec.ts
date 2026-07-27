@@ -10,43 +10,45 @@ test.describe('Financial and Estimation Tools Tests', () => {
 
   test('should open and calculate loan payments', async ({ page }) => {
     // Click "Tính lãi vay" button
-    const loanToolBtn = page.getByText('Tính lãi vay').first();
-    await expect(loanToolBtn).toBeVisible();
-    await loanToolBtn.click();
+    const loanToolBtn = page.locator('text=Tính lãi vay').first();
+    await expect(loanToolBtn).toBeVisible({ timeout: 15000 });
+    await loanToolBtn.click({ force: true });
     await page.waitForTimeout(2000);
 
-    // Locate the active dialog modal
-    const dialogModal = page.locator('div[role="dialog"]');
-    await expect(dialogModal).toBeVisible();
+    // Locate active dialog modal
+    const dialogModal = page.locator('div[role="dialog"]').first();
+    await expect(dialogModal).toBeVisible({ timeout: 10000 });
 
-    // Fill out inputs in the loan calculator
-    const inputs = await dialogModal.locator('input').all();
-    console.log(`Loan inputs found: ${inputs.length}`);
-    for (let i = 0; i < inputs.length; i++) {
-      const ph = await inputs[i].getAttribute('placeholder');
-      console.log(`Input ${i}: placeholder="${ph}"`);
-      if (await inputs[i].isEditable()) {
-        if (i === 0) {
-          await inputs[i].fill('1000000000'); // Amount: 1,000,000,000 VND
-        } else if (i === 1) {
-          await inputs[i].fill('120'); // Term: 120 months
-        } else if (i === 2) {
-          await inputs[i].fill('8.5'); // Interest rate: 8.5%
-        } else {
-          const val = await inputs[i].inputValue();
-          if (!val) {
-            await inputs[i].fill('10');
-          }
-        }
-      }
+    // Verify modal title "Tính lãi vay"
+    const modalTitle = dialogModal.locator('text=/Tính lãi vay/i').first();
+    await expect(modalTitle).toBeVisible();
+
+    // Fill out inputs in the loan calculator modal
+    const allInputs = await dialogModal.locator('input:not([type="radio"]):not([type="checkbox"])').all();
+    expect(allInputs.length).toBeGreaterThanOrEqual(3);
+
+    // Fill Required fields: Số tiền vay, Lãi suất vay (%), Thời hạn vay (tháng)
+    if (allInputs[0] && await allInputs[0].isEditable()) {
+      await allInputs[0].fill('1000000000'); // Số tiền: 1,000,000,000 VND
     }
-    await page.waitForTimeout(1000);
+    if (allInputs[1] && await allInputs[1].isEditable()) {
+      await allInputs[1].fill('8.5'); // Lãi suất: 8.5%/năm
+    }
+    if (allInputs[2] && await allInputs[2].isEditable()) {
+      await allInputs[2].fill('120'); // Thời hạn: 120 tháng
+    }
+    await page.waitForTimeout(500);
 
-    // Submit or calculate button inside the modal
-    const calcBtn = dialogModal.locator('button:has-text("Tính"), button:has-text("Kết quả"), button:has-text("Ước tính")').first();
-    await expect(calcBtn).toBeEnabled();
-    await calcBtn.click();
+    // Submit button "Ước tính khoản vay" inside the modal
+    const calcBtn = dialogModal.locator('button:has-text("Ước tính khoản vay"), button:has-text("Ước tính"), button:has-text("Tính")').first();
+    await expect(calcBtn).toBeVisible({ timeout: 10000 });
+    await expect(calcBtn).toBeEnabled({ timeout: 5000 });
+    await calcBtn.click({ force: true });
     await page.waitForTimeout(2000);
+
+    // Verify calculated results exist in the right panel / modal
+    const resultElement = dialogModal.locator('text=/Thông tin khoản vay|Bảng dự toán|VNĐ|tháng|gốc|lãi/i').first();
+    await expect(resultElement).toBeVisible({ timeout: 10000 });
     
     // Take screenshot of calculations
     await page.screenshot({ path: 'loan-calculated.png' });
@@ -65,24 +67,68 @@ test.describe('Financial and Estimation Tools Tests', () => {
 
     // Verify calculator inputs inside the modal
     const inputs = await dialogModal.locator('input').all();
-    console.log(`Savings inputs found: ${inputs.length}`);
+    expect(inputs.length).toBeGreaterThan(0);
+
+    // Perform calculation and check return result
+    if (inputs[0] && await inputs[0].isEditable()) {
+      await inputs[0].fill('500000000');
+    }
+    const calcBtn = dialogModal.locator('button:has-text("Tính"), button:has-text("Kết quả")').first();
+    if (await calcBtn.isVisible()) {
+      await calcBtn.click();
+      await page.waitForTimeout(1500);
+    }
+    const resultText = dialogModal.locator('text=/tiết kiệm|lãi|VNĐ/i').first();
+    await expect(resultText).toBeVisible({ timeout: 10000 });
   });
 
   test('should open building cost estimator', async ({ page }) => {
     // Click "Ước tính chi phí xây nhà" button
-    const buildToolBtn = page.getByText('Ước tính chi phí xây nhà').first();
-    await expect(buildToolBtn).toBeVisible();
-    await buildToolBtn.click();
+    const buildToolBtn = page.locator('text=Ước tính chi phí xây nhà').first();
+    await expect(buildToolBtn).toBeVisible({ timeout: 15000 });
+    await buildToolBtn.click({ force: true });
     await page.waitForTimeout(2000);
 
-    // Locate active dialog
-    const dialogModal = page.locator('div[role="dialog"]');
-    await expect(dialogModal).toBeVisible();
+    // Locate active dialog modal
+    const dialogModal = page.locator('div[role="dialog"]').first();
+    await expect(dialogModal).toBeVisible({ timeout: 10000 });
 
-    // Verify estimator inputs
-    const areaInput = dialogModal.locator('input').first();
-    if (await areaInput.isVisible()) {
-      await expect(areaInput).toBeVisible();
+    // Verify modal header title "Ước tính chi phí xây nhà"
+    const modalTitle = dialogModal.locator('text=/Ước tính chi phí xây nhà/i').first();
+    await expect(modalTitle).toBeVisible();
+
+    // Fill out all required input fields (Diện tích sàn, Số tầng, Chiều dài tường bao)
+    const allInputs = await dialogModal.locator('input:not([type="radio"]):not([type="checkbox"])').all();
+    expect(allInputs.length).toBeGreaterThan(0);
+
+    for (let i = 0; i < allInputs.length; i++) {
+      if (await allInputs[i].isEditable().catch(() => false)) {
+        const ph = (await allInputs[i].getAttribute('placeholder')) || '';
+        const val = await allInputs[i].inputValue();
+        if (!val || val.trim() === '') {
+          if (ph.includes('100') || i === 0) {
+            await allInputs[i].fill('100'); // Area: 100 m2
+          } else if (ph.includes('3') || i === 1) {
+            await allInputs[i].fill('3'); // Floors: 3
+          } else if (ph.includes('40') || i === 3) {
+            await allInputs[i].fill('40'); // Perimeter length: 40 m
+          } else {
+            await allInputs[i].fill('10');
+          }
+        }
+      }
     }
+    await page.waitForTimeout(500);
+
+    // Submit / Calculate button inside the modal (enabled once required fields are filled)
+    const calcBtn = dialogModal.locator('button:has-text("Tính toán"), button:has-text("Tính")').first();
+    await expect(calcBtn).toBeVisible({ timeout: 10000 });
+    await expect(calcBtn).toBeEnabled({ timeout: 5000 });
+    await calcBtn.click({ force: true });
+    await page.waitForTimeout(2000);
+
+    // Verify calculated output result is displayed in right panel
+    const resultElement = dialogModal.locator('text=/VNĐ|tổng chi phí|chi phí|tỷ|triệu|thi công/i').first();
+    await expect(resultElement).toBeVisible({ timeout: 10000 });
   });
 });

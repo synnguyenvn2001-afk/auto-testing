@@ -36,6 +36,7 @@
     "appium-uiautomator2-driver": "^3.7.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
+    "wdio-html-nice-reporter": "^8.1.7",
     "webdriverio": "^8.38.0"
   },
   "dependencies": {

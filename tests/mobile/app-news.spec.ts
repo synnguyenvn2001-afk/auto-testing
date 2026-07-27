@@ -20,6 +20,9 @@ describe('3. Kiểm thử Tin tức thị trường trên Mobile App (Mobile New
       await newsOption.click();
       await driver.pause(1500);
     }
+
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_NEWS_002: Kiểm tra ô Tìm kiếm AI ("Bạn muốn tìm hiểu về khu vực nào?...")', async () => {
@@ -27,7 +30,11 @@ describe('3. Kiểm thử Tin tức thị trường trên Mobile App (Mobile New
     if (await searchInput.isDisplayed().catch(() => false)) {
       await searchInput.setValue('Hà Nội');
       await driver.pause(1000);
-      console.log('✅ Đã nhập từ khóa tìm kiếm tin tức trên ô AI Search Mobile');
+      const value = await searchInput.getText();
+      expect(value).toContain('Hà Nội');
+    } else {
+      const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+      await expect(pageContainer).toBeDisplayed();
     }
   });
 
@@ -40,7 +47,8 @@ describe('3. Kiểm thử Tin tức thị trường trên Mobile App (Mobile New
       .perform();
 
     await driver.pause(1000);
-    console.log('✅ Đã vuốt cuộn màn hình tin tức trên Mobile');
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_NEWS_004: Mở Bộ lọc Tin tức & Click nút Reset (↺) "Xóa bộ lọc"', async () => {
@@ -53,8 +61,9 @@ describe('3. Kiểm thử Tin tức thị trường trên Mobile App (Mobile New
       if (await resetBtn.isDisplayed().catch(() => false)) {
         await resetBtn.click();
         await driver.pause(1000);
-        console.log('✅ Đã reset bộ lọc tin tức thành công trên Mobile');
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });

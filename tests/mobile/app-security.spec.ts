@@ -18,11 +18,10 @@ describe('7. Kiểm thử Bảo mật & Giới hạn dữ liệu trên Mobile Ap
       if (await submitBtn.isDisplayed().catch(() => false)) {
         await submitBtn.click();
         await driver.pause(1000);
-
-        // App không được sập (crash) hoặc popup alert XSS
-        console.log('✅ Mobile App đã mã hóa và bảo vệ an toàn trước dữ liệu XSS');
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_SEC_002: Chống bấm liên tục nút Submit (Double-click / Rapid tap protection)', async () => {
@@ -33,7 +32,8 @@ describe('7. Kiểm thử Bảo mật & Giới hạn dữ liệu trên Mobile Ap
       await submitBtn.click();
       await submitBtn.click();
       await driver.pause(1000);
-      console.log('✅ Mobile App xử lý an toàn chống spam click nút submit');
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });

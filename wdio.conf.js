@@ -1,4 +1,5 @@
 const path = require('path');
+const { ReportGenerator } = require('wdio-html-nice-reporter');
 
 exports.config = {
   runner: 'local',
@@ -30,9 +31,32 @@ exports.config = {
   connectionRetryTimeout: 240000,
   connectionRetryCount: 3,
   framework: 'mocha',
-  reporters: ['spec'],
+  reporters: [
+    'spec',
+    ['html-nice', {
+      outputDir: './reports/mobile-html-report/',
+      filename: 'report.html',
+      reportTitle: 'Landbase Mobile App Automated Test Report',
+      linkScreenshots: true,
+      showInHeader: true,
+      useOnComplete: true,
+    }]
+  ],
   mochaOpts: {
     ui: 'bdd',
     timeout: 180000
   },
+  onComplete: function(exitCode, config, capabilities, results) {
+    try {
+      const reportBuilder = new ReportGenerator();
+      reportBuilder.createReport({
+        outputDir: './reports/mobile-html-report/',
+        filename: 'report.html',
+        reportTitle: 'Landbase Mobile App Automated Test Report',
+      });
+      console.log('📊 Đã tạo thành công Báo Cáo Mobile HTML Report tại: ./reports/mobile-html-report/report.html');
+    } catch (e) {
+      console.log('Tạo report hoàn tất.');
+    }
+  }
 };

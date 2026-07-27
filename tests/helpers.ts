@@ -24,14 +24,23 @@ export async function skipOnboardingTour(page: Page) {
  * Logs in with the test user credentials if not already logged in.
  */
 export async function loginIfNeeded(page: Page) {
-  const loginTrigger = page.locator('#login-trigger-btn');
+  const loginTrigger = page.locator('#login-trigger-btn, button:has-text("Đăng nhập")').first();
   if (await loginTrigger.isVisible().catch(() => false)) {
     await loginTrigger.click({ force: true }).catch(() => {});
-    await page.locator('#login-username').fill('usert1').catch(() => {});
-    await page.locator('#login-password').fill('Enao@123').catch(() => {});
-    await page.locator('#login-continue-btn').click({ force: true }).catch(() => {});
-    await page.waitForTimeout(3000);
-    await skipOnboardingTour(page);
+    await page.waitForTimeout(500);
+
+    const dialogModal = page.locator('div[role="dialog"]').first();
+    const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
+    const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
+    const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+
+    if (await usernameInput.isVisible().catch(() => false)) {
+      await usernameInput.fill('usert1').catch(() => {});
+      await passwordInput.fill('Enao@123').catch(() => {});
+      await submitBtn.click({ force: true }).catch(() => {});
+      await page.waitForTimeout(3000);
+      await skipOnboardingTour(page);
+    }
   }
 }
 /**

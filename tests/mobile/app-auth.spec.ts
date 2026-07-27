@@ -52,6 +52,7 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
     await openLoginModalIfNeeded();
 
     const modalInputs = await getLoginModalInputs();
+    expect(modalInputs.length).toBeGreaterThan(0);
     if (modalInputs.length >= 1) {
       await modalInputs[0].click();
       await modalInputs[0].clearValue();
@@ -62,15 +63,17 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
       if (purpleSubmitBtn && await purpleSubmitBtn.isDisplayed().catch(() => false)) {
         await purpleSubmitBtn.click();
         await driver.pause(1000);
-        console.log('✅ Đã nhập user^78! vào Modal Đăng nhập và kiểm tra validate');
       }
     }
+    const loggedIn = await isMobileLoggedIn();
+    expect(loggedIn).toBe(false);
   });
 
   it('MOBILE_AUTH_004: Validate Đăng nhập thất bại khi nhập Sai Mật khẩu', async () => {
     await openLoginModalIfNeeded();
 
     const modalInputs = await getLoginModalInputs();
+    expect(modalInputs.length).toBeGreaterThan(0);
     if (modalInputs.length >= 1) {
       await modalInputs[0].click();
       await modalInputs[0].clearValue();
@@ -88,9 +91,10 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
       if (purpleSubmitBtn && await purpleSubmitBtn.isDisplayed().catch(() => false)) {
         await purpleSubmitBtn.click();
         await driver.pause(1500);
-        console.log('✅ Đã thử nghiệm nhập sai mật khẩu trong Modal Đăng nhập');
       }
     }
+    const loggedIn = await isMobileLoggedIn();
+    expect(loggedIn).toBe(false);
   });
 
   it('MOBILE_AUTH_005: ĐĂNG NHẬP THÀNH CÔNG trực tiếp bằng Tên tài khoản [usert1] & Mật khẩu [Enao@123]', async () => {

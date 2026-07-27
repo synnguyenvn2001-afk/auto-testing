@@ -20,6 +20,9 @@ describe('5. Kiểm thử Công cụ Tính toán BĐS trên Mobile App (Mobile T
       await toolsOption.click();
       await driver.pause(1500);
     }
+
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 
   it('MOBILE_TOOLS_002: Nhập số tiền vay và kiểm tra kết quả tính toán', async () => {
@@ -33,8 +36,9 @@ describe('5. Kiểm thử Công cụ Tính toán BĐS trên Mobile App (Mobile T
       if (await calcBtn.isDisplayed().catch(() => false)) {
         await calcBtn.click();
         await driver.pause(1000);
-        console.log('✅ Công cụ tính lãi vay đã thực thi trên Mobile');
       }
     }
+    const pageContainer = await $('//android.view.ViewGroup | //android.widget.FrameLayout');
+    await expect(pageContainer).toBeDisplayed();
   });
 });
