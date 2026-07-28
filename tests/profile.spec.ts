@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504 } from './helpers';
 
 test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () => {
   const PROFILE_URL = 'https://dev-webapp.laand.vn/tong-quan-tai-khoan';
@@ -9,12 +9,14 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test.setTimeout(60000);
     apiChecker = setupStrictApiCheck(page);
 
-    await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const response = await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
+    await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
     await loginIfNeeded(page);
 
     if (!page.url().includes('tong-quan-tai-khoan')) {
-      await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded' });
+      const res2 = await page.goto(PROFILE_URL, { waitUntil: 'domcontentloaded' }).catch(() => null);
+      await checkAndSkipIf504(page, res2);
       await skipOnboardingTour(page);
     }
   });

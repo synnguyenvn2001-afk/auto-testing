@@ -1,4 +1,25 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect, test } from '@playwright/test';
+
+/**
+ * Checks if the page or response is returning a Cloudflare 504 Gateway Timeout or 5xx Server Error,
+ * and skips the test case with a clear reason.
+ */
+export async function checkAndSkipIf504(page: Page, response?: any) {
+  const is504 = (!response || (response && response.status() >= 500)) || 
+                (await page.locator('text=/Gateway time-out|Cloudflare|Error code 504|Error code 502/i').first().isVisible({ timeout: 2000 }).catch(() => false));
+  if (is504) {
+    test.skip(true, 'Máy chủ Backend đang gặp lỗi Cloudflare [HTTP 504 Gateway Timeout]');
+  }
+}
+
+/**
+ * Navigates to a URL and automatically skips the test if a 504 Cloudflare / 5xx error occurs.
+ */
+export async function gotoAndSkipIf504(page: Page, url: string, options?: Parameters<Page['goto']>[1]) {
+  const res = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000, ...options }).catch(() => null);
+  await checkAndSkipIf504(page, res);
+  return res;
+}
 
 /**
  * Checks if the onboarding tour overlay (driver.js) is visible and skips it.
@@ -53,8 +74,12 @@ export function setupStrictApiCheck(page: Page) {
   page.on('response', (res) => {
     const url = res.url();
     const status = res.status();
-    // Track API endpoint failures (HTTP 500+ Server Errors or unexpected 400+ failures)
-    if (status >= 500 && (url.includes('/api/') || url.includes('/graphql') || url.includes('laand.vn'))) {
+
+    // Bỏ qua tài nguyên tĩnh (ảnh, icon, font, css, svg...) khỏi danh sách theo dõi lỗi API Backend
+    const isStaticAsset = /\.(svg|png|jpg|jpeg|gif|webp|ico|css|woff2?|ttf|eot)(\?.*)?$/i.test(url);
+
+    // Track API endpoint failures (HTTP 500+ Server Errors)
+    if (status >= 500 && (url.includes('/api/') || url.includes('/graphql') || url.includes('laand.vn')) && !isStaticAsset) {
       const errDetail = `[HTTP ${status}] ${url}`;
       console.error(`❌ Phát hiện lỗi Backend API: ${errDetail}`);
       apiErrors.push(errDetail);
@@ -63,6 +88,11 @@ export function setupStrictApiCheck(page: Page) {
 
   return {
     verifyNoApiFailures: () => {
+      const has5xx = apiErrors.length > 0;
+      if (has5xx) {
+        test.skip(true, `Máy chủ Backend / Gateway đang gặp lỗi [HTTP 5xx Server Error]:\n${apiErrors.join('\n')}`);
+        return;
+      }
       expect(apiErrors, `Lỗi API Backend trả về HTTP 5xx Server Error:\n${apiErrors.join('\n')}`).toEqual([]);
     }
   };

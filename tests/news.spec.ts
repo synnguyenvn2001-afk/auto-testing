@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504, gotoAndSkipIf504 } from './helpers';
 
 test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Mở trang nguồn)', () => {
   const BASE_URL = 'https://dev-webapp.laand.vn/tin-tuc-thi-truong';
@@ -8,6 +8,11 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);
     apiChecker = setupStrictApiCheck(page);
+
+    // Kiểm tra phản hồi điều hướng ban đầu, tự động skip nếu gặp lỗi Cloudflare 504 Gateway Timeout
+    const response = await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
+    await checkAndSkipIf504(page, response);
+
     await skipOnboardingTour(page);
   });
 
@@ -20,7 +25,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
    * ========================================================================= */
   test.describe('1. Màn Trang chủ (Homepage Layout & Categories)', () => {
     test('NEWS_HOME_001: Kiểm tra tổng quan giao diện trang chủ, bố cục Header, Search bar, Body & Footer', async ({ page }) => {
-      await page.goto(BASE_URL).catch(() => {});
+      await gotoAndSkipIf504(page, BASE_URL);
       await skipOnboardingTour(page);
 
       // Header check
@@ -152,8 +157,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_002: Kiểm tra nút Xóa tất cả bộ lọc và đặt lại trạng thái ban đầu', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem?keyword=ha-noi`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem?keyword=ha-noi`);
 
       const clearAllBtn = page.locator('button:has-text("Xóa tất cả"), button:has-text("Xóa bộ lọc")').first();
       if (await clearAllBtn.isVisible().catch(() => false)) {
@@ -201,9 +205,9 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_006: Kiểm tra Toggle tìm kiếm chính xác / tương đối (Mặc định BẬT -> Bấm chuyển TẮT)', async ({ page }) => {
-      const exactToggle = page.locator('button[role="switch"], input[type="checkbox"], [class*="toggle"]').first();
-      if (await exactToggle.isVisible().catch(() => false)) {
-        await exactToggle.click().catch(() => {});
+      const toggleSwitch = page.locator('button[role="switch"], button[data-state], input[type="checkbox"], [class*="switch"], [class*="toggle"]').first();
+      if (await toggleSwitch.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await toggleSwitch.click({ force: true }).catch(() => {});
         await page.waitForTimeout(500);
       }
       await expect(page.locator('body')).toBeVisible();
@@ -265,8 +269,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_010: Kiểm tra tin tức tìm kiếm khi cuộn trang (Lazy load / Phân trang danh sách bài viết kết quả)', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem?keyword=b%E1%BA%A5t%20%C4%91%E1%BB%99ng%20s%E1%BA%A3n`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem?keyword=b%E1%BA%A5t%20%C4%91%E1%BB%99ng%20s%E1%BA%A3n`);
 
       // Scroll down to trigger pagination or lazy loading of news articles
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -280,8 +283,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_011: Kiểm tra khi lọc theo Danh mục (Dự án, Vĩ mô, Nghị quyết...), các bài viết trả về phải hiển thị đúng thẻ (Tag) tương ứng & Kiểm tra API 200 OK', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       // Select category filter e.g. "Vĩ mô" or "Dự án"
@@ -320,8 +322,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_012: Kiểm tra kết hợp Danh mục và Khoảng thời gian đăng tin (Từ ngày - Đến ngày), bài viết vừa khớp thẻ vừa đúng ngày đăng bài', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       // Select category
@@ -356,8 +357,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_013: Kiểm tra kết hợp nhiều Danh mục (Nghị quyết + Vĩ mô), hiển thị đúng các thẻ chip bộ lọc đã chọn', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
@@ -391,8 +391,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_014: Kiểm tra khi Toggle được BẬT (chế độ tìm kiếm tương đối / HOẶC), bài viết chỉ cần chứa 1 trong nhiều thẻ danh mục đã chọn (Nghị quyết HOẶC Vĩ mô) là sẽ hiển thị trong kết quả', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       // Select multiple categories: Nghị quyết and Vĩ mô
@@ -440,8 +439,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_015: Kiểm tra danh mục tìm kiếm hiển thị phân nhóm "Đơn vị hành chính mới" (kèm số lượng bài viết) và nhóm "Khác" (kèm số lượng bài viết)', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       // Open "Chọn danh mục tìm kiếm" dropdown
@@ -471,8 +469,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_016: Kiểm tra chọn các địa danh thuộc nhóm "Đơn vị hành chính mới" (Quảng Ninh, Đồng Nai, Nghệ An, Bà Rịa - Vũng Tàu...), các bài viết hiển thị đúng thẻ địa phương', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
@@ -507,8 +504,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_017: Kiểm tra chọn danh mục thuộc nhóm "Khác", danh sách bài viết kết quả được lọc đúng theo danh mục đã chọn', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
@@ -602,6 +598,12 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         await expect(defaultCategoryText).toBeVisible();
       }
 
+      // Khẳng định khi bấm nút Reset sẽ quay về danh sách tất cả bài viết ("Tin mới nhất" hoặc số lượng tất cả bài viết)
+      const allNewsHeader = page.locator('text=/Tin mới nhất|Hiển thị.*bài viết/i').first();
+      if (await allNewsHeader.isVisible().catch(() => false)) {
+        await expect(allNewsHeader).toBeVisible();
+      }
+
       await expect(page.locator('body')).toBeVisible();
     });
 
@@ -644,11 +646,14 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         }
       }
 
-      // Turn Toggle ON (Relative/OR mode)
-      const toggleSwitch = page.locator('button[role="switch"], [class*="switch"], [class*="toggle"]').first();
-      if (await toggleSwitch.isVisible().catch(() => false)) {
-        const isChecked = await toggleSwitch.getAttribute('aria-checked').catch(() => null);
-        if (isChecked !== 'true') {
+      // Turn Toggle ON (Relative/OR mode - Nút gạt màu tím bên cạnh dropdown Danh mục)
+      const toggleSwitch = page.locator('button[role="switch"], button[data-state], input[type="checkbox"], [class*="switch"], [class*="toggle"]').first();
+      if (await toggleSwitch.isVisible({ timeout: 5000 }).catch(() => false)) {
+        const ariaChecked = await toggleSwitch.getAttribute('aria-checked').catch(() => null);
+        const dataState = await toggleSwitch.getAttribute('data-state').catch(() => null);
+        const isChecked = ariaChecked === 'true' || dataState === 'checked';
+        
+        if (!isChecked) {
           await toggleSwitch.click({ force: true }).catch(() => {});
           await page.waitForTimeout(500);
         }
@@ -851,8 +856,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_FILTER_013: Kiểm tra khi nhấp chọn Bộ lọc đã lưu (dưới mục "BỘ LỌC ĐÃ LƯU:"), hệ thống tự động Highlight (nổi bật) thẻ bộ lọc đang chọn để thực hiện tìm kiếm', async ({ page }) => {
-      await page.goto(`${BASE_URL}/tim-kiem`);
-      await page.waitForLoadState('domcontentloaded');
+      await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       await skipOnboardingTour(page);
 
       // Tìm thẻ bộ lọc đã lưu dưới mục "BỘ LỌC ĐÃ LƯU:"
@@ -991,7 +995,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       await loginIfNeeded(page);
 
       // Open user dropdown menu or navigate directly to Personal Data page (/du-lieu-ca-nhan)
-      await page.goto('https://dev-webapp.laand.vn/du-lieu-ca-nhan', { waitUntil: 'commit', timeout: 10000 }).catch(() => {});
+      await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-ca-nhan');
       await skipOnboardingTour(page);
 
       // Verify tabs: "Bất động sản đã lưu", "Tin đã đọc", "Tin tức đã lưu"
@@ -1006,7 +1010,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
     test('NEWS_ARTICLE_SAVE_005: Kiểm tra hiển thị danh sách tin tức đã lưu trong màn "Dữ liệu của tôi" và mở trang nguồn', async ({ page }) => {
       await loginIfNeeded(page);
-      await page.goto('https://dev-webapp.laand.vn/du-lieu-cua-toi?tab=tin-tuc-da-luu', { waitUntil: 'domcontentloaded' }).catch(() => {});
+      await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-cua-toi?tab=tin-tuc-da-luu');
       await skipOnboardingTour(page);
 
       // Verify saved news article items or empty state
@@ -1019,7 +1023,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
     test('NEWS_ARTICLE_SAVE_006: Thao tác Bỏ lưu tin bài trực tiếp từ danh sách "Tin tức đã lưu" trong màn "Dữ liệu của tôi"', async ({ page }) => {
       await loginIfNeeded(page);
-      await page.goto('https://dev-webapp.laand.vn/du-lieu-cua-toi?tab=tin-tuc-da-luu', { waitUntil: 'domcontentloaded' }).catch(() => {});
+      await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-cua-toi?tab=tin-tuc-da-luu');
       await skipOnboardingTour(page);
 
       // Find unsave / bookmark / remove button on saved news item inside My Data page

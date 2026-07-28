@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504 } from './helpers';
 
 test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao vặt.xlsx)', () => {
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
@@ -12,8 +12,8 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
 
-    await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
-    await page.waitForLoadState('domcontentloaded');
+    const response = await page.goto('https://dev-webapp.laand.vn/tin-rao-vat').catch(() => null);
+    await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });
 

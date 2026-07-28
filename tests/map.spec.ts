@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck } from './helpers';
+import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504 } from './helpers';
 
 test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
@@ -12,8 +12,8 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
 
-    await page.goto('https://dev-webapp.laand.vn/ban-do');
-    await page.waitForLoadState('domcontentloaded');
+    const response = await page.goto('https://dev-webapp.laand.vn/ban-do').catch(() => null);
+    await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });
 

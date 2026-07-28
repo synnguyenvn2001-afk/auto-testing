@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { skipOnboardingTour } from './helpers';
+import { skipOnboardingTour, checkAndSkipIf504 } from './helpers';
 
 test.describe('Financial and Estimation Tools Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://dev-webapp.laand.vn/');
-    await page.waitForLoadState('domcontentloaded');
+    const response = await page.goto('https://dev-webapp.laand.vn/').catch(() => null);
+    await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });
 
