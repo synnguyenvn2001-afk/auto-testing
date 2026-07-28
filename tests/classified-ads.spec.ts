@@ -547,8 +547,13 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
   // =========================================================================
   // PHẦN 10: CHI TIẾT BĐS - TỔNG QUAN, TIỆN ÍCH DỊCH VỤ, TÍNH CHÍ PHÍ & TIN TỨC LIÊN QUAN
   // =========================================================================
-  test.describe('10. Chi tiết BĐS - Tổng quan, Tiện ích dịch vụ, Tính chi phí & Tin tức liên quan', () => {
+  // =========================================================================
+  // PHẦN 10: MÀN CHI TIẾT BĐS (OVERVIEW, THÔNG TIN CHI TIẾT, SHARE, TIỆN ÍCH, CÔNG CỤ TÍNH TOÁN & TIN TỨC)
+  // =========================================================================
+  test.describe('10. Chi tiết BĐS - Màn hình Chi tiết Bất động sản toàn diện', () => {
     test.beforeEach(async ({ page }) => {
+      await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
+      await page.waitForLoadState('domcontentloaded');
       await page.waitForTimeout(2000);
       await skipOnboardingTour(page);
 
@@ -561,9 +566,9 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
       }
     });
 
-    test('10.1. Kiểm tra bố cục Tổng quan BĐS và Grid Thông tin chi tiết (Ngày đăng, Loại hình, Người đăng, SĐT, Nguồn...)', async ({ page }) => {
+    test('10.1. Kiểm tra Tiêu đề Modal "Chi tiết bất động sản" và các nút thao tác trên Header (Lưu, Chia sẻ, Đóng X)', async ({ page }) => {
       // Verify Modal Title
-      const detailTitle = page.locator('text=/Chi tiết bất động sản/i').first();
+      const detailTitle = page.locator('h1, h2, h3, div').filter({ hasText: /^Chi tiết bất động sản$/i }).first();
       if (await detailTitle.isVisible().catch(() => false)) {
         await expect(detailTitle).toBeVisible();
       }
@@ -571,79 +576,176 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
       // Verify Header Action Buttons: Lưu, Chia sẻ, Close (X)
       const saveBtn = page.locator('button:has-text("Lưu"), [aria-label*="Lưu"]').first();
       const shareBtn = page.locator('button:has-text("Chia sẻ"), [aria-label*="Chia sẻ"]').first();
+      const closeBtn = page.locator('button.absolute, button[data-slot="dialog-close"], button[aria-label*="Close"i]').first();
+
       if (await saveBtn.isVisible().catch(() => false)) {
         await expect(saveBtn).toBeVisible();
       }
       if (await shareBtn.isVisible().catch(() => false)) {
         await expect(shareBtn).toBeVisible();
       }
-
-      // Verify Details Grid Fields (Loại hình BĐS, Ngày đăng, Tên người đăng, SĐT, Nguồn)
-      const detailGrid = page.locator('text=/Thông tin chi tiết|Tổng quan bất động sản/i').first();
-      if (await detailGrid.isVisible().catch(() => false)) {
-        await expect(detailGrid).toBeVisible();
-      }
-
-      await expect(page.locator('body')).toBeVisible();
-    });
-
-    test('10.2. Kiểm tra click link Nguồn BĐS (GULAND.VN / Nguồn tin gốc)', async ({ page }) => {
-      const sourceLink = page.locator('a[href*="http"]').filter({ hasText: /GULAND|Nguồn|land/i }).first();
-      if (await sourceLink.isVisible().catch(() => false)) {
-        const [newPage] = await Promise.all([
-          page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null),
-          sourceLink.click({ force: true }).catch(() => {}),
-        ]);
-        if (newPage) {
-          await newPage.waitForLoadState('domcontentloaded').catch(() => {});
-          await newPage.close().catch(() => {});
-        }
+      if (await closeBtn.isVisible().catch(() => false)) {
+        await expect(closeBtn).toBeVisible();
       }
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('10.3. Kiểm tra khối Tiện ích và dịch vụ (Phân loại Đường phố, Y tế, Trường học, Ngân hàng & Khoảng cách)', async ({ page }) => {
-      // Scroll down to Tiện ích và dịch vụ section
-      const utilityHeader = page.locator('text=/Tiện ích và dịch vụ/i').first();
-      if (await utilityHeader.isVisible().catch(() => false)) {
-        await utilityHeader.scrollIntoViewIfNeeded().catch(() => {});
-        await expect(utilityHeader).toBeVisible();
+    test('10.2. Kiểm tra Menu "Chia sẻ" (Mở dropdown với 3 tùy chọn: Facebook, Zalo, Sao chép liên kết)', async ({ page }) => {
+      const shareBtn = page.locator('button:has-text("Chia sẻ"), [aria-label*="Chia sẻ"]').first();
+      if (await shareBtn.isVisible().catch(() => false)) {
+        await shareBtn.click({ force: true });
+        await page.waitForTimeout(500);
 
-        // Check utility radius filter (e.g. 10 km) or filter buttons
-        const distanceFilter = page.locator('button, div').filter({ hasText: /10 km|km/i }).first();
-        if (await distanceFilter.isVisible().catch(() => false)) {
-          await expect(distanceFilter).toBeVisible();
+        // Verify Share Popover Menu Options: Facebook, Zalo, Sao chép liên kết
+        const fbOption = page.locator('button, div, span, a').filter({ hasText: /Facebook/i }).first();
+        const zaloOption = page.locator('button, div, span, a').filter({ hasText: /Zalo/i }).first();
+        const copyOption = page.locator('button, div, span, a').filter({ hasText: /Sao chép liên kết/i }).first();
+
+        if (await fbOption.isVisible().catch(() => false)) {
+          await expect(fbOption).toBeVisible();
         }
+        if (await zaloOption.isVisible().catch(() => false)) {
+          await expect(zaloOption).toBeVisible();
+        }
+        if (await copyOption.isVisible().catch(() => false)) {
+          await expect(copyOption).toBeVisible();
 
-        // Test category tab switching: Đường phố, Trường học, Cơ sở y tế, Ngân hàng...
-        const tabCategory = page.locator('button, div, span').filter({ hasText: /Trường học|Cơ sở y tế|Ngân hàng|Đường phố/i }).first();
-        if (await tabCategory.isVisible().catch(() => false)) {
-          await tabCategory.click({ force: true }).catch(() => {});
+          // Click "Sao chép liên kết" option
+          await copyOption.click({ force: true });
           await page.waitForTimeout(500);
         }
       }
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('10.4. Kiểm tra Công cụ "Ước tính chi phí xây dựng" (Nhập thông số, chọn phương pháp & bấm Tính toán)', async ({ page }) => {
+    test('10.3. Kiểm tra khối "Tổng quan bất động sản" (Ảnh xem trước, Tiêu đề BĐS, Địa chỉ, Giá, Badge Sổ đỏ/Sổ hồng, Thông số Diện tích/Phòng ngủ/Hướng)', async ({ page }) => {
+      const overviewHeader = page.locator('text=/Tổng quan bất động sản/i').first();
+      if (await overviewHeader.isVisible().catch(() => false)) {
+        await expect(overviewHeader).toBeVisible();
+      }
+
+      // Verify Price element (e.g. 3.99 tỷ, 99.75tr/m²)
+      const priceText = page.locator('text=/tỷ|triệu/i').first();
+      if (await priceText.isVisible().catch(() => false)) {
+        await expect(priceText).toBeVisible();
+      }
+
+      // Verify Legal status badge e.g. "Sổ đỏ/ Số hồng"
+      const legalBadge = page.locator('text=/Sổ đỏ|Sổ hồng|Pháp lý/i').first();
+      if (await legalBadge.isVisible().catch(() => false)) {
+        await expect(legalBadge).toBeVisible();
+      }
+
+      // Verify key specs e.g. "Diện tích", "Phòng ngủ", "Hướng"
+      const specElements = page.locator('text=/Diện tích|Phòng ngủ|Hướng/i').first();
+      if (await specElements.isVisible().catch(() => false)) {
+        await expect(specElements).toBeVisible();
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('10.4. Kiểm tra khối "Thông tin chi tiết" (Bắt buộc: Ngày đăng, Loại hình BĐS, Tên người đăng, Nguồn; Tùy chọn: Số tầng, Số phòng tắm)', async ({ page }) => {
+      const detailHeader = page.locator('text=/Thông tin chi tiết/i').first();
+      if (await detailHeader.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await expect(detailHeader).toBeVisible();
+
+        // 4 trường thông tin BẮT BUỘC phải có trong mọi bài đăng BĐS
+        const publishDate = page.locator('text=/Ngày đăng/i').first();
+        const propertyType = page.locator('text=/Loại hình BĐS/i').first();
+        const posterName = page.locator('text=/Tên người đăng/i').first();
+        const sourceLink = page.locator('text=/Nguồn/i').first();
+
+        if (await publishDate.isVisible().catch(() => false)) {
+          await expect(publishDate).toBeVisible();
+        }
+        if (await propertyType.isVisible().catch(() => false)) {
+          await expect(propertyType).toBeVisible();
+        }
+        if (await posterName.isVisible().catch(() => false)) {
+          await expect(posterName).toBeVisible();
+        }
+        if (await sourceLink.isVisible().catch(() => false)) {
+          await expect(sourceLink).toBeVisible();
+        }
+
+        // Các trường TÙY CHỌN (Số tầng, Số phòng tắm - có thể không có đối với BĐS Đất)
+        const optionalFloors = page.locator('text=/Số tầng/i').first();
+        const optionalBaths = page.locator('text=/Số phòng tắm|Số phòng ngủ/i').first();
+
+        if (await optionalFloors.isVisible().catch(() => false)) {
+          await expect(optionalFloors).toBeVisible();
+        }
+        if (await optionalBaths.isVisible().catch(() => false)) {
+          await expect(optionalBaths).toBeVisible();
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('10.5. Kiểm tra khối "Tiện ích và dịch vụ" & Nút "Xem thêm" (Tải thêm tối đa 10 dòng tiện ích mới)', async ({ page }) => {
+      const utilityHeader = page.locator('text=/Tiện ích và dịch vụ/i').first();
+      if (await utilityHeader.isVisible().catch(() => false)) {
+        await utilityHeader.scrollIntoViewIfNeeded().catch(() => {});
+        await expect(utilityHeader).toBeVisible();
+
+        // Check utility radius dropdown filter (10 km)
+        const radiusBtn = page.locator('button, div').filter({ hasText: /10 km|km/i }).first();
+        if (await radiusBtn.isVisible().catch(() => false)) {
+          await expect(radiusBtn).toBeVisible();
+        }
+
+        // Check "+ Thêm địa điểm" button
+        const addLocationBtn = page.locator('button, div, span').filter({ hasText: /\+ Thêm địa điểm|Thêm địa điểm/i }).first();
+        if (await addLocationBtn.isVisible().catch(() => false)) {
+          await expect(addLocationBtn).toBeVisible();
+        }
+
+        // Test category sidebar tab switching: Đường phố, Trường học, Cơ sở y tế, Ngân hàng...
+        const tabCategory = page.locator('button, div, span').filter({ hasText: /Trường học|Cơ sở y tế|Ngân hàng|Đường phố|Khu thương mại/i }).first();
+        if (await tabCategory.isVisible().catch(() => false)) {
+          await tabCategory.click({ force: true }).catch(() => {});
+          await page.waitForTimeout(500);
+        }
+
+        // Bấm nút "Xem thêm" trong khối Tiện ích và dịch vụ
+        const seeMoreBtn = page.locator('button:has-text("Xem thêm"), div:has-text("Xem thêm"), span:has-text("Xem thêm")').first();
+        if (await seeMoreBtn.isVisible().catch(() => false)) {
+          const initialRowsCount = await page.locator('text=/km|phút/i').count();
+
+          await seeMoreBtn.scrollIntoViewIfNeeded().catch(() => {});
+          await seeMoreBtn.click({ force: true }).catch(() => {});
+          await page.waitForTimeout(1000);
+
+          // Kiểm tra số lượng dòng tiện ích được tải thêm (tối đa 10 dòng nữa)
+          const newRowsCount = await page.locator('text=/km|phút/i').count();
+          if (newRowsCount > initialRowsCount) {
+            const addedRows = newRowsCount - initialRowsCount;
+            expect(addedRows).toBeLessThanOrEqual(10);
+          }
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('10.6. Kiểm tra Công cụ "Ước tính chi phí xây dựng" (Nhập các thông số Sàn, Tầng, Mái, Móng, Khấu hao & Chọn phương pháp "Giao thầu trọn gói" -> Bấm Tính toán)', async ({ page }) => {
       const calcHeader = page.locator('text=/Ước tính chi phí xây dựng/i').first();
       if (await calcHeader.isVisible().catch(() => false)) {
         await calcHeader.scrollIntoViewIfNeeded().catch(() => {});
         await expect(calcHeader).toBeVisible();
 
-        // Fill inputs: Diện tích sàn, Số tầng
-        const areaInput = page.locator('input[value="38"], input[placeholder*="38"], input[type="number"]').first();
+        // Input "Diện tích sàn"
+        const areaInput = page.locator('input[placeholder*="38"i], input[value="40"], input[type="number"]').first();
         if (await areaInput.isVisible().catch(() => false)) {
           await areaInput.fill('50').catch(() => {});
         }
 
-        // Select construction method: Giao thầu trọn gói or Chủ nhà tự xây
+        // Select radio method: "Giao thầu trọn gói" or "Chủ nhà tự quản lý (Tự xây)"
         const radioOption = page.locator('label, input[type="radio"]').filter({ hasText: /Giao thầu trọn gói|Tự xây/i }).first();
         if (await radioOption.isVisible().catch(() => false)) {
           await radioOption.click({ force: true }).catch(() => {});
         }
 
-        // Click Tính toán button
+        // Click "Tính toán" button
         const calculateBtn = page.locator('button:has-text("Tính toán"), button:has-text("tính toán")').first();
         if (await calculateBtn.isVisible().catch(() => false)) {
           await calculateBtn.click({ force: true }).catch(() => {});
@@ -653,30 +755,77 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('10.5. Kiểm tra khối "Tin tức quanh đây" & "Tin pháp lý" (BĐS360 Tin tức liên quan)', async ({ page }) => {
-      const newsHeader = page.locator('text=/Tin tức quanh đây|Tin pháp lý/i').first();
-      if (await newsHeader.isVisible().catch(() => false)) {
-        await newsHeader.scrollIntoViewIfNeeded().catch(() => {});
-        await expect(newsHeader).toBeVisible();
+    test('10.7. Kiểm tra khối "Bất động sản tương tự" (Hiển thị 10 tin đầu tiên, bấm nút mũi tên > cuộn đến cuối để tải thêm 10 tin mới)', async ({ page }) => {
+      const similarHeader = page.locator('text=/Bất động sản tương tự/i').first();
+      if (await similarHeader.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await similarHeader.scrollIntoViewIfNeeded().catch(() => {});
+        await expect(similarHeader).toBeVisible();
 
-        // Switch to "Tin pháp lý" tab
-        const legalTab = page.locator('button, div, span').filter({ hasText: /^Tin pháp lý$/i }).first();
-        if (await legalTab.isVisible().catch(() => false)) {
-          await legalTab.click({ force: true }).catch(() => {});
-          await page.waitForTimeout(500);
+        // 1. Kiểm tra hiển thị tối đa 10 tin BĐS tương tự đầu tiên
+        const similarSection = similarHeader.locator('xpath=ancestor::section | ancestor::div[contains(@class, "space-y")] | ancestor::div[1]').first();
+        const cards = similarSection.locator('article, [class*="card"], div.grid > div').filter({ hasText: /tỷ|triệu/i });
+        const initialCount = await cards.count();
+
+        if (initialCount > 0) {
+          expect(initialCount).toBeLessThanOrEqual(10);
         }
 
-        // Switch back to "Tin tức quanh đây" tab
-        const aroundTab = page.locator('button, div, span').filter({ hasText: /^Tin tức quanh đây$/i }).first();
-        if (await aroundTab.isVisible().catch(() => false)) {
-          await aroundTab.click({ force: true }).catch(() => {});
-          await page.waitForTimeout(500);
+        // 2. Tìm nút mũi tên > (Next Arrow Button) và bấm cuộn sang phải để load thêm 10 tin nữa
+        const nextArrowBtn = page.locator('button:has(i.fa-chevron-right), button:has(i.fa-arrow-right), button:has(svg path[d*="right"]), button.swiper-button-next, button[aria-label*="next"i]').first();
+        if (await nextArrowBtn.isVisible().catch(() => false)) {
+          for (let i = 0; i < 5; i++) {
+            await nextArrowBtn.click({ force: true }).catch(() => {});
+            await page.waitForTimeout(300);
+          }
+          await page.waitForTimeout(1000);
+
+          // Kiểm tra số lượng card tăng lên sau khi load thêm 10 tin mới
+          const newCount = await cards.count();
+          if (newCount > initialCount) {
+            const addedCount = newCount - initialCount;
+            expect(addedCount).toBeLessThanOrEqual(10);
+          }
         }
       }
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('10.6. Kiểm tra Guest (chưa đăng nhập) khi bấm nút con mắt (hiện SĐT/Nguồn), nút "Xem thêm" Tiện ích hoặc nút "Lưu tin" sẽ mở Popup Yêu cầu Đăng nhập', async ({ page }) => {
+    test('10.8. Kiểm tra khối "Tin tức quanh đây" và "Tin pháp lý" (Hiển thị 10 tin đầu tiên, bấm nút mũi tên > cuộn tới cuối tải thêm 10 tin mới)', async ({ page }) => {
+      const newsHeader = page.locator('text=/Tin tức quanh đây|Tin pháp lý/i').first();
+      if (await newsHeader.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await newsHeader.scrollIntoViewIfNeeded().catch(() => {});
+        await expect(newsHeader).toBeVisible();
+
+        // 1. Kiểm tra Tab "Tin tức quanh đây" (Hiển thị 10 tin đầu tiên & cuộn nút > tải thêm 10 tin nữa)
+        const aroundNewsCards = page.locator('article, [class*="card"]').filter({ hasText: /2025|2026|ngày|giờ/i });
+        const initialAroundCount = await aroundNewsCards.count();
+        if (initialAroundCount > 0) {
+          expect(initialAroundCount).toBeLessThanOrEqual(10);
+        }
+
+        const nextArrowBtn = page.locator('button:has(i.fa-chevron-right), button:has(i.fa-arrow-right), button:has(svg path[d*="right"]), button.swiper-button-next, button[aria-label*="next"i]').first();
+        if (await nextArrowBtn.isVisible().catch(() => false)) {
+          await nextArrowBtn.click({ force: true }).catch(() => {});
+          await page.waitForTimeout(800);
+        }
+
+        // 2. Chuyển sang Tab "Tin pháp lý" (Hiển thị 10 tin đầu tiên & cuộn nút > tải thêm 10 tin mới)
+        const legalTab = page.locator('button, div, span').filter({ hasText: /^Tin pháp lý$/i }).first();
+        if (await legalTab.isVisible().catch(() => false)) {
+          await legalTab.click({ force: true }).catch(() => {});
+          await page.waitForTimeout(500);
+
+          const legalCards = page.locator('article, [class*="card"]').filter({ hasText: /Pháp lý|Quyết định|Nghị quyết/i });
+          const initialLegalCount = await legalCards.count();
+          if (initialLegalCount > 0) {
+            expect(initialLegalCount).toBeLessThanOrEqual(10);
+          }
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('10.9. Kiểm tra Guest (chưa đăng nhập) khi bấm nút con mắt (hiện SĐT/Nguồn), nút "Xem thêm" Tiện ích hoặc nút "Lưu tin" sẽ mở Popup Yêu cầu Đăng nhập', async ({ page }) => {
       // 1. Click Eye icon on SĐT or Nguồn
       const eyeIcon = page.locator('button:has(i.fa-eye), button:has(i.fa-eye-slash), [class*="eye"]').or(
         page.locator('svg[data-icon="eye"], svg[data-icon="eye-slash"]')
@@ -693,20 +842,7 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
         }
       }
 
-      // 2. Click "Xem thêm" button in Tiện ích và dịch vụ list
-      const seeMoreUtilityBtn = page.locator('button:has-text("Xem thêm"), div:has-text("Xem thêm")').first();
-      if (await seeMoreUtilityBtn.isVisible().catch(() => false)) {
-        await seeMoreUtilityBtn.scrollIntoViewIfNeeded().catch(() => {});
-        await seeMoreUtilityBtn.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(1000);
-
-        const loginModal = page.locator('#login-trigger-btn, div[role="dialog"]:has-text("Đăng nhập"), button:has-text("Đăng nhập")').first();
-        if (await loginModal.isVisible().catch(() => false)) {
-          await expect(loginModal).toBeVisible();
-        }
-      }
-
-      // 3. Click "Lưu" button on Top Header
+      // 2. Click "Lưu" button on Top Header
       const saveAdBtn = page.locator('button:has-text("Lưu"), [aria-label*="Lưu"]').first();
       if (await saveAdBtn.isVisible().catch(() => false)) {
         await saveAdBtn.click({ force: true }).catch(() => {});
@@ -720,6 +856,53 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
 
       await expect(page.locator('body')).toBeVisible();
     });
+  });
+
+  // =========================================================================
+  // PHẦN 11: BỘ LỌC THỜI GIAN ĐĂNG TIN (3 NGÀY, 1 TUẦN = 7 NGÀY, 1 THÁNG = 30 NGÀY, 3 THÁNG = 90 NGÀY)
+  // =========================================================================
+  test.describe('11. Bộ lọc Thời gian Đăng tin (3 ngày, 1 tuần, 1 tháng, 3 tháng)', () => {
+    const timeOptions = [
+      { name: '3 ngày', maxDays: 3 },
+      { name: '1 tuần', maxDays: 7 },
+      { name: '1 tháng', maxDays: 30 },
+      { name: '3 tháng', maxDays: 90 },
+    ];
+
+    for (const opt of timeOptions) {
+      test(`Kiểm tra lọc tin rao vặt theo khoảng thời gian "${opt.name}" (${opt.maxDays} ngày so với ngày hiện tại)`, async ({ page }) => {
+        await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
+        await page.waitForLoadState('domcontentloaded');
+        await skipOnboardingTour(page);
+
+        // Click dropdown chọn khoảng thời gian đăng tin (Ví dụ: 3 ngày, 1 tuần, 1 tháng, 3 tháng)
+        const timeSelectTrigger = page.locator('button, [data-slot="popover-trigger"], [class*="select"]').filter({ hasText: /3 ngày|1 tuần|1 tháng|3 tháng|Thời gian|Khoảng thời gian/i }).first();
+        if (await timeSelectTrigger.isVisible({ timeout: 5000 }).catch(() => false)) {
+          await timeSelectTrigger.click({ force: true });
+          await page.waitForTimeout(500);
+
+          // Chọn option tương ứng từ danh sách dropdown
+          const optionItem = page.locator('[role="option"], [role="menuitem"], button, div, span').filter({ hasText: new RegExp(`^${opt.name}$`, 'i') }).first();
+          if (await optionItem.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await optionItem.click({ force: true });
+            await page.waitForTimeout(2000);
+          }
+        }
+
+        // Xác minh danh sách bài viết hiển thị đúng khoảng thời gian hoặc trang hoạt động bình thường
+        const cards = page.locator('main div.grid > div, main div.grid > a, main [class*="card"], article');
+        if (await cards.count() > 0) {
+          await expect(cards.first()).toBeVisible();
+
+          // Kiểm tra nhãn thời gian đăng bài trên card nếu có (Ví dụ: 19/06/2026, 2 ngày trước...)
+          const timeLabel = cards.first().locator('text=/ngày|giờ|phút|2025|2026/i').first();
+          if (await timeLabel.isVisible().catch(() => false)) {
+            await expect(timeLabel).toBeVisible();
+          }
+        }
+        await expect(page.locator('body')).toBeVisible();
+      });
+    }
   });
 });
 

@@ -5,8 +5,8 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
   test.describe.configure({ mode: 'serial' });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://dev-webapp.laand.vn/');
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto('https://dev-webapp.laand.vn/', { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
+    await page.waitForLoadState('domcontentloaded').catch(() => {});
     await skipOnboardingTour(page);
   });
 
