@@ -257,8 +257,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_005: Chuyển sang Tab Đổi mật khẩu và kiểm tra 3 trường nhập liệu', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await expect(passwordInputs.first()).toBeVisible({ timeout: 10000 });
@@ -268,8 +267,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_006: Kiểm tra validation cảnh báo khi nhập mật khẩu mới và nhập lại mật khẩu mới KHÔNG KHỚP NHAU', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await passwordInputs.nth(0).fill('Enao@123'); // Mật khẩu hiện tại
@@ -294,8 +292,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_PASS_VAL_001: Validate Mật khẩu mới quá ngắn (Nhập dưới độ dài tối thiểu)', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await passwordInputs.nth(0).fill('Enao@123');
@@ -316,8 +313,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_PASS_VAL_002: Validate Mật khẩu mới thiếu ký tự đặc biệt / chữ hoa (Định dạng yếu)', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await passwordInputs.nth(0).fill('Enao@123');
@@ -338,8 +334,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_PASS_VAL_003: Validate Mật khẩu mới trùng hệt với Mật khẩu hiện tại', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await passwordInputs.nth(0).fill('Enao@123');
@@ -360,8 +355,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_007: Thực hiện Đổi mật khẩu từ Enao@123 sang Enao@1234 và Đổi lại về Enao@123 (Kiểm tra API response 200 OK)', async ({ page }) => {
       const passTab = page.locator('button, div[role="tab"]').filter({ hasText: /đổi mật khẩu/i }).first();
       await expect(passTab).toBeVisible({ timeout: 10000 });
-      await passTab.click({ force: true });
-      await page.waitForTimeout(500);
+      await passTab.click();
 
       const passwordInputs = page.locator('input[type="password"]');
       await expect(passwordInputs.first()).toBeVisible({ timeout: 10000 });

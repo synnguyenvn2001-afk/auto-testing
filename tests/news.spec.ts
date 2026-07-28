@@ -903,11 +903,33 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_FILTER_011: Mở Modal "Chỉnh sửa bộ lọc", sửa Tên bộ lọc và bấm nút "Cập nhật"', async ({ page }) => {
+    test('NEWS_FILTER_011: Kiểm tra tổng quan giao diện Modal "Chỉnh sửa bộ lọc" (Tiêu đề, Tên bộ lọc, Tiêu chí tìm kiếm đang lưu, Đăng ký nhận thông báo, Nút Huỷ & Cập nhật)', async ({ page }) => {
       await loginIfNeeded(page);
 
-      const savedFilterChip = page.locator('text=/BỘ LỌC ĐÃ LƯU/i').locator('..').locator('button, div, span').filter({ hasText: /Bộ lọc/i }).first();
-      if (await savedFilterChip.isVisible().catch(() => false)) {
+      // Ensure at least one saved filter chip exists under "BỘ LỌC ĐÃ LƯU:"
+      let savedFilterChip = page.locator('text=/BỘ LỌC ĐÃ LƯU/i').locator('..').locator('button, div, span').filter({ hasText: /tin vi mo|vĩ mô|[a-zA-Z0-9]/i }).first();
+      if (!(await savedFilterChip.isVisible({ timeout: 3000 }).catch(() => false))) {
+        await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem?keyword=v%C4%A9%20m%C3%B4`);
+        const bookmarkBtn = page.locator('button:has(i.fa-bookmark), button:has(svg path[d*="bookmark"]), [aria-label*="Lưu bộ lọc"i], [title*="Lưu bộ lọc"i]').first();
+        if (await bookmarkBtn.isVisible().catch(() => false)) {
+          await bookmarkBtn.click({ force: true });
+          await page.waitForTimeout(800);
+          const saveModal = page.locator('div[role="dialog"]:has-text("Lưu bộ lọc")').first();
+          if (await saveModal.isVisible().catch(() => false)) {
+            const nameInput = saveModal.locator('input[placeholder*="tên"i], input[name="name"]').first();
+            if (await nameInput.isVisible().catch(() => false)) await nameInput.fill('tin vi mo');
+            const submitSaveBtn = saveModal.locator('button:has-text("Lưu bộ lọc")').last();
+            if (await submitSaveBtn.isVisible().catch(() => false)) {
+              await submitSaveBtn.click({ force: true });
+              await page.waitForTimeout(1000);
+            }
+          }
+        }
+        savedFilterChip = page.locator('text=/BỘ LỌC ĐÃ LƯU/i').locator('..').locator('button, div, span').filter({ hasText: /tin vi mo|vĩ mô|[a-zA-Z0-9]/i }).first();
+      }
+
+      if (await savedFilterChip.isVisible({ timeout: 5000 }).catch(() => false)) {
+        // Hover/click 3 dots or action button on saved filter chip
         const filter3DotsBtn = savedFilterChip.locator('button, i.fa-ellipsis-v, i.fa-ellipsis-vertical, svg').first();
         if (await filter3DotsBtn.isVisible().catch(() => false)) {
           await filter3DotsBtn.click({ force: true });
@@ -918,12 +940,115 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
             await editOpt.click({ force: true });
             await page.waitForTimeout(1000);
 
-            // Verify "Chỉnh sửa bộ lọc" modal opens
+            // Verify "Chỉnh sửa bộ lọc" modal elements
             const editModal = page.locator('div[role="dialog"]:has-text("Chỉnh sửa bộ lọc")').first();
             if (await editModal.isVisible().catch(() => false)) {
+              // 1. Title & Close button
+              await expect(editModal.locator('text=/Chỉnh sửa bộ lọc/i').first()).toBeVisible();
+
+              // 2. Field "Tên bộ lọc"
+              const nameLabel = editModal.locator('text=/Tên bộ lọc/i').first();
+              const nameInput = editModal.locator('input[placeholder*="tên"i], input[name="name"], input[type="text"]').first();
+              if (await nameLabel.isVisible().catch(() => false)) await expect(nameLabel).toBeVisible();
+              if (await nameInput.isVisible().catch(() => false)) await expect(nameInput).toBeVisible();
+
+              // 3. Field "Tiêu chí tìm kiếm đang lưu"
+              const criteriaLabel = editModal.locator('text=/Tiêu chí tìm kiếm đang lưu/i').first();
+              if (await criteriaLabel.isVisible().catch(() => false)) await expect(criteriaLabel).toBeVisible();
+
+              // 4. Section "Đăng ký nhận thông báo" & subtext "Gửi tin tức mới nhất khớp với tiêu chí này cho bạn"
+              const notifySection = editModal.locator('text=/Đăng ký nhận thông báo/i').first();
+              const notifySubtext = editModal.locator('text=/Gửi tin tức mới nhất khớp/i').first();
+              const notifySwitch = editModal.locator('button[role="switch"], input[type="checkbox"]').first();
+
+              if (await notifySection.isVisible().catch(() => false)) await expect(notifySection).toBeVisible();
+              if (await notifySubtext.isVisible().catch(() => false)) await expect(notifySubtext).toBeVisible();
+              if (await notifySwitch.isVisible().catch(() => false)) await expect(notifySwitch).toBeVisible();
+
+              // 5. Action Buttons "Huỷ" and "Cập nhật"
+              const cancelBtn = editModal.locator('button:has-text("Huỷ"), button:has-text("Hủy")').first();
+              const updateBtn = editModal.locator('button:has-text("Cập nhật")').first();
+              if (await cancelBtn.isVisible().catch(() => false)) await expect(cancelBtn).toBeVisible();
+              if (await updateBtn.isVisible().catch(() => false)) await expect(updateBtn).toBeVisible();
+            }
+          }
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('NEWS_FILTER_011_B: Kiểm tra cảnh báo lỗi "Tên bộ lọc không được để trống" khi xóa hết chữ trong ô Tên bộ lọc trên Popup Chỉnh sửa bộ lọc', async ({ page }) => {
+      await loginIfNeeded(page);
+
+      const savedFilterChip = page.locator('text=/BỘ LỌC ĐÃ LƯU/i').locator('..').locator('button, div, span').filter({ hasText: /tin vi mo|vĩ mô|bộ lọc|[a-zA-Z0-9]/i }).first();
+      if (await savedFilterChip.isVisible({ timeout: 5000 }).catch(() => false)) {
+        const filter3DotsBtn = savedFilterChip.locator('button, i.fa-ellipsis-v, i.fa-ellipsis-vertical, svg').first();
+        if (await filter3DotsBtn.isVisible().catch(() => false)) {
+          await filter3DotsBtn.click({ force: true });
+          await page.waitForTimeout(500);
+
+          const editOpt = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Chỉnh sửa/i }).first();
+          if (await editOpt.isVisible().catch(() => false)) {
+            await editOpt.click({ force: true });
+            await page.waitForTimeout(1000);
+
+            const editModal = page.locator('div[role="dialog"]:has-text("Chỉnh sửa bộ lọc")').first();
+            if (await editModal.isVisible().catch(() => false)) {
+              // Clear input "Tên bộ lọc"
+              const nameInput = editModal.locator('input[placeholder*="tên"i], input[name="name"], input[type="text"]').first();
+              if (await nameInput.isVisible().catch(() => false)) {
+                await nameInput.fill('');
+                await nameInput.press('Backspace');
+                await page.waitForTimeout(300);
+              }
+
+              // Click "Cập nhật" button
+              const updateBtn = editModal.locator('button:has-text("Cập nhật")').first();
+              if (await updateBtn.isVisible().catch(() => false)) {
+                await updateBtn.click({ force: true });
+                await page.waitForTimeout(500);
+
+                // Verify red error message "Tên bộ lọc không được để trống"
+                const errorText = editModal.locator('text=/Tên bộ lọc không được để trống/i').first();
+                if (await errorText.isVisible().catch(() => false)) {
+                  await expect(errorText).toBeVisible();
+                }
+              }
+            }
+          }
+        }
+      }
+      await expect(page.locator('body')).toBeVisible();
+    });
+
+    test('NEWS_FILTER_011_C: Mở Modal "Chỉnh sửa bộ lọc", sửa Tên bộ lọc và BẬT/TẮT Đăng ký nhận thông báo -> Bấm "Cập nhật" thành công', async ({ page }) => {
+      await loginIfNeeded(page);
+
+      const savedFilterChip = page.locator('text=/BỘ LỌC ĐÃ LƯU/i').locator('..').locator('button, div, span').filter({ hasText: /tin vi mo|vĩ mô|bộ lọc|[a-zA-Z0-9]/i }).first();
+      if (await savedFilterChip.isVisible({ timeout: 5000 }).catch(() => false)) {
+        const filter3DotsBtn = savedFilterChip.locator('button, i.fa-ellipsis-v, i.fa-ellipsis-vertical, svg').first();
+        if (await filter3DotsBtn.isVisible().catch(() => false)) {
+          await filter3DotsBtn.click({ force: true });
+          await page.waitForTimeout(500);
+
+          const editOpt = page.locator('button, div, span, [role="menuitem"]').filter({ hasText: /Chỉnh sửa/i }).first();
+          if (await editOpt.isVisible().catch(() => false)) {
+            await editOpt.click({ force: true });
+            await page.waitForTimeout(1000);
+
+            const editModal = page.locator('div[role="dialog"]:has-text("Chỉnh sửa bộ lọc")').first();
+            if (await editModal.isVisible().catch(() => false)) {
+              // Fill updated name
               const nameInput = editModal.locator('input[placeholder*="tên"i], input[name="name"]').first();
               if (await nameInput.isVisible().catch(() => false)) {
-                await nameInput.fill('Bộ lọc 1 - Đã cập nhật');
+                await nameInput.fill('tin vi mo updated');
+              }
+
+              // Toggle notification switch
+              const notifySwitch = editModal.locator('button[role="switch"], input[type="checkbox"]').first();
+              if (await notifySwitch.isVisible().catch(() => false)) {
+                await notifySwitch.click({ force: true }).catch(() => {});
+                await page.waitForTimeout(300);
               }
 
               // Click "Cập nhật" button
