@@ -4,9 +4,14 @@ import { skipOnboardingTour } from './helpers';
 test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', () => {
   test.describe.configure({ mode: 'serial' });
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
+    await context.clearCookies();
     await page.goto('https://dev-webapp.laand.vn/', { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
-    await page.waitForLoadState('domcontentloaded').catch(() => {});
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    }).catch(() => {});
+    await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
     await skipOnboardingTour(page);
   });
 
@@ -211,7 +216,16 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
     test('AUTH_LOG_003: Đăng nhập thành công với tài khoản và mật khẩu hợp lệ', async ({ page }) => {
       const loginTrigger = page.locator('#login-trigger-btn, button:has-text("Đăng nhập")').first();
-      await expect(loginTrigger).toBeVisible();
+      
+      // Nếu trạng thái trình duyệt đã đăng nhập từ testcase trước, làm sạch session để trở về Guest
+      if (!(await loginTrigger.isVisible({ timeout: 3000 }).catch(() => false))) {
+        await page.context().clearCookies();
+        await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); }).catch(() => {});
+        await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
+        await skipOnboardingTour(page);
+      }
+
+      await expect(loginTrigger).toBeVisible({ timeout: 10000 });
       await loginTrigger.click({ force: true });
 
       const dialogModal = page.locator('div[role="dialog"]').first();
