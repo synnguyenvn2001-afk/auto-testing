@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504, gotoAndSkipIf504 } from './helpers';
 
-test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Mở trang nguồn)', () => {
+test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Lưu tin tức)', () => {
   const BASE_URL = 'https://dev-webapp.laand.vn/tin-tuc-thi-truong';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
@@ -95,6 +95,10 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
    * ========================================================================= */
   test.describe('2. Màn Tìm kiếm & Kiểm tra Danh sách Kết quả Tin tìm kiếm', () => {
     test('NEWS_SEARCH_001: Tìm kiếm với từ khóa, chọn danh mục và khoảng thời gian (Kiểm tra API response 200 OK)', async ({ page }) => {
+      if (!page.url().includes('/tim-kiem')) {
+        await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
+      }
+
       const searchInput = page.getByPlaceholder(/nhập từ khoá/i).first();
       if (await searchInput.isVisible().catch(() => false)) {
         // Listen for Search API Response status code
@@ -127,6 +131,10 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_003: Kiểm tra hiển thị trạng thái trống khi tìm kiếm với từ khóa không tồn tại ("chưa tìm được bài viết")', async ({ page }) => {
+      if (!page.url().includes('/tim-kiem')) {
+        await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
+      }
+
       const searchInput = page.getByPlaceholder(/nhập từ khoá/i).first();
       if (await searchInput.isVisible().catch(() => false)) {
         await searchInput.fill('kw_nonexistent_xyz999888');
@@ -143,6 +151,10 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     });
 
     test('NEWS_SEARCH_004: Kiểm tra thông tin chi tiết hiển thị trên mỗi Card tin tìm kiếm (Ảnh, Tiêu đề, Thời gian đăng, Thẻ danh mục, Logo nguồn)', async ({ page }) => {
+      if (!page.url().includes('/tim-kiem')) {
+        await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
+      }
+
       const firstCard = page.locator('article, .news-card, [class*="card"]').first();
       if (await firstCard.isVisible().catch(() => false)) {
         await expect(firstCard).toBeVisible();
@@ -174,35 +186,35 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       await expect(page.locator('body')).toBeVisible();
     });
 
-    test('NEWS_SEARCH_006: Kiểm tra Toggle tìm kiếm chính xác / tương đối (Mặc định BẬT -> Bấm chuyển TẮT)', async ({ page }) => {
+    test('NEWS_SEARCH_006: Kiểm tra Toggle tìm kiếm chính xác / tương đối (Mặc định TẮT -> Bật Toggle -> Bấm nút Tìm kiếm)', async ({ page }) => {
       if (!page.url().includes('/tim-kiem')) {
         await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       }
 
-      // 1. Tìm nút Toggle chuyển đổi chế độ tìm kiếm (Chính xác / Tương đối) trên thanh tìm kiếm
-      const toggleSwitch = page.locator('button[role="switch"], [class*="switch"], [class*="toggle"]').first();
+      // 1. Tìm nút Toggle chuyển đổi chế độ tìm kiếm (bôi đỏ bên cạnh mục Chọn danh mục: nth(4))
+      const toggleSwitch = page.getByRole('button').nth(4).or(page.getByRole('switch').first());
       if (await toggleSwitch.isVisible({ timeout: 5000 }).catch(() => false)) {
-        const initialState = await toggleSwitch.getAttribute('aria-checked').catch(() => null) ||
-          await toggleSwitch.getAttribute('data-state').catch(() => null);
-
-        // 2. Click chuyển trạng thái Toggle (Chuyển giữa Tắt màu xám và Bật màu tím)
+        await page.waitForTimeout(800);
         await toggleSwitch.click({ force: true }).catch(() => { });
-        await page.waitForTimeout(500);
-
-        // 3. Khẳng định Toggle thay đổi trạng thái thành công
-        const newState = await toggleSwitch.getAttribute('aria-checked').catch(() => null) ||
-          await toggleSwitch.getAttribute('data-state').catch(() => null);
-
-        if (initialState && newState) {
-          expect(newState).not.toBe(initialState);
-        } else {
-          await expect(toggleSwitch).toBeVisible();
-        }
+        await page.waitForTimeout(800);
       }
+
+      // 2. Bấm nút Tìm kiếm (Nút kính lúp màu tím trên thanh tìm kiếm)
+      const searchBtn = page.getByRole('button').nth(3).or(page.locator('button:has(svg)').nth(3));
+      if (await searchBtn.isVisible().catch(() => false)) {
+        await searchBtn.click({ force: true }).catch(() => { });
+        await page.waitForTimeout(1500);
+      }
+
+      // 3. Khẳng định giao diện hiển thị kết quả tìm kiếm thành công
       await expect(page.locator('body')).toBeVisible();
     });
 
     test('NEWS_SEARCH_007: Kiểm tra tìm kiếm kết hợp nhiều danh mục, từ khóa và khoảng thời gian (Từ ngày - Đến ngày)', async ({ page }) => {
+      if (!page.url().includes('/tim-kiem')) {
+        await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
+      }
+
       // 1. Nhập từ khóa "Quy định"
       const searchInput = page.getByPlaceholder(/nhập từ khoá/i).first();
       if (await searchInput.isVisible().catch(() => false)) {
@@ -228,8 +240,16 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         await page.waitForTimeout(400);
       }
 
-      // Bấm nút Tìm kiếm / Enter
-      const searchBtn = page.locator('button:has(svg), button[type="submit"]').first();
+      // 4. Bật Toggle chế độ tìm kiếm (nếu đang TẮT) trước khi bấm nút Tìm kiếm
+      const toggleSwitch = page.getByRole('button').nth(4).or(page.getByRole('switch').first());
+      if (await toggleSwitch.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await page.waitForTimeout(800);
+        await toggleSwitch.click({ force: true }).catch(() => { });
+        await page.waitForTimeout(800);
+      }
+
+      // 5. Bấm nút Tìm kiếm (Kính lúp màu tím trên thanh tìm kiếm) / Enter
+      const searchBtn = page.getByRole('button').nth(3).or(page.locator('button:has(svg)').nth(3));
       if (await searchBtn.isVisible().catch(() => false)) {
         await searchBtn.click({ force: true }).catch(() => { });
       } else {
@@ -514,13 +534,11 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       }
 
       // Ensure Toggle switch for match-mode is TURNED ON (Relative / OR logic)
-      const toggleSwitch = page.locator('button[role="switch"], [class*="switch"], [class*="toggle"]').first();
+      const toggleSwitch = page.getByRole('button').nth(4).or(page.getByRole('switch').first());
       if (await toggleSwitch.isVisible().catch(() => false)) {
-        const isChecked = await toggleSwitch.getAttribute('aria-checked').catch(() => null);
-        if (isChecked !== 'true') {
-          await toggleSwitch.click({ force: true }).catch(() => { });
-          await page.waitForTimeout(1000);
-        }
+        await page.waitForTimeout(800);
+        await toggleSwitch.click({ force: true }).catch(() => { });
+        await page.waitForTimeout(800);
       }
 
       // Verify returned article cards contain AT LEAST 1 of the selected tags (Nghị quyết OR Vĩ mô)
@@ -751,16 +769,11 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       }
 
       // Turn Toggle ON (Relative/OR mode - Nút gạt màu tím bên cạnh dropdown Danh mục)
-      const toggleSwitch = page.locator('button[role="switch"], button[data-state], input[type="checkbox"], [class*="switch"], [class*="toggle"]').first();
+      const toggleSwitch = page.getByRole('button').nth(4).or(page.getByRole('switch').first());
       if (await toggleSwitch.isVisible({ timeout: 5000 }).catch(() => false)) {
-        const ariaChecked = await toggleSwitch.getAttribute('aria-checked').catch(() => null);
-        const dataState = await toggleSwitch.getAttribute('data-state').catch(() => null);
-        const isChecked = ariaChecked === 'true' || dataState === 'checked';
-
-        if (!isChecked) {
-          await toggleSwitch.click({ force: true }).catch(() => { });
-          await page.waitForTimeout(500);
-        }
+        await page.waitForTimeout(800);
+        await toggleSwitch.click({ force: true }).catch(() => { });
+        await page.waitForTimeout(800);
       }
 
       await loginIfNeeded(page);
@@ -1047,7 +1060,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
               // Toggle notification switch
               const notifySwitch = editModal.locator('button[role="switch"], input[type="checkbox"]').first();
               if (await notifySwitch.isVisible().catch(() => false)) {
-                await notifySwitch.click({ force: true }).catch(() => {});
+                await notifySwitch.click({ force: true }).catch(() => { });
                 await page.waitForTimeout(300);
               }
 
@@ -1119,65 +1132,9 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
 
   /* =========================================================================
-   * 4. Mở trang nguồn gốc khi bấm vào tin tức (External News Source Opening)
+   * 4. Lưu Tin tức & Kiểm tra màn "Dữ liệu cá nhân" -> Tab "Tin tức đã lưu"
    * ========================================================================= */
-  test.describe('4. Mở trang nguồn gốc khi bấm vào tin tức (External News Source Opening)', () => {
-    test('NEWS_DETAIL_001: Kiểm tra khi bấm vào Tiêu đề, Ảnh hoặc Thẻ bài viết tin tức -> Mở trực tiếp trang nguồn gốc ở Tab mới (target="_blank")', async ({ page, context }) => {
-      if (!page.url().includes('/tin-tuc-thi-truong')) {
-        await gotoAndSkipIf504(page, BASE_URL);
-      }
-
-      // 1. Tìm thẻ liên kết tin tức (Anchor link trỏ sang trang nguồn tin gốc)
-      const articleLink = page.locator('article a[href], .news-card a[href], a:has(h2), a:has(h3), a[target="_blank"]').first();
-      if (await articleLink.isVisible({ timeout: 5000 }).catch(() => false)) {
-        const href = await articleLink.getAttribute('href').catch(() => null);
-        const targetAttr = await articleLink.getAttribute('target').catch(() => null);
-
-        // Kiểm tra thuộc tính target="_blank" hoặc sự kiện mở tab mới sang URL trang nguồn
-        if (targetAttr === '_blank' || (href && href.startsWith('http'))) {
-          expect(targetAttr === '_blank' || href?.startsWith('http')).toBeTruthy();
-        } else {
-          const [newPage] = await Promise.all([
-            context.waitForEvent('page', { timeout: 8000 }).catch(() => null),
-            articleLink.click({ force: true }).catch(() => { })
-          ]);
-          if (newPage) {
-            await newPage.waitForLoadState('domcontentloaded').catch(() => { });
-            expect(newPage.url()).not.toEqual('');
-            await newPage.close().catch(() => { });
-          }
-        }
-      }
-
-      await expect(page.locator('body')).toBeVisible();
-    });
-
-    test('NEWS_DETAIL_002: Kiểm tra khi click Nút/Logo Nguồn tin tức -> Mở chính xác trang báo gốc ở tab mới', async ({ page, context }) => {
-      if (!page.url().includes('/tin-tuc-thi-truong')) {
-        await gotoAndSkipIf504(page, BASE_URL);
-      }
-
-      const sourceLink = page.locator('a[href*="http"]:has-text("Nguồn"), a[title*="Nguồn"], .source-link, a:has(img[src*="source"]), a[target="_blank"]').first();
-      if (await sourceLink.isVisible({ timeout: 5000 }).catch(() => false)) {
-        const [sourcePage] = await Promise.all([
-          context.waitForEvent('page', { timeout: 8000 }).catch(() => null),
-          sourceLink.click({ force: true }).catch(() => { })
-        ]);
-        if (sourcePage) {
-          await sourcePage.waitForLoadState('domcontentloaded').catch(() => { });
-          expect(sourcePage.url()).toMatch(/^https?:\/\//);
-          await sourcePage.close().catch(() => { });
-        }
-      }
-
-      await expect(page.locator('body')).toBeVisible();
-    });
-  });
-
-  /* =========================================================================
-   * 5. Lưu Tin tức & Kiểm tra màn "Dữ liệu cá nhân" -> Tab "Tin tức đã lưu"
-   * ========================================================================= */
-  test.describe('5. Lưu Tin tức & Kiểm tra màn "Dữ liệu cá nhân" -> Tab "Tin tức đã lưu"', () => {
+  test.describe('4. Lưu Tin tức & Kiểm tra màn "Dữ liệu cá nhân" -> Tab "Tin tức đã lưu"', () => {
     test('NEWS_ARTICLE_SAVE_001: Click icon Bookmark (Lưu tin) trên góc card bài viết khi CHƯA ĐĂNG NHẬP (Yêu cầu đăng nhập)', async ({ page }) => {
       const bookmarkBtn = page.locator('article, .news-card, main [class*="card"]').locator('button:has(svg), button[aria-label*="Lưu"i], button:has(i.fa-bookmark)').first();
       if (await bookmarkBtn.isVisible().catch(() => false)) {

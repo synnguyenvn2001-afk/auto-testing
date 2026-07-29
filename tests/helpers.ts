@@ -38,27 +38,60 @@ export async function skipOnboardingTour(page: Page) {
  * Logs in with the test user credentials if not already logged in.
  */
 export async function loginIfNeeded(page: Page) {
+  // 1. Kiểm tra trạng thái ĐÃ ĐĂNG NHẬP từ storageState Token (Nút Đăng xuất hoặc Link Tài khoản)
+  const loggedInState = page.locator('button:has-text("Đăng xuất"), a[href*="tong-quan-tai-khoan"]').first();
+  if (await loggedInState.isVisible({ timeout: 2000 }).catch(() => false)) {
+    return; // Đã có Token hợp lệ từ storageState, bỏ qua bước đăng nhập!
+  }
+
+  // 2. Bấm nút "Đăng nhập" trên Header/Trang để bật Popup Đăng nhập
   const loginTrigger = page.locator('#login-trigger-btn, button:has-text("Đăng nhập")').first();
-  if (await loginTrigger.isVisible().catch(() => false)) {
+  
+  // Nếu chưa thấy nút Đăng nhập trên trang hiện tại, điều hướng về Trang chủ để nạp nút Đăng nhập
+  if (!await loginTrigger.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await page.goto('https://dev-webapp.laand.vn', { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
+    await skipOnboardingTour(page);
+  }
+
+  if (await loginTrigger.isVisible({ timeout: 10000 }).catch(() => false)) {
     const currentUrl = page.url();
 
+    // Bấm nút Đăng nhập góc trên phải
     await loginTrigger.click({ force: true }).catch(() => {});
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000); // Đợi Modal hiển thị hoàn tất
 
     const dialogModal = page.locator('div[role="dialog"]').first();
+    await dialogModal.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
+
     const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
     const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
-    const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
+    // Dùng regex chính xác /^Đăng nhập$/i và .last() để tuyệt đối không bấm nhầm vào "Đăng nhập với Google"
+    const submitBtn = dialogModal.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialogModal.locator('button[type="submit"]:not(:has-text("Google"))')).last();
 
-    if (await usernameInput.isVisible().catch(() => false)) {
+    // Chờ ô nhập username sẵn sàng đến 10000ms
+    if (await usernameInput.isVisible({ timeout: 10000 }).catch(() => false)) {
       await usernameInput.fill('usert1').catch(() => {});
       await passwordInput.fill('Enao@123').catch(() => {});
       await submitBtn.click({ force: true }).catch(() => {});
-      await page.waitForTimeout(2500);
+      await page.waitForTimeout(3000); // Đợi xử lý login API & token
+
+      // Mật khẩu dự phòng Enao@1234 nếu Modal vẫn còn mở
+      if (await dialogModal.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await passwordInput.fill('Enao@1234').catch(() => {});
+        await submitBtn.click({ force: true }).catch(() => {});
+        await page.waitForTimeout(3000);
+      }
+
       await skipOnboardingTour(page);
 
-      // Nếu sau khi đăng nhập bị chuyển hướng ra khỏi trang tin tức, quay trở lại đúng URL tin tức
-      if (currentUrl.includes('/tin-tuc-thi-truong') && !page.url().includes('/tin-tuc-thi-truong')) {
+      // Đợi Modal đóng hẳn (Login thành công hoàn toàn)
+      await dialogModal.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
+
+      // Tự động lưu Token / Cookie vào file storageState để tái sử dụng
+      await page.context().storageState({ path: 'playwright/.auth/user.json' }).catch(() => {});
+
+      // Quay lại đúng URL ban đầu nếu bị chuyển trang
+      if (currentUrl.includes('/tong-quan-tai-khoan') && !page.url().includes('/tong-quan-tai-khoan')) {
         await page.goto(currentUrl, { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
         await page.waitForTimeout(1000);
       }
