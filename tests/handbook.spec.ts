@@ -4,7 +4,7 @@ import { skipOnboardingTour } from './helpers';
 test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => {
   test('should load handbook list, search and view details', async ({ page }) => {
     // 1. Navigate to Cẩm nang page
-    await page.goto('https://dev-webapp.laand.vn/cam-nang');
+    await page.goto('https://laand.vn:8443/cam-nang');
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
 
@@ -36,7 +36,7 @@ test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => 
 
   test('should load expert documents page', async ({ page }) => {
     // 2. Navigate to Tài liệu BĐS page with retry logic
-    const docUrl = 'https://dev-webapp.laand.vn/tai-lieu';
+    const docUrl = 'https://laand.vn:8443/tai-lieu';
     try {
       await page.goto(docUrl, { timeout: 35000 });
     } catch (err) {

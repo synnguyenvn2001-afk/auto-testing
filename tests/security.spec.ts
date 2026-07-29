@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded } from './helpers';
 
 test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức năng)', () => {
-  const BASE_URL = 'https://dev-webapp.laand.vn';
+  const BASE_URL = 'https://laand.vn:8443';
 
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL);

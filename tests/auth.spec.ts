@@ -6,7 +6,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
   test.beforeEach(async ({ context, page }) => {
     await context.clearCookies();
-    await page.goto('https://dev-webapp.laand.vn/', { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
+    await page.goto('https://laand.vn:8443/', { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
     await page.evaluate(() => {
       localStorage.clear();
       sessionStorage.clear();

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504, gotoAndSkipIf504 } from './helpers';
 
 test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Lưu tin tức)', () => {
-  const BASE_URL = 'https://dev-webapp.laand.vn/tin-tuc-thi-truong';
+  const BASE_URL = 'https://laand.vn:8443/tin-tuc-thi-truong';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   test.beforeEach(async ({ page }) => {
@@ -1192,7 +1192,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_ARTICLE_SAVE_004: Điều hướng màn "Dữ liệu cá nhân" -> Chuyển Tab "Tin tức đã lưu" (Hiển thị tab gạch chân màu tím)', async ({ page }) => {
       await loginIfNeeded(page);
       if (!page.url().includes('/du-lieu-ca-nhan')) {
-        await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-ca-nhan/bat-dong-san-da-luu');
+        await gotoAndSkipIf504(page, 'https://laand.vn:8443/du-lieu-ca-nhan/bat-dong-san-da-luu');
       }
 
       // Verify tabs: "Bất động sản đã lưu", "Tin đã đọc", "Tin tức đã lưu"
@@ -1225,7 +1225,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
       // Đảm bảo ở trang Dữ liệu cá nhân
       if (!page.url().includes('/du-lieu-ca-nhan')) {
-        await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-ca-nhan/bat-dong-san-da-luu');
+        await gotoAndSkipIf504(page, 'https://laand.vn:8443/du-lieu-ca-nhan/bat-dong-san-da-luu');
       }
 
       // 4. Click chuyển sang Tab "Tin tức đã lưu"
@@ -1254,7 +1254,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_ARTICLE_SAVE_006: Thao tác Bỏ lưu tin bài trực tiếp từ danh sách "Tin tức đã lưu" trong màn "Dữ liệu cá nhân"', async ({ page }) => {
       await loginIfNeeded(page);
       if (!page.url().includes('/du-lieu-ca-nhan/tin-da-luu')) {
-        await gotoAndSkipIf504(page, 'https://dev-webapp.laand.vn/du-lieu-ca-nhan/tin-da-luu');
+        await gotoAndSkipIf504(page, 'https://laand.vn:8443/du-lieu-ca-nhan/tin-da-luu');
       }
 
       const unsaveItemBtn = page.locator('button[title*="Bỏ lưu"i], button[aria-label*="Bỏ lưu"i], button:has(i.fa-bookmark), [class*="card"] button:has(svg)').first();

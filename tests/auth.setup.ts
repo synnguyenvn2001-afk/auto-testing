@@ -6,7 +6,7 @@ const authFile = 'playwright/.auth/user.json';
 setup('authenticate user once and save storage state', async ({ page }) => {
   setup.setTimeout(60000);
 
-  await page.goto('https://dev-webapp.laand.vn', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
+  await page.goto('https://laand.vn:8443', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
   await skipOnboardingTour(page);
 
   // 1. Tìm nút Đăng nhập góc trên phải

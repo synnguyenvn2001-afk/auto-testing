@@ -3,7 +3,7 @@ import { skipOnboardingTour, checkAndSkipIf504 } from './helpers';
 
 test.describe('Financial and Estimation Tools Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const response = await page.goto('https://dev-webapp.laand.vn/').catch(() => null);
+    const response = await page.goto('https://laand.vn:8443/').catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });

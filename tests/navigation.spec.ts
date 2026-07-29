@@ -3,7 +3,7 @@ import { skipOnboardingTour } from './helpers';
 
 test.describe('Navigation Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://dev-webapp.laand.vn/');
+    await page.goto('https://laand.vn:8443/');
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
   });

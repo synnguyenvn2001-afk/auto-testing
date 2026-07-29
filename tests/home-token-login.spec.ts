@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded } from './helpers';
 
 test.describe('Đăng nhập bằng Token vào Trang chủ (Token-based Authentication)', () => {
-  const HOME_URL = 'https://dev-webapp.laand.vn/';
+  const HOME_URL = 'https://laand.vn:8443/';
 
   test('AUTH_TOKEN_001: Sử dụng Token/Cookie phiên làm việc để đăng nhập Trang chủ thành công', async ({ page, context }) => {
     test.setTimeout(45000);
@@ -42,7 +42,7 @@ test.describe('Đăng nhập bằng Token vào Trang chủ (Token-based Authenti
     await loginIfNeeded(page);
 
     // 2. Click chuyển sang trang Tổng quan tài khoản
-    await page.goto('https://dev-webapp.laand.vn/tong-quan-tai-khoan', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://laand.vn:8443/tong-quan-tai-khoan', { waitUntil: 'domcontentloaded' });
     await skipOnboardingTour(page);
 
     // 3. Xác minh trang cá nhân hiển thị thông tin người dùng (không bị redirect về login)

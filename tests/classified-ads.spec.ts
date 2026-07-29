@@ -12,7 +12,7 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
 
-    const response = await page.goto('https://dev-webapp.laand.vn/tin-rao-vat').catch(() => null);
+    const response = await page.goto('https://laand.vn:8443/tin-rao-vat').catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });
@@ -552,7 +552,7 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
   // =========================================================================
   test.describe('10. Chi tiết BĐS - Màn hình Chi tiết Bất động sản toàn diện', () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
+      await page.goto('https://laand.vn:8443/tin-rao-vat');
       await page.waitForLoadState('domcontentloaded');
       await page.waitForTimeout(2000);
       await skipOnboardingTour(page);
@@ -871,7 +871,7 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
 
     for (const opt of timeOptions) {
       test(`Kiểm tra lọc tin rao vặt theo khoảng thời gian "${opt.name}" (${opt.maxDays} ngày so với ngày hiện tại)`, async ({ page }) => {
-        await page.goto('https://dev-webapp.laand.vn/tin-rao-vat');
+        await page.goto('https://laand.vn:8443/tin-rao-vat');
         await page.waitForLoadState('domcontentloaded');
         await skipOnboardingTour(page);
 

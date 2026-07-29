@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504 } from './helpers';
 
 test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () => {
-  const PROFILE_URL = 'https://dev-webapp.laand.vn/tong-quan-tai-khoan';
+  const PROFILE_URL = 'https://laand.vn:8443/tong-quan-tai-khoan';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   // Đảm bảo các test case chạy tuần tự: Case đầu tiên Đăng nhập & Lưu Token, các case sau dùng Token để vào trực tiếp

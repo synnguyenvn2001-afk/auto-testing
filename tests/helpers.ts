@@ -49,7 +49,7 @@ export async function loginIfNeeded(page: Page) {
   
   // Nếu chưa thấy nút Đăng nhập trên trang hiện tại, điều hướng về Trang chủ để nạp nút Đăng nhập
   if (!await loginTrigger.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await page.goto('https://dev-webapp.laand.vn', { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
+    await page.goto('https://laand.vn:8443', { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
     await skipOnboardingTour(page);
   }
 
