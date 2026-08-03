@@ -1,5 +1,25 @@
 const { spawn } = require('child_process');
 const readline = require('readline');
+const fs = require('fs');
+const path = require('path');
+
+// Function to clean old reports and test artifacts before running new tests
+const cleanOldReports = () => {
+  console.log('🧹 Đang xóa báo cáo và kết quả kiểm thử cũ...');
+  const dirsToClean = ['playwright-report', 'test-results'];
+  dirsToClean.forEach((dir) => {
+    const fullPath = path.join(__dirname, dir);
+    if (fs.existsSync(fullPath)) {
+      try {
+        fs.rmSync(fullPath, { recursive: true, force: true });
+        console.log(`   └─ Đã xóa thành công: ${dir}/`);
+      } catch (err) {
+        console.warn(`   └─ Không thể xóa ${dir}: ${err.message}`);
+      }
+    }
+  });
+  console.log('');
+};
 
 // Command line arguments parsing if provided directly
 const args = process.argv.slice(2);
@@ -71,6 +91,7 @@ async function main() {
     console.log(`\n✅ Đã chọn Mobile Module: ${selectedMobileSuite.name}\n`);
 
     rl.close();
+    cleanOldReports();
 
     const wdioArgs = ['wdio', 'run', 'wdio.conf.js'];
     if (selectedMobileSuite.spec) {
@@ -127,6 +148,7 @@ async function main() {
   }
 
   rl.close();
+  cleanOldReports();
 
   const playwrightArgs = ['playwright', 'test'];
 

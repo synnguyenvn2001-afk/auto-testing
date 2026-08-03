@@ -33,6 +33,8 @@ export default defineConfig({
     baseURL: 'https://laand.vn:8443',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    /* Tự động chụp ảnh màn hình ở cuối mỗi testcase để kẹp vào HTML report */
+    screenshot: 'on',
     navigationTimeout: 15000,
     actionTimeout: 8000,
   },
