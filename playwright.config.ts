@@ -30,7 +30,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://laand.vn:8443',
+    baseURL: process.env.BASE_URL || 'https://beta.landbase.vn',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Tự động chụp ảnh màn hình ở cuối mỗi testcase để kẹp vào HTML report */

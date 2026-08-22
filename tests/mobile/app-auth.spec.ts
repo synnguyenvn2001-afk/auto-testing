@@ -77,7 +77,7 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
     if (modalInputs.length >= 1) {
       await modalInputs[0].click();
       await modalInputs[0].clearValue();
-      await modalInputs[0].setValue(TEST_ACCOUNT.username); // usert1
+      await modalInputs[0].setValue(TEST_ACCOUNT.username); // user1
       await driver.pause(300);
 
       if (modalInputs.length >= 2) {
@@ -97,7 +97,7 @@ describe('1. Kiểm thử Đăng nhập bằng Tài khoản trên Mobile App (Di
     expect(loggedIn).toBe(false);
   });
 
-  it('MOBILE_AUTH_005: ĐĂNG NHẬP THÀNH CÔNG trực tiếp bằng Tên tài khoản [usert1] & Mật khẩu [Enao@123]', async () => {
+  it('MOBILE_AUTH_005: ĐĂNG NHẬP THÀNH CÔNG trực tiếp bằng Tên tài khoản [user1] & Mật khẩu [Enao@123]', async () => {
     // Đóng Modal cũ từ testcase nhập sai mật khẩu để reset form về trạng thái sạch
     const closeBtn = await $('//android.widget.Button[@text="Đóng"]');
     if (await closeBtn.isDisplayed().catch(() => false)) {

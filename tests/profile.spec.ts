@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504 } from './helpers';
 
 test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () => {
-  const PROFILE_URL = 'https://laand.vn:8443/tong-quan-tai-khoan';
+  const PROFILE_URL = (process.env.BASE_URL || 'https://beta.landbase.vn') + '/tong-quan-tai-khoan';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   // Đảm bảo các test case chạy tuần tự: Case đầu tiên Đăng nhập & Lưu Token, các case sau dùng Token để vào trực tiếp
@@ -41,7 +41,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
    * 0. KHỞI TẠO & KIỂM TRA ĐĂNG NHẬP BẰNG TOKEN LẦN ĐẦU
    * ========================================================================= */
   test('PROFILE_000_INIT_AUTH: Thực hiện Đăng nhập lần đầu và Lưu Token phiên làm việc cho các case sau', async ({ page }) => {
-    // 1. Thực hiện quy trình đăng nhập lần đầu với tài khoản usert1
+    // 1. Thực hiện quy trình đăng nhập lần đầu với tài khoản user1
     await loginIfNeeded(page);
 
     // 2. Lưu lại toàn bộ Token / Cookies / StorageState phiên làm việc vào file

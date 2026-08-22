@@ -49,7 +49,8 @@ export async function loginIfNeeded(page: Page) {
   
   // Nếu chưa thấy nút Đăng nhập trên trang hiện tại, điều hướng về Trang chủ để nạp nút Đăng nhập
   if (!await loginTrigger.isVisible({ timeout: 3000 }).catch(() => false)) {
-    await page.goto('https://laand.vn:8443', { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
+    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
     await skipOnboardingTour(page);
   }
 
@@ -70,7 +71,7 @@ export async function loginIfNeeded(page: Page) {
 
     // Chờ ô nhập username sẵn sàng đến 10000ms
     if (await usernameInput.isVisible({ timeout: 10000 }).catch(() => false)) {
-      await usernameInput.fill('usert1').catch(() => {});
+      await usernameInput.fill('user1').catch(() => {});
       await passwordInput.fill('Enao@123').catch(() => {});
       await submitBtn.click({ force: true }).catch(() => {});
       await page.waitForTimeout(3000); // Đợi xử lý login API & token

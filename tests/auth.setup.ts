@@ -6,7 +6,8 @@ const authFile = 'playwright/.auth/user.json';
 setup('authenticate user once and save storage state', async ({ page }) => {
   setup.setTimeout(60000);
 
-  await page.goto('https://laand.vn:8443', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
+  const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+  await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
   await skipOnboardingTour(page);
 
   // 1. Tìm nút Đăng nhập góc trên phải
@@ -23,7 +24,7 @@ setup('authenticate user once and save storage state', async ({ page }) => {
       const submitBtn = dialogModal.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialogModal.locator('button[type="submit"]:not(:has-text("Google"))')).last();
 
       if (await usernameInput.isVisible({ timeout: 8000 }).catch(() => false)) {
-        await usernameInput.fill('usert1').catch(() => {});
+        await usernameInput.fill('user1').catch(() => {});
         await passwordInput.fill('Enao@123').catch(() => {});
         await submitBtn.click({ force: true }).catch(() => {});
         await page.waitForTimeout(2500);

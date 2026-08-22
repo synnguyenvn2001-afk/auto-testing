@@ -3,7 +3,8 @@ import { skipOnboardingTour, checkAndSkipIf504 } from './helpers';
 
 test.describe('Financial and Estimation Tools Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const response = await page.goto('https://laand.vn:8443/').catch(() => null);
+    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const response = await page.goto(baseUrl).catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });

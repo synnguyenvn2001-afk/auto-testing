@@ -6,7 +6,8 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
   test.beforeEach(async ({ context, page }) => {
     await context.clearCookies();
-    await page.goto('https://laand.vn:8443/', { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
+    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    await page.goto(baseUrl, { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
     await page.evaluate(() => {
       localStorage.clear();
       sessionStorage.clear();
@@ -140,7 +141,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
       const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
-      await usernameInput.fill('usert1');
+      await usernameInput.fill('user1');
       await passwordInput.fill('WrongPassword999!');
 
       const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
@@ -235,7 +236,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
       await expect(usernameInput).toBeVisible();
 
-      await usernameInput.fill('usert1');
+      await usernameInput.fill('user1');
       await passwordInput.fill('Enao@123');
 
       const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();

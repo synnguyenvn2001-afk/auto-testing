@@ -1,8 +1,8 @@
 import { driver, $, $$ } from '@wdio/globals';
 
 export const TEST_ACCOUNTS = [
-  'usert1', 'usert2', 'usert3', 'usert4', 'usert5',
-  'usert6', 'usert7', 'usert8', 'usert9', 'usert10'
+  'user1', 'user2', 'user3', 'user4', 'user5',
+  'user6', 'user7', 'user8', 'user9', 'user10'
 ];
 
 export const TEST_PASSWORD = 'Enao@123';
@@ -176,7 +176,7 @@ export async function ensureMobileLoggedOut() {
 
 /**
  * TỰ ĐỘNG ĐĂNG NHẬP BẰNG TÀI KHOẢN LANDBASE
- * Nếu tài khoản hiện tại bị khóa, tự động chuyển sang thử các tài khoản từ usert1 -> usert10 (Mật khẩu: Enao@123)
+ * Nếu tài khoản hiện tại bị khóa, tự động chuyển sang thử các tài khoản từ user1 -> user10 (Mật khẩu: Enao@123)
  */
 export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
   const loggedIn = await isMobileLoggedIn();
@@ -185,7 +185,7 @@ export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
     return;
   }
 
-  // Tạo danh sách ưu tiên thử nghiệm từ account truyền vào -> usert1..usert10
+  // Tạo danh sách ưu tiên thử nghiệm từ account truyền vào -> user1..user10
   const candidateUsers = [account.username, ...TEST_ACCOUNTS.filter(u => u !== account.username)];
 
   for (const username of candidateUsers) {
@@ -221,5 +221,5 @@ export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
     console.log(`⚠️ Tài khoản [${username}] bị khóa/lỗi -> Thử tài khoản tiếp theo trong danh sách...`);
   }
 
-  console.log(`❌ Tất cả các tài khoản từ usert1 đến usert10 đều không thể đăng nhập.`);
+  console.log(`❌ Tất cả các tài khoản từ user1 đến user10 đều không thể đăng nhập.`);
 }

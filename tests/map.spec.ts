@@ -12,7 +12,8 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
 
-    const response = await page.goto('https://laand.vn:8443/ban-do').catch(() => null);
+    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const response = await page.goto(`${baseUrl}/ban-do`).catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
   });
@@ -206,7 +207,8 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     test('MAP_SEARCH_SUGGESTION_AUTH_NORMAL: Người dùng đã đăng nhập (Logged-in) click vào kết quả gợi ý tìm kiếm sẽ sử dụng bình thường (không hiện Prompt Đăng nhập)', async ({ page }) => {
       // Đăng nhập tài khoản trước
       await loginIfNeeded(page);
-      await page.goto('https://laand.vn:8443/ban-do');
+      const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+      await page.goto(`${baseUrl}/ban-do`);
       await page.waitForLoadState('domcontentloaded');
       await skipOnboardingTour(page);
 
@@ -257,7 +259,7 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     });
 
     test('Kiểm tra hiển thị dropdown khi chọn 63 tỉnh và 34 tỉnh', async ({ page }) => {
-      const boundaryTab = page.locator('button[role="tab"]:has-text("Tọa độ góc ranh")');
+      const boundaryTab = page.locator('button[role="tab"]').filter({ hasText: /Góc ranh|Tọa độ góc ranh/i }).first();
       if (await boundaryTab.isVisible()) {
         await boundaryTab.click();
         const btn63 = page.locator('button[role="tab"]:has-text("63 tỉnh")');
@@ -421,7 +423,8 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
 
     test('MAP_SEARCH_002_AUTH: Người dùng Đã đăng nhập chọn Tỉnh/TP -> Phường/Xã, tự động chuyển tâm bản đồ', async ({ page }) => {
       await loginIfNeeded(page);
-      await page.goto('https://laand.vn:8443/ban-do');
+      const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+      await page.goto(`${baseUrl}/ban-do`);
       await page.waitForLoadState('domcontentloaded');
       await skipOnboardingTour(page);
 
@@ -557,16 +560,16 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
   });
 
   /* =========================================================================
-   * 5. Chức năng Tìm kiếm - Tìm kiếm theo Lat/Lon & Tọa độ góc ranh / VN2000
+   * 5. Chức năng Tìm kiếm - Tìm kiếm theo Lat/Lon & Góc ranh / VN2000
    * ========================================================================= */
-  test.describe('5. Chức năng Tìm kiếm - Tìm kiếm theo Lat/Lon & Tọa độ góc ranh / VN2000', () => {
+  test.describe('5. Chức năng Tìm kiếm - Tìm kiếm theo Lat/Lon & Góc ranh / VN2000', () => {
     test.beforeEach(async ({ page }) => {
-      const boundaryTab = page.locator('button[role="tab"]:has-text("Tọa độ góc ranh")');
+      const boundaryTab = page.locator('button[role="tab"]').filter({ hasText: /Góc ranh|Tọa độ góc ranh/i }).first();
       await expect(boundaryTab).toBeVisible();
       await boundaryTab.click();
     });
 
-    test('Kiểm tra hiển thị nút chuyển đổi 63 tỉnh / 34 tỉnh trong tab Tọa độ góc ranh', async ({ page }) => {
+    test('Kiểm tra hiển thị nút chuyển đổi 63 tỉnh / 34 tỉnh trong tab Góc ranh', async ({ page }) => {
       const btn63Provinces = page.locator('button[role="tab"]:has-text("63 tỉnh")');
       const btn34Provinces = page.locator('button[role="tab"]:has-text("34 tỉnh")');
 
@@ -970,7 +973,7 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       // Monitor network requests & responses
       page.on('request', (request) => {
         const url = request.url();
-        if (url.includes('/api/') || url.includes('.laand.vn') || url.includes('mapbox') || url.includes('map')) {
+        if (url.includes('/api/') || url.includes('.laand.vn') || url.includes('landbase.vn') || url.includes('mapbox') || url.includes('map')) {
           pendingRequests.add(request);
         }
       });
