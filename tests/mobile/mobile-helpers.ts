@@ -1,11 +1,11 @@
 import { driver, $, $$ } from '@wdio/globals';
 
 export const TEST_ACCOUNTS = [
-  'user1', 'user2', 'user3', 'user4', 'user5',
+  'user', 'user1', 'user2', 'user3', 'user4', 'user5',
   'user6', 'user7', 'user8', 'user9', 'user10'
 ];
 
-export const TEST_PASSWORD = 'Enao@123';
+export const TEST_PASSWORD = 'Enao@1234';
 
 export const TEST_ACCOUNT = {
   username: TEST_ACCOUNTS[0],
@@ -176,7 +176,7 @@ export async function ensureMobileLoggedOut() {
 
 /**
  * TỰ ĐỘNG ĐĂNG NHẬP BẰNG TÀI KHOẢN LANDBASE
- * Nếu tài khoản hiện tại bị khóa, tự động chuyển sang thử các tài khoản từ user1 -> user10 (Mật khẩu: Enao@123)
+ * Nếu tài khoản hiện tại bị khóa, tự động chuyển sang thử các tài khoản từ user -> user10 (Mật khẩu: Enao@1234)
  */
 export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
   const loggedIn = await isMobileLoggedIn();
@@ -221,5 +221,5 @@ export async function ensureMobileLoggedIn(account = TEST_ACCOUNT) {
     console.log(`⚠️ Tài khoản [${username}] bị khóa/lỗi -> Thử tài khoản tiếp theo trong danh sách...`);
   }
 
-  console.log(`❌ Tất cả các tài khoản từ user1 đến user10 đều không thể đăng nhập.`);
+  console.log(`❌ Tất cả các tài khoản từ user đến user10 đều không thể đăng nhập.`);
 }

@@ -40,10 +40,10 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       const logoLink = page.locator('a:has(img[alt*="logo"i]), header a, [class*="header"] a, a[href="/"]').first();
       if (await logoLink.isVisible({ timeout: 10000 }).catch(() => false)) {
         await Promise.all([
-          page.waitForURL(/(dev-webapp\.laand\.vn\/?$|\/tin-tuc-thi-truong)/i, { timeout: 10000 }).catch(() => { }),
+          page.waitForURL(/(landbase\.vn|laand\.vn|\/tin-tuc-thi-truong|\/?$)/i, { timeout: 10000 }).catch(() => { }),
           logoLink.click({ force: true })
         ]);
-        await expect(page).toHaveURL(/laand\.vn/i);
+        await expect(page).toHaveURL(/(landbase\.vn|laand\.vn)/i);
       }
       await expect(page.locator('body')).toBeVisible();
     });
@@ -71,20 +71,25 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_HOME_005: Kiểm tra khi click vào thẻ danh mục/địa danh trên card bài viết (ví dụ: Vĩ mô, Nghệ An, Đồng Nai...), hệ thống chuyển sang màn Tìm kiếm với thẻ đó được chọn sẵn', async ({ page }) => {
       await checkAndSkipIf504(page);
 
-      // Tìm thẻ tag trên card bài viết (Ví dụ: Quảng Bình, Quảng Ninh, Bà Rịa - Vũng Tàu, Vĩ mô, Đồng Nai...)
-      const tagChip = page.locator('button:has-text("Quảng Bình"), button:has-text("Quảng Ninh"), button:has-text("Bà Rịa - Vũng Tàu"), button:has-text("Vĩ mô"), button:has-text("Đồng Nai"), main a button, main [class*="card"] button').first();
-      if (await tagChip.isVisible({ timeout: 10000 }).catch(() => false)) {
-        const tagText = (await tagChip.innerText().catch(() => ''))?.trim() || 'Quảng Bình';
+      // Đợi danh sách tin tức tải xong từ API và ổn định
+      await page.waitForLoadState('networkidle').catch(() => {});
+      await page.waitForTimeout(1000);
 
-        await Promise.all([
-          page.waitForURL(/\/tim-kiem|\?tags=/i, { timeout: 10000 }).catch(() => { }),
-          tagChip.click({ force: true })
-        ]);
-        await page.waitForTimeout(500);
+      // Tìm thẻ tag trên card bài viết (Ví dụ: Pháp lý, Gia Lai, Hồ Chí Minh, Quy hoạch, Vĩ mô, Dự án...)
+      const tagChip = page.locator('button').filter({ hasText: /Pháp lý|Gia Lai|Hồ Chí Minh|Hà Nội|Quy hoạch|Dự án|Vĩ mô|Đấu giá|Khởi công|Phú Thọ|Địa phương|Quảng/i }).first();
+      await expect(tagChip).toBeVisible({ timeout: 15000 });
+      await tagChip.scrollIntoViewIfNeeded().catch(() => {});
 
-        // Khẳng định trang đã chuyển sang màn tìm kiếm với thẻ được chọn
-        await expect(page).toHaveURL(/laand\.vn/i);
+      // Click và đợi chuyển trang sang màn tìm kiếm
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await tagChip.click().catch(() => {});
+        const navigated = await page.waitForURL(/\/tim-kiem/i, { timeout: 3000 }).then(() => true).catch(() => false);
+        if (navigated) break;
+        await page.waitForTimeout(1000);
       }
+
+      // Khẳng định trang đã chuyển sang màn tìm kiếm với thẻ được chọn
+      await expect(page).toHaveURL(/\/tim-kiem/i, { timeout: 15000 });
       await expect(page.locator('body')).toBeVisible();
     });
   });
@@ -166,19 +171,19 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         await gotoAndSkipIf504(page, `${BASE_URL}/tim-kiem`);
       }
 
-      const categorySelect = page.locator('button[role="combobox"], [class*="select"], button:has-text("Danh mục"), [data-slot="popover-trigger"]').first();
+      const categorySelect = page.locator('span:text-matches("Chọn danh mục", "i"), div[data-slot="popover-anchor"]:has-text("danh mục"), button[role="combobox"], [class*="select"]').filter({ visible: true }).first();
       if (await categorySelect.isVisible().catch(() => false)) {
         await categorySelect.click({ force: true });
         await page.waitForTimeout(400);
 
-        const categoryOption = page.locator('[role="option"], [data-slot="popover-content"] div, span').filter({ hasText: /quy hoạch|đấu giá|vĩ mô|khởi công/i }).first();
+        const categoryOption = page.locator('[role="option"], [data-slot="popover-content"] label, [data-slot="popover-content"] div, span').filter({ hasText: /quy hoạch|đấu giá|vĩ mô|khởi công/i }).first();
         if (await categoryOption.isVisible().catch(() => false)) {
           await categoryOption.click({ force: true });
           await page.waitForTimeout(1000);
         }
       }
 
-      const activeChip = page.locator('button, span, div').filter({ hasText: /quy hoạch|đấu giá|vĩ mô|khởi công/i }).first();
+      const activeChip = page.locator('button, span, div, label').filter({ hasText: /quy hoạch|đấu giá|vĩ mô|khởi công/i }).first();
       if (await activeChip.isVisible({ timeout: 5000 }).catch(() => false)) {
         await expect(activeChip).toBeVisible();
       }
@@ -363,7 +368,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
         await page.waitForTimeout(500);
 
         // 4. Khẳng định màn hình chuyển sang /tim-kiem và thẻ danh mục (Ví dụ: "Khởi công ×") được chọn sẵn trên thanh tìm kiếm
-        await expect(page).toHaveURL(/laand\.vn/i);
+        await expect(page).toHaveURL(/(landbase\.vn|laand\.vn).*(\/tim-kiem|\?tags=)/i);
         const searchChip = page.locator('button, span, div, h2').filter({ hasText: /khởi công|quy hoạch|vĩ mô|địa phương|đấu giá|tin mới nhất/i }).first();
         if (await searchChip.isVisible({ timeout: 5000 }).catch(() => false)) {
           await expect(searchChip).toBeVisible();
@@ -660,6 +665,298 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
       }
 
       await expect(page.locator('body')).toBeVisible();
+    });
+  });
+
+  /* =========================================================================
+   * 2.1. Bộ lọc tìm kiếm tách riêng các Box (Tỉnh/TP, Phường/xã, Danh mục, Reset)
+   * ========================================================================= */
+  test.describe('2.1. Bộ lọc tìm kiếm tách riêng các Box (Tỉnh/TP, Phường/xã, Danh mục, Reset)', () => {
+    const openProvinceDropdown = async (page: any, provinceBox: any) => {
+      const provinceSearch = page.locator('input[placeholder*="Tìm tỉnh"i]').first();
+      if (await provinceSearch.isVisible().catch(() => false)) return;
+
+      await page.keyboard.press('Escape').catch(() => {});
+      await page.waitForTimeout(200);
+
+      await expect(provinceBox).toBeVisible({ timeout: 10000 });
+      await provinceBox.click().catch(() => {});
+      await page.waitForTimeout(400);
+      if (!await provinceSearch.isVisible().catch(() => false)) {
+        await provinceBox.dispatchEvent('click');
+        await page.waitForTimeout(600);
+      }
+      await expect(provinceSearch).toBeVisible({ timeout: 8000 });
+    };
+
+    const openWardDropdown = async (page: any, wardBox: any) => {
+      const wardSearch = page.locator('input[placeholder*="Tìm phường"i]').first();
+      if (await wardSearch.isVisible().catch(() => false)) return;
+
+      await expect(wardBox).toBeVisible({ timeout: 10000 });
+      await wardBox.click().catch(() => {});
+      await page.waitForTimeout(400);
+      if (!await wardSearch.isVisible().catch(() => false)) {
+        await wardBox.dispatchEvent('click');
+        await page.waitForTimeout(600);
+      }
+      await expect(wardSearch).toBeVisible({ timeout: 8000 });
+    };
+
+    const openCategoryDropdown = async (page: any, catBox: any) => {
+      const catSearch = page.locator('input[placeholder*="Tìm danh mục"i]').first();
+      if (await catSearch.isVisible().catch(() => false)) return;
+
+      await expect(catBox).toBeVisible({ timeout: 10000 });
+      await catBox.click().catch(() => {});
+      await page.waitForTimeout(400);
+      if (!await catSearch.isVisible().catch(() => false)) {
+        await catBox.dispatchEvent('click');
+        await page.waitForTimeout(600);
+      }
+      await expect(catSearch).toBeVisible({ timeout: 8000 });
+    };
+
+    test('NEWS_FILTER_BOX_001: Kiểm tra cấu trúc thanh tìm kiếm mới tách thành các box riêng biệt (Tỉnh/TP, Phường/xã, Danh mục, Khoảng thời gian, Lưu bộ lọc, Reset)', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const provinceBox = desktopFilterBar.locator('div[class*="w-72"] > div').first().locator('div[class*="cursor"]').first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+      const categoryBox = desktopFilterBar.locator('[data-slot="popover-anchor"]').first();
+      const dateBox = desktopFilterBar.locator('button:has-text("khoảng thời gian"), button:has-text("Chọn khoảng")').first();
+      const bookmarkBtn = desktopFilterBar.locator('button:has(i.fa-bookmark)').first();
+      const resetBtn = desktopFilterBar.locator('button:has(i.fa-arrow-rotate-right), button:has(i[class*="rotate"])').first();
+
+      await expect(desktopFilterBar).toBeVisible({ timeout: 10000 });
+      await expect(provinceBox).toBeVisible({ timeout: 5000 });
+      await expect(wardBox).toBeVisible({ timeout: 5000 });
+      await expect(categoryBox).toBeVisible({ timeout: 5000 });
+      await expect(dateBox).toBeVisible({ timeout: 5000 });
+      await expect(bookmarkBtn).toBeVisible({ timeout: 5000 });
+      await expect(resetBtn).toBeVisible({ timeout: 5000 });
+    });
+
+    test('NEWS_FILTER_BOX_002: Kiểm tra Box Phường/xã BỊ KHÓA / KHÔNG THỂ CHỌN khi CHƯA CHỌN Tỉnh/TP', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+      await expect(wardBox).toBeVisible({ timeout: 10000 });
+
+      // 1. Kiểm tra box Phường/xã có class cursor-not-allowed hoặc opacity-60
+      const wardClass = (await wardBox.getAttribute('class')) || '';
+      expect(wardClass).toMatch(/cursor-not-allowed|opacity-60/i);
+
+      // 2. Thử kích hoạt box Phường/xã -> Không mở ra ô tìm kiếm phường/xã
+      await wardBox.dispatchEvent('click');
+      await page.waitForTimeout(500);
+      const wardSearchInput = page.locator('input[placeholder*="Tìm phường"i]');
+      expect(await wardSearchInput.isVisible().catch(() => false)).toBe(false);
+
+      // Đóng tooltip nếu có xuất hiện khi click vào phần tử bị khóa
+      await page.keyboard.press('Escape').catch(() => {});
+      await page.waitForTimeout(300);
+    });
+
+    test('NEWS_FILTER_BOX_003: Chọn Tỉnh/TP (Thành phố Hà Nội) -> Box Phường/xã được MỞ KHÓA (Enabled) và nạp danh sách Phường/xã tương ứng', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const provinceBox = desktopFilterBar.locator('div[class*="w-72"] > div').first().locator('div[class*="cursor"]').first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+
+      // 1. Click mở popup chọn Tỉnh/TP
+      await openProvinceDropdown(page, provinceBox);
+
+      // 2. Chọn "Thành phố Hà Nội"
+      const hanoiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Thành phố Hà Nội' }).first();
+      await expect(hanoiOpt).toBeVisible({ timeout: 5000 });
+      await hanoiOpt.click();
+      await page.waitForTimeout(1000);
+
+      // 3. Kiểm tra Box Phường/xã đã được MỞ KHÓA (cursor-not-allowed bị xóa, trở thành cursor-pointer)
+      const wardClass = (await wardBox.getAttribute('class')) || '';
+      expect(wardClass).not.toContain('cursor-not-allowed');
+      expect(wardClass).toContain('cursor-pointer');
+
+      // 4. Click vào box Phường/xã -> Mở popup danh sách Phường/xã của Hà Nội
+      await openWardDropdown(page, wardBox);
+
+      // Kiểm tra có các phường/xã của Hà Nội xuất hiện
+      const wardLabels = page.locator('div[class*="z-50"] label');
+      expect(await wardLabels.count()).toBeGreaterThan(0);
+
+      await page.keyboard.press('Escape');
+    });
+
+    test('NEWS_FILTER_BOX_004: Tìm kiếm và chọn Phường/xã tương ứng trong Box Phường/xã (Ví dụ: Phường Bạch Mai)', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const provinceBox = desktopFilterBar.locator('div[class*="w-72"] > div').first().locator('div[class*="cursor"]').first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+
+      // 1. Chọn Tỉnh/TP Hà Nội nếu chưa chọn
+      if (!await provinceBox.innerText().then(t => t.includes('Hà Nội')).catch(() => false)) {
+        await openProvinceDropdown(page, provinceBox);
+        const hanoiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Thành phố Hà Nội' }).first();
+        await expect(hanoiOpt).toBeVisible({ timeout: 5000 });
+        await hanoiOpt.click();
+        await page.waitForTimeout(1000);
+      }
+
+      // 2. Mở box Phường/xã và tìm kiếm "Bạch Mai"
+      await openWardDropdown(page, wardBox);
+      const wardSearch = page.locator('input[placeholder*="Tìm phường"i]').first();
+      await wardSearch.pressSequentially('Bạch Mai', { delay: 50 });
+      await page.waitForTimeout(800);
+
+      const bachMaiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Bạch Mai' }).first();
+      await expect(bachMaiOpt).toBeVisible({ timeout: 5000 });
+      await bachMaiOpt.click();
+      await page.waitForTimeout(1000);
+
+      // 3. Khẳng định box Phường/xã đã hiển thị "Bạch Mai"
+      expect(await wardBox.innerText()).toContain('Bạch Mai');
+
+      await page.keyboard.press('Escape');
+    });
+
+    test('NEWS_FILTER_BOX_005: Kiểm tra Box Danh mục tìm kiếm (Chọn danh mục...) mở ô tìm kiếm và danh sách checkbox nhiều danh mục', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const catBox = desktopFilterBar.locator('[data-slot="popover-anchor"]').first();
+      await expect(catBox).toBeVisible({ timeout: 10000 });
+      await openCategoryDropdown(page, catBox);
+
+      // 1. Kiểm tra danh sách các danh mục (Khởi công, Dự án, Vĩ mô, Đấu giá, Quy hoạch...)
+      const categories = ['Quy hoạch', 'Dự án', 'Vĩ mô', 'Đấu giá'];
+      for (const cat of categories) {
+        const catItem = page.locator('[role="dialog"] div.cursor-pointer').filter({ hasText: new RegExp(`^${cat}$`, 'i') }).first();
+        await expect(catItem).toBeVisible({ timeout: 5000 });
+      }
+
+      // 2. Click chọn danh mục "Quy hoạch"
+      const quyHoachOpt = page.locator('[role="dialog"] div.cursor-pointer').filter({ hasText: /^Quy hoạch$/i }).first();
+      await quyHoachOpt.click();
+      await page.waitForTimeout(500);
+      const checkboxState = await quyHoachOpt.locator('button[role="checkbox"]').getAttribute('data-state');
+      expect(checkboxState).toBe('checked');
+
+      await page.keyboard.press('Escape');
+    });
+
+    test('NEWS_FILTER_BOX_006: Thực hiện Tìm kiếm kết hợp Tỉnh/TP + Phường/xã + Danh mục (Kiểm tra URL query và API response 200 OK)', async ({ page }) => {
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const provinceBox = desktopFilterBar.locator('div[class*="w-72"] > div').first().locator('div[class*="cursor"]').first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+      const categoryBox = desktopFilterBar.locator('[data-slot="popover-anchor"]').first();
+      const searchBtn = page.locator('button:has(i.fa-magnifying-glass)').first();
+
+      // 1. Chọn Tỉnh Hà Nội nếu chưa chọn
+      if (!await provinceBox.innerText().then(t => t.includes('Hà Nội')).catch(() => false)) {
+        await openProvinceDropdown(page, provinceBox);
+        const hanoiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Thành phố Hà Nội' }).first();
+        await expect(hanoiOpt).toBeVisible({ timeout: 5000 });
+        await hanoiOpt.click();
+        await page.waitForTimeout(1000);
+      }
+
+      // 2. Chọn Phường Bạch Mai nếu chưa chọn
+      if (!await wardBox.innerText().then(t => t.includes('Bạch Mai')).catch(() => false)) {
+        await openWardDropdown(page, wardBox);
+        const wardInp = page.locator('input[placeholder*="Tìm phường"i]').first();
+        await wardInp.pressSequentially('Bạch Mai', { delay: 50 });
+        await page.waitForTimeout(800);
+        const bachMaiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Bạch Mai' }).first();
+        await expect(bachMaiOpt).toBeVisible({ timeout: 5000 });
+        await bachMaiOpt.click();
+        await page.waitForTimeout(1000);
+      }
+
+      // 3. Chọn Danh mục Quy hoạch
+      await openCategoryDropdown(page, categoryBox);
+      const quyHoachOpt = page.locator('[role="dialog"] div.cursor-pointer').filter({ hasText: /^Quy hoạch$/i }).first();
+      if (await quyHoachOpt.isVisible().catch(() => false)) {
+        await quyHoachOpt.click();
+        await page.waitForTimeout(500);
+      }
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
+
+      // 4. Bấm nút Tìm kiếm (Kính lúp màu tím) và lắng nghe API phản hồi 200 OK
+      const apiResponsePromise = page.waitForResponse(
+        (res) => (res.url().includes('tin-tuc') || res.url().includes('article') || res.url().includes('news') || res.url().includes('search')) && res.status() < 400,
+        { timeout: 10000 }
+      ).catch(() => null);
+
+      await searchBtn.click();
+      const apiRes = await apiResponsePromise;
+      if (apiRes) {
+        expect(apiRes.status()).toBeLessThan(400);
+      }
+      await page.waitForTimeout(1500);
+
+      // Khẳng định URL chứa provinceCodes=01 và wardCodes
+      expect(page.url()).toContain('provinceCodes=01');
+    });
+
+    test('NEWS_FILTER_BOX_007: Kiểm tra nút Reset (↺) đặt lại toàn bộ các box lọc về ban đầu (Tỉnh về "Tỉnh", Phường/xã bị KHÓA lại)', async ({ page }) => {
+      // Nếu đang ở URL kết quả tìm kiếm (/tim-kiem), quay về trang tin tức
+      if (page.url().includes('/tim-kiem')) {
+        await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(1000);
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(500);
+
+      const desktopFilterBar = page.locator('div[class*="lg:flex"]').filter({ has: page.locator('div[class*="w-72"]') }).first();
+      const provinceBox = desktopFilterBar.locator('div[class*="w-72"] > div').first().locator('div[class*="cursor"]').first();
+      const wardBox = desktopFilterBar.locator('div[class*="w-72"] > div').nth(1).locator('div[class*="rounded"]').first();
+      const resetBtn = desktopFilterBar.locator('button:has(i.fa-arrow-rotate-right), button:has(i[class*="rotate"])').first();
+
+      // 1. Chọn Tỉnh Hà Nội để kích hoạt trạng thái có bộ lọc nếu chưa chọn
+      if (!await provinceBox.innerText().then(t => t.includes('Hà Nội')).catch(() => false)) {
+        await openProvinceDropdown(page, provinceBox);
+        const hanoiOpt = page.locator('div[class*="z-50"] label').filter({ hasText: 'Thành phố Hà Nội' }).first();
+        await expect(hanoiOpt).toBeVisible({ timeout: 5000 });
+        await hanoiOpt.click();
+        await page.waitForTimeout(1000);
+      }
+
+      // 2. Click nút Reset (↺)
+      await expect(resetBtn).toBeVisible({ timeout: 5000 });
+      await resetBtn.click();
+      await page.waitForTimeout(1500);
+
+      // 3. Khẳng định box Tỉnh đã trở về nhãn "Tỉnh"
+      expect(await provinceBox.innerText()).toContain('Tỉnh');
+
+      // 4. Khẳng định box Phường/xã đã bị KHÓA lại với class cursor-not-allowed / opacity-60
+      const resetWardClass = (await wardBox.getAttribute('class')) || '';
+      expect(resetWardClass).toMatch(/cursor-not-allowed|opacity-60/i);
     });
   });
 

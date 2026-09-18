@@ -41,7 +41,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
    * 0. KHỞI TẠO & KIỂM TRA ĐĂNG NHẬP BẰNG TOKEN LẦN ĐẦU
    * ========================================================================= */
   test('PROFILE_000_INIT_AUTH: Thực hiện Đăng nhập lần đầu và Lưu Token phiên làm việc cho các case sau', async ({ page }) => {
-    // 1. Thực hiện quy trình đăng nhập lần đầu với tài khoản user1
+    // 1. Thực hiện quy trình đăng nhập lần đầu với tài khoản user
     await loginIfNeeded(page);
 
     // 2. Lưu lại toàn bộ Token / Cookies / StorageState phiên làm việc vào file
@@ -303,8 +303,8 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
 
     test('PROFILE_006: Kiểm tra validation cảnh báo khi nhập mật khẩu mới và nhập lại mật khẩu mới KHÔNG KHỚP NHAU', async ({ page }) => {
       const passwordInputs = await ensurePasswordTabActive(page);
-      await passwordInputs.nth(0).fill('Enao@123'); // Mật khẩu hiện tại
-      await passwordInputs.nth(1).fill('Enao@1234'); // Mật khẩu mới
+      await passwordInputs.nth(0).fill('Enao@1234'); // Mật khẩu hiện tại
+      await passwordInputs.nth(1).fill('Enao@12345'); // Mật khẩu mới
       await passwordInputs.nth(2).fill('Enao@9999'); // Nhập lại mật khẩu mới KHÁC NHAU
 
       const saveBtn = page.locator('button:has-text("Đổi mật khẩu")').last().or(page.locator('button:has-text("Lưu thay đổi")').first());
@@ -324,7 +324,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
      * ------------------------------------------------------------------------- */
     test('PROFILE_PASS_VAL_001: Validate Mật khẩu mới quá ngắn (Nhập dưới độ dài tối thiểu)', async ({ page }) => {
       const passwordInputs = await ensurePasswordTabActive(page);
-      await passwordInputs.nth(0).fill('Enao@123');
+      await passwordInputs.nth(0).fill('Enao@1234');
       await passwordInputs.nth(1).fill('En1'); // Too short password
       await passwordInputs.nth(2).fill('En1');
 
@@ -341,7 +341,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
 
     test('PROFILE_PASS_VAL_002: Validate Mật khẩu mới thiếu ký tự đặc biệt / chữ hoa (Định dạng yếu)', async ({ page }) => {
       const passwordInputs = await ensurePasswordTabActive(page);
-      await passwordInputs.nth(0).fill('Enao@123');
+      await passwordInputs.nth(0).fill('Enao@1234');
       await passwordInputs.nth(1).fill('enaopassword123'); // Missing special character / uppercase
       await passwordInputs.nth(2).fill('enaopassword123');
 
@@ -358,9 +358,9 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
 
     test('PROFILE_PASS_VAL_003: Validate Mật khẩu mới trùng hệt với Mật khẩu hiện tại', async ({ page }) => {
       const passwordInputs = await ensurePasswordTabActive(page);
-      await passwordInputs.nth(0).fill('Enao@123');
-      await passwordInputs.nth(1).fill('Enao@123'); // Same as old password
-      await passwordInputs.nth(2).fill('Enao@123');
+      await passwordInputs.nth(0).fill('Enao@1234');
+      await passwordInputs.nth(1).fill('Enao@1234'); // Same as old password
+      await passwordInputs.nth(2).fill('Enao@1234');
 
       const saveBtn = page.locator('button:has-text("Đổi mật khẩu")').last().or(page.locator('button:has-text("Lưu thay đổi")').first());
       await expect(saveBtn).toBeVisible({ timeout: 10000 });
@@ -373,13 +373,13 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       }
     });
 
-    test('PROFILE_007: Thực hiện Đổi mật khẩu từ Enao@123 sang Enao@1234 và Đổi lại về Enao@123 (Kiểm tra API response 200 OK)', async ({ page }) => {
+    test('PROFILE_007: Thực hiện Đổi mật khẩu từ Enao@1234 sang Enao@123 và Đổi lại về Enao@1234 (Kiểm tra API response 200 OK)', async ({ page }) => {
       const passwordInputs = await ensurePasswordTabActive(page);
 
-      // Step 1: Change Enao@123 -> Enao@1234
-      await passwordInputs.nth(0).fill('Enao@123');
-      await passwordInputs.nth(1).fill('Enao@1234');
-      await passwordInputs.nth(2).fill('Enao@1234');
+      // Step 1: Change Enao@1234 -> Enao@123
+      await passwordInputs.nth(0).fill('Enao@1234');
+      await passwordInputs.nth(1).fill('Enao@123');
+      await passwordInputs.nth(2).fill('Enao@123');
 
       const saveBtn = page.locator('button:has-text("Đổi mật khẩu")').last().or(page.locator('button:has-text("Lưu thay đổi")').first());
       await expect(saveBtn).toBeVisible({ timeout: 10000 });
@@ -397,11 +397,11 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       }
       await page.waitForTimeout(1500);
 
-      // Step 2: Immediately Revert Enao@1234 -> Enao@123
+      // Step 2: Immediately Revert Enao@123 -> Enao@1234
       const passwordInputs2 = await ensurePasswordTabActive(page);
-      await passwordInputs2.nth(0).fill('Enao@1234');
-      await passwordInputs2.nth(1).fill('Enao@123');
-      await passwordInputs2.nth(2).fill('Enao@123');
+      await passwordInputs2.nth(0).fill('Enao@123');
+      await passwordInputs2.nth(1).fill('Enao@1234');
+      await passwordInputs2.nth(2).fill('Enao@1234');
 
       const apiResponsePromise2 = page.waitForResponse(
         (res) => (res.url().includes('password') || res.url().includes('user') || res.url().includes('auth') || res.request().method() === 'POST' || res.request().method() === 'PUT') && res.status() < 400,

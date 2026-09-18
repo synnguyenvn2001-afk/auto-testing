@@ -141,7 +141,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
       const usernameInput = dialogModal.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
-      await usernameInput.fill('user1');
+      await usernameInput.fill('user');
       await passwordInput.fill('WrongPassword999!');
 
       const submitBtn = dialogModal.locator('button:not(:has-text("Google")):has-text("Đăng nhập"), button[type="submit"], #login-continue-btn').first();
@@ -196,12 +196,12 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       await registerLink.click({ force: true });
       await page.waitForTimeout(1000);
 
-      // Verify Register Modal title, Google button ("Tiếp tục với Google"), and 3 input fields
+      // Verify Register Modal title, submit button ("Tạo tài khoản"), and 3 input fields
       const registerTitle = modalContainer.locator('text=/Tạo tài khoản/i').first();
       await expect(registerTitle).toBeVisible();
-      const googleRegisterBtn = modalContainer.locator('button:has-text("Tiếp tục với Google")');
-      await expect(googleRegisterBtn).toBeVisible();
-      const confirmPassInput = modalContainer.locator('input[placeholder*="nhập lại mật khẩu"i]');
+      const registerSubmitBtn = modalContainer.locator('button:has-text("Tạo tài khoản")').first();
+      await expect(registerSubmitBtn).toBeVisible();
+      const confirmPassInput = modalContainer.locator('input[placeholder*="nhập lại mật khẩu"i], #register-confirm-password').first();
       await expect(confirmPassInput).toBeVisible();
 
       // 3. Click "Đăng nhập" link at bottom to switch back to Login modal
@@ -236,14 +236,15 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
       await expect(usernameInput).toBeVisible();
 
-      await usernameInput.fill('user1');
-      await passwordInput.fill('Enao@123');
+      await usernameInput.fill('user');
+      await passwordInput.fill('Enao@1234');
 
-      const submitBtn = dialogModal.locator('button:has-text("Đăng nhập"), #login-continue-btn').first();
+      const submitBtn = dialogModal.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialogModal.locator('button[type="submit"]:not(:has-text("Google")), button:not(:has-text("Google")):has-text("Đăng nhập")')).last();
       await submitBtn.click({ force: true });
 
       await page.waitForTimeout(3000);
-      await expect(dialogModal).toBeHidden();
+      await skipOnboardingTour(page);
+      await expect(dialogModal).toBeHidden({ timeout: 10000 });
     });
   });
 });

@@ -161,21 +161,40 @@ DELETED_KEYWORDS = (
     "không tìm thấy nội dung",
     "trang không khả dụng",
     "liên kết có thể bị hỏng",
+    "liên kết bạn theo dõi có thể đã bị hỏng",
     "page may have been removed",
+    "or the page may have been removed",
     "bài viết đã bị gỡ",
+    "hoặc trang có thể đã bị gỡ",
     "attachment unavailable",
+    "this link may be broken",
+    "this content is no longer available",
+    "bài viết này không còn tồn tại",
+    "bài viết không khả dụng",
+    "chỉ chia sẻ nội dung với một nhóm nhỏ",
+    "hoặc đã xóa nội dung",
+    "trang này không hiển thị",
+    "this post may have been deleted",
+    "post unavailable",
 )
 
 
-def check_is_deleted(page, original_post: Optional[str], final_post: Optional[str], final_url: str) -> bool:
+def check_is_deleted(page, original_post: Optional[str], final_post: Optional[str], final_url: str, render_wait_s: float = 2.0) -> bool:
     # Rule 1: Had post ID originally, but redirect lost post ID (e.g. landed on group home page or /404)
     if original_post and not final_post:
         return True
 
+    # Allow React SPA a brief moment to finish rendering error boxes if render_wait_s > 0
+    if render_wait_s > 0:
+        try:
+            page.wait_for_timeout(int(render_wait_s * 1000))
+        except Exception:
+            pass
+
     # Rule 2: Title check
     try:
         title = (page.title() or "").lower()
-        if any(kw in title for kw in ["content not found", "page not found", "không tìm thấy", "không khả dụng"]):
+        if any(kw in title for kw in ["content not found", "page not found", "không tìm thấy", "không khả dụng", "bài viết không khả dụng", "liên kết bị hỏng"]):
             return True
     except Exception:
         pass
@@ -191,7 +210,7 @@ def check_is_deleted(page, original_post: Optional[str], final_post: Optional[st
     return False
 
 
-def check_one(page, original_url: str, timeout_ms: int) -> dict:
+def check_one(page, original_url: str, timeout_ms: int, render_wait_s: float = 2.0) -> dict:
     original_url = (original_url or "").strip()
     original_group, original_post = parse_group_post(original_url)
 
@@ -240,7 +259,7 @@ def check_one(page, original_url: str, timeout_ms: int) -> dict:
     if original_post and final_post:
         result["post_id_same"] = final_post == original_post
 
-    is_deleted = check_is_deleted(page, original_post, final_post, final_url)
+    is_deleted = check_is_deleted(page, original_post, final_post, final_url, render_wait_s=render_wait_s)
 
     if is_deleted:
         result["status"] = "POST_DELETED"
@@ -267,7 +286,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("input_file", help="File CSV/XLSX co cot URL")
     p.add_argument("--url-column", default="url", help="Ten cot URL, mac dinh: url")
     p.add_argument("--output", default=None, help="Ten file output khong can duoi mo rong")
-    p.add_argument("--timeout", type=int, default=30, help="Timeout moi URL, giay")
+    p.add_argument("--timeout", type=int, default=45, help="Timeout moi URL, giay (mac dinh: 45)")
+    p.add_argument("--render-wait", type=float, default=2.0, help="Thoi gian cho render text noi dung FB, giay (mac dinh: 2.0)")
     p.add_argument("--delay-min", type=float, default=0.0, help="Delay toi thieu giua cac URL, giay")
     p.add_argument("--delay-max", type=float, default=0.0, help="Delay toi da giua cac URL, giay")
     p.add_argument("--workers", type=int, default=10, help="So luong worker chay song song (mac dinh: 10)")
@@ -346,7 +366,7 @@ def run_worker(
                 break
 
             url = str(df.at[idx, args.url_column]).strip()
-            result = check_one(page, url, args.timeout * 1000)
+            result = check_one(page, url, timeout_ms=args.timeout * 1000, render_wait_s=args.render_wait)
 
             with df_lock:
                 for key in result_columns:

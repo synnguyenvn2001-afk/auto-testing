@@ -16,7 +16,10 @@ export async function checkAndSkipIf504(page: Page, response?: any): Promise<boo
  */
 export async function gotoAndSkipIf504(page: Page, url: string, options?: Parameters<Page['goto']>[1]) {
   if (page.url() === url) {
-    return { response: null, skipped: false };
+    const hasError = await page.locator('text="Đã có lỗi xảy ra"').isVisible({ timeout: 500 }).catch(() => false);
+    if (!hasError) {
+      return { response: null, skipped: false };
+    }
   }
 
   const res = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000, ...options }).catch(() => null);
@@ -71,17 +74,10 @@ export async function loginIfNeeded(page: Page) {
 
     // Chờ ô nhập username sẵn sàng đến 10000ms
     if (await usernameInput.isVisible({ timeout: 10000 }).catch(() => false)) {
-      await usernameInput.fill('user1').catch(() => {});
-      await passwordInput.fill('Enao@123').catch(() => {});
+      await usernameInput.fill('user').catch(() => {});
+      await passwordInput.fill('Enao@1234').catch(() => {});
       await submitBtn.click({ force: true }).catch(() => {});
       await page.waitForTimeout(3000); // Đợi xử lý login API & token
-
-      // Mật khẩu dự phòng Enao@1234 nếu Modal vẫn còn mở
-      if (await dialogModal.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await passwordInput.fill('Enao@1234').catch(() => {});
-        await submitBtn.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(3000);
-      }
 
       await skipOnboardingTour(page);
 

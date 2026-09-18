@@ -14,5 +14,5 @@ if "%~1"=="" (
   set INPUT=%~1
 )
 
-%PY% "%~dp0fb_redirect_checker.py" "%INPUT%" --resume --workers 10 --delay-min 0 --delay-max 0 --save-every 200 --headless
+%PY% "%~dp0fb_redirect_checker.py" "%INPUT%" --resume --workers 10 --timeout 45 --render-wait 2.0 --delay-min 0 --delay-max 0 --save-every 200 --headless %*
 pause

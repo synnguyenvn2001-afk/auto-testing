@@ -1,0 +1,35 @@
+{
+  "confirmed": 6,
+  "results": [
+    {
+      "probe": "login_redirect_misclassified",
+      "expected": "LOGIN_REDIRECT",
+      "actual": "POST_DELETED"
+    },
+    {
+      "probe": "navigation_failure_marked_complete",
+      "expected": "retryable error",
+      "actual": "SAME_URL",
+      "has_error": true
+    },
+    {
+      "probe": "redirect_evidence_not_exported",
+      "final_url_in_full_result_columns": false
+    },
+    {
+      "probe": "drag_drop_launcher_duplicates_input",
+      "parser_exit_code": 2
+    },
+    {
+      "probe": "changed_coordinates_trusted_as_unchanged",
+      "expected": "re-evaluate changed coordinates",
+      "actual": "KNOWN_GT_PASS",
+      "confidence": 0.99
+    },
+    {
+      "probe": "news_resume_skips_failed_page",
+      "failed_page": 2,
+      "next_default_page": 4
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+src/db.ts(220,10): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'LeadRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'LeadRow': post_id, group_url, group_name, author, and 9 more.
+src/db.ts(224,10): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'ScannedRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'ScannedRow': is_lead, comment_status, comment_text, comment_generated_at, and 20 more.
+src/db.ts(246,10): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'GroupRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'GroupRow': url, added_at, active
+src/db.ts(346,10): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'CommentRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'CommentRow': post_id, text, status, generated_at, and 2 more.
+src/db.ts(425,10): error TS2352: Conversion of type 'Record<string, SQLOutputValue>[]' to type 'MessageRow[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, SQLOutputValue>' is missing the following properties from type 'MessageRow': post_id, user_id, text, status, and 3 more.
+src/runtime-config.ts(37,9): error TS18047: 'cached' is possibly 'null'.
+src/runtime-config.ts(37,42): error TS18047: 'cached' is possibly 'null'.
+src/runtime-config.ts(38,9): error TS18047: 'cached' is possibly 'null'.
+src/runtime-config.ts(38,39): error TS18047: 'cached' is possibly 'null'.
+src/runtime-config.ts(39,5): error TS2322: Type 'RuntimeConfig | null' is not assignable to type 'RuntimeConfig'.
+  Type 'null' is not assignable to type 'RuntimeConfig'.

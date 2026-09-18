@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.streamlit/secrets.toml
+data/user_ground_truth.sqlite
+*.xlsx
+*.xls
+*.csv
+!data/ground_truth_seed.csv
