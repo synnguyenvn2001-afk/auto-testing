@@ -1,8 +1,17 @@
 
-# Playwright
+# Node.js
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+
+# Generated test artifacts and local authentication
+projects/landbase-e2e-tests/artifacts/playwright-report/
+projects/landbase-e2e-tests/artifacts/test-results/
+projects/landbase-e2e-tests/artifacts/blob-report/
+projects/landbase-e2e-tests/playwright/.cache/
+projects/landbase-e2e-tests/playwright/.auth/
+projects/landbase-e2e-tests/reports/
+
+# Python caches and local environments
+**/__pycache__/
+**/.pytest_cache/
+**/.venv/
+*.py[cod]

@@ -1,0 +1,4 @@
+assets/images/*
+!assets/images/.gitkeep
+output/*
+!output/.gitkeep
