@@ -134,9 +134,11 @@ export function setupStrictApiCheck(page: Page) {
 
   return {
     verifyNoApiFailures: () => {
-      // Giúp testcase tập trung kiểm tra tính năng UI hoàn chỉnh mà không bị dừng vô lý
       if (apiErrors.length > 0) {
-        console.warn(`⚠️ Ghi nhận ${apiErrors.length} lỗi API phụ từ Backend (không làm ngắt test UI).`);
+        expect(
+          apiErrors,
+          `Phát hiện ${apiErrors.length} lỗi Server API (HTTP 5xx) từ Backend trong quá trình kiểm thử:\n${apiErrors.join('\n')}`
+        ).toHaveLength(0);
       }
     }
   };

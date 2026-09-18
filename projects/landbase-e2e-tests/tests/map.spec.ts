@@ -603,20 +603,28 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     test('Kiểm tra tìm kiếm khi nhập đầy đủ thông tin nhưng không có dữ liệu (MSG001)', async ({ page }) => {
       await dismissGuideIfPresent(page);
       const plotTab = page.locator('button[role="tab"], button').filter({ hasText: /^Tờ\/thửa$|Số tờ/i }).first();
-      if (await plotTab.isVisible().catch(() => false)) {
-        await plotTab.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(500);
-      }
+      await expect(plotTab).toBeVisible({ timeout: 8000 });
+      await plotTab.click({ force: true });
+      await page.waitForTimeout(500);
 
       const sheetInput = page.locator('input[placeholder="Số tờ bản đồ"]').first();
       const plotInput = page.locator('input[placeholder="Số thửa đất"]').first();
 
       await expect(sheetInput).toBeVisible({ timeout: 8000 });
+      await expect(plotInput).toBeVisible({ timeout: 8000 });
       await sheetInput.fill('999999');
       await plotInput.fill('888888');
       await page.waitForTimeout(500);
 
-      await expect(sheetInput).toBeVisible();
+      // Nhấn nút Tìm kiếm theo đúng kịch bản kiểm thử thủ công
+      const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
+      await expect(submitBtn).toBeVisible({ timeout: 5000 });
+      await submitBtn.click({ force: true });
+      await page.waitForTimeout(1500);
+
+      // Xác minh hệ thống hiển thị thông báo MSG001 không có kết quả phù hợp
+      const noDataMsg = page.locator('text=/Không có kết quả phù hợp|Không tìm thấy dữ liệu phù hợp|MSG001/i').first();
+      await expect(noDataMsg).toBeVisible({ timeout: 10000 });
     });
   });
 

@@ -394,14 +394,11 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
       await page.waitForTimeout(3000);
       await skipOnboardingTour(page);
 
-      // Verify list of ad cards is rendered
+      // Bắt buộc danh sách card tin rao vặt phải hiển thị
       const cards = page.locator('main div.grid > div, main div.grid > a, main [class*="card"]');
+      await expect(cards.first()).toBeVisible({ timeout: 15000 });
       const count = await cards.count();
-      if (count > 0) {
-        await expect(cards.first()).toBeVisible();
-      } else {
-        await expect(page.locator('body')).toBeVisible();
-      }
+      expect(count).toBeGreaterThan(0);
     });
 
     test('Kiểm tra trường hợp không tìm thấy tin rao vặt: Hiển thị thông báo "Không tìm thấy tin rao vặt phù hợp"', async ({ page }) => {
@@ -410,33 +407,25 @@ test.describe('Classified Ads (Tin rao vặt) - Complete Testcase Suite (Tin rao
 
       // Filter with an extreme price value to trigger empty results
       const priceTrigger = page.locator('button, [data-slot="popover-trigger"]').filter({ hasText: /Khoảng giá|Giá/i }).first();
-      if (await priceTrigger.isVisible().catch(() => false)) {
-        await priceTrigger.click({ force: true });
-        await page.waitForTimeout(500);
+      await expect(priceTrigger).toBeVisible({ timeout: 10000 });
+      await priceTrigger.click({ force: true });
+      await page.waitForTimeout(500);
 
-        const minPriceInput = page.locator('input[placeholder*="Từ"i], input[placeholder*="tu"i]').first();
-        const maxPriceInput = page.locator('input[placeholder*="Đến"i], input[placeholder*="den"i]').first();
+      const minPriceInput = page.locator('input[placeholder*="Từ"i], input[placeholder*="tu"i]').first();
+      const maxPriceInput = page.locator('input[placeholder*="Đến"i], input[placeholder*="den"i]').first();
 
-        if (await minPriceInput.isVisible().catch(() => false)) {
-          await minPriceInput.fill('99999').catch(() => {});
-        }
-        if (await maxPriceInput.isVisible().catch(() => false)) {
-          await maxPriceInput.fill('999999').catch(() => {});
-        }
+      await expect(minPriceInput).toBeVisible({ timeout: 5000 });
+      await minPriceInput.fill('99999');
+      await maxPriceInput.fill('999999');
 
-        const applyBtn = page.locator('button:has-text("Áp dụng"), button:has-text("áp dụng")').first();
-        if (await applyBtn.isVisible().catch(() => false)) {
-          await applyBtn.click({ force: true }).catch(() => {});
-          await page.waitForTimeout(2000);
-        }
-      }
+      const applyBtn = page.locator('button:has-text("Áp dụng"), button:has-text("áp dụng")').first();
+      await expect(applyBtn).toBeVisible({ timeout: 5000 });
+      await applyBtn.click({ force: true });
+      await page.waitForTimeout(2000);
 
-      // Check empty state notice text: "Không tìm thấy tin rao vặt phù hợp"
-      const emptyStateText = page.locator('text=/Không tìm thấy tin rao vặt phù hợp|Thử mở rộng khu vực|Không tìm thấy/i').first();
-      if (await emptyStateText.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await expect(emptyStateText).toBeVisible();
-      }
-      await expect(page.locator('body')).toBeVisible();
+      // Bắt buộc phải hiển thị thông báo empty state theo đúng giao diện
+      const emptyStateText = page.locator('text=/Không có tin rao vặt phù hợp|Thử mở rộng khu vực|Không tìm thấy tin rao vặt/i').first();
+      await expect(emptyStateText).toBeVisible({ timeout: 10000 });
     });
   });
 

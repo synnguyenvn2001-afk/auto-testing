@@ -77,10 +77,11 @@ test.describe('Financial and Estimation Tools Tests', () => {
       await inputs[0].fill('500000000');
     }
     const calcBtn = dialogModal.locator('button:has-text("Tính"), button:has-text("Kết quả")').first();
-    if (await calcBtn.isVisible()) {
-      await calcBtn.click();
-      await page.waitForTimeout(1500);
-    }
+    await expect(calcBtn).toBeVisible({ timeout: 5000 });
+    await expect(calcBtn).toBeEnabled({ timeout: 5000 });
+    await calcBtn.click();
+    await page.waitForTimeout(1500);
+
     const resultText = dialogModal.locator('text=/tiết kiệm|lãi|VNĐ/i').first();
     await expect(resultText).toBeVisible({ timeout: 10000 });
   });
@@ -109,47 +110,41 @@ test.describe('Financial and Estimation Tools Tests', () => {
     const modalTitle = dialogModal.locator('text=/Ước tính chi phí xây nhà/i').first();
     await expect(modalTitle).toBeVisible();
 
-    // Fill out all required input fields (Diện tích sàn, Số tầng, Chiều dài tường bao)
-    const allInputs = await dialogModal.locator('input:not([type="radio"]):not([type="checkbox"])').all();
-    expect(allInputs.length).toBeGreaterThan(0);
+    // Điền đầy đủ các trường bắt buộc có dấu *: Diện tích sàn, Số tầng, Chiều dài tường bao
+    const areaInput = dialogModal.locator('input[placeholder*="100"]').first();
+    await expect(areaInput).toBeVisible({ timeout: 5000 });
+    await areaInput.fill('100'); // 100 m2
 
-    for (let i = 0; i < allInputs.length; i++) {
-      if (await allInputs[i].isEditable().catch(() => false)) {
-        const ph = (await allInputs[i].getAttribute('placeholder')) || '';
-        const val = await allInputs[i].inputValue();
-        if (!val || val.trim() === '') {
-          if (ph.includes('100') || i === 0) {
-            await allInputs[i].fill('100'); // Area: 100 m2
-          } else if (ph.includes('3') || i === 1) {
-            await allInputs[i].fill('3'); // Floors: 3
-          } else if (ph.includes('40') || i === 3) {
-            await allInputs[i].fill('40'); // Perimeter length: 40 m
-          } else {
-            await allInputs[i].fill('10');
-          }
-        }
-      }
-    }
+    // Chọn Số tầng từ popover dropdown (Bắt buộc để kích hoạt nút tính toán)
+    const floorSelect = dialogModal.locator('button[data-slot="popover-trigger"], button').filter({ hasText: /Chọn số tầng/i }).first();
+    await expect(floorSelect).toBeVisible({ timeout: 5000 });
+    await floorSelect.click();
+    await page.waitForTimeout(400);
+
+    const floorOption = page.locator('button, div, span').filter({ hasText: /^3 tầng$/i }).first();
+    await expect(floorOption).toBeVisible({ timeout: 5000 });
+    await floorOption.click();
+    await page.waitForTimeout(400);
+
+    // Điền Chiều dài tường bao
+    const wallInput = dialogModal.locator('input[placeholder*="40"]').first();
+    await expect(wallInput).toBeVisible({ timeout: 5000 });
+    await wallInput.fill('40'); // 40 m
     await page.waitForTimeout(500);
 
-    // Submit / Calculate button inside the modal (enabled once required fields are filled)
+    // Nút Tính toán phải enabled sau khi nhập đủ các trường bắt buộc
     const calcBtn = dialogModal.locator('button:has-text("Tính toán"), button:has-text("Tính")').first();
     await expect(calcBtn).toBeVisible({ timeout: 10000 });
+    await expect(calcBtn).toBeEnabled({ timeout: 5000 });
+    await calcBtn.click({ force: true });
+    await page.waitForTimeout(2000);
 
-    if (await calcBtn.isEnabled().catch(() => false)) {
-      await calcBtn.click({ force: true });
-      await page.waitForTimeout(2000);
+    // Bắt buộc kết quả dự toán chi phí phải xuất hiện (Không chấp nhận pass chỉ vì modal còn mở)
+    const resultTable = dialogModal.locator('text=/Bảng dự toán chi phí|TỔNG CỘNG|Vật liệu|Nhân công/i').first();
+    await expect(resultTable).toBeVisible({ timeout: 10000 });
 
-      // Verify calculated output result is displayed or modal remains intact
-      const resultElement = dialogModal.locator('text=/VNĐ|tổng chi phí|chi phí|tỷ|triệu|thi công|kết quả|gốc|lãi/i').first();
-      if (await resultElement.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await expect(resultElement).toBeVisible();
-      } else {
-        await expect(dialogModal).toBeVisible();
-      }
-    } else {
-      await expect(dialogModal).toBeVisible();
-    }
+    const totalAmount = dialogModal.locator('text=/TỔNG CỘNG/i');
+    await expect(totalAmount).toBeVisible();
   });
 
   /* =========================================================================

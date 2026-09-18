@@ -113,15 +113,14 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await page.waitForTimeout(500);
 
       const saveBtn = page.locator('button:has-text("Lưu thay đổi"), button:has-text("Cập nhật")').first();
-      if (await saveBtn.isVisible().catch(() => false)) {
-        await saveBtn.click({ force: true });
-        await page.waitForTimeout(1000);
+      await expect(saveBtn).toBeVisible({ timeout: 10000 });
+      await saveBtn.click({ force: true });
+      await page.waitForTimeout(1000);
 
-        const errorMsg = page.locator('text=/số điện thoại không hợp lệ|định dạng|chỉ được chứa số/i').first();
-        if (await errorMsg.count() > 0) {
-          await expect(errorMsg).toBeVisible();
-        }
-      }
+      // Bắt buộc phải hiển thị thông báo lỗi số điện thoại không hợp lệ
+      const errorMsg = page.locator('text=/số điện thoại không hợp lệ|định dạng/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
+
       await expect(phoneInput).toBeVisible();
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
@@ -135,15 +134,14 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await page.waitForTimeout(500);
 
       const saveBtn = page.locator('button:has-text("Lưu thay đổi"), button:has-text("Cập nhật")').first();
-      if (await saveBtn.isVisible().catch(() => false)) {
-        await saveBtn.click({ force: true });
-        await page.waitForTimeout(1000);
+      await expect(saveBtn).toBeVisible({ timeout: 10000 });
+      await saveBtn.click({ force: true });
+      await page.waitForTimeout(1000);
 
-        const errorMsg = page.locator('text=/ít nhất 10 số|10 chữ số|không hợp lệ|độ dài/i').first();
-        if (await errorMsg.count() > 0) {
-          await expect(errorMsg).toBeVisible();
-        }
-      }
+      // Bắt buộc phải hiển thị thông báo lỗi số điện thoại không hợp lệ
+      const errorMsg = page.locator('text=/số điện thoại không hợp lệ|ít nhất 10 số|10 chữ số/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
+
       await expect(phoneInput).toBeVisible();
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
@@ -314,11 +312,9 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await saveBtn.click({ force: true });
       await page.waitForTimeout(1000);
 
-      // Verify validation warning notice for mismatched passwords
-      const errorMsg = page.locator('text=/không khớp|không trùng|xác nhận mật khẩu|mật khẩu nhập lại/i').first();
-      if (await errorMsg.count() > 0) {
-        await expect(errorMsg).toBeVisible();
-      }
+      // Bắt buộc phải hiển thị cảnh báo mật khẩu mới không khớp nhau
+      const errorMsg = page.locator('text=/mật khẩu mới không khớp/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
     });
 
     /* -------------------------------------------------------------------------
@@ -335,10 +331,9 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await saveBtn.click({ force: true });
       await page.waitForTimeout(1000);
 
-      const errorMsg = page.locator('text=/quá ngắn|ít nhất|tối thiểu|độ dài|6 ký tự|8 ký tự/i').first();
-      if (await errorMsg.count() > 0) {
-        await expect(errorMsg).toBeVisible();
-      }
+      // Bắt buộc phải hiển thị cảnh báo mật khẩu mới ít nhất 8 ký tự
+      const errorMsg = page.locator('text=/mật khẩu mới ít nhất 8 ký tự|quá ngắn|ít nhất/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
     });
 
     test('PROFILE_PASS_VAL_002: Validate Mật khẩu mới thiếu ký tự đặc biệt / chữ hoa (Định dạng yếu)', async ({ page }) => {
@@ -352,10 +347,9 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await saveBtn.click({ force: true });
       await page.waitForTimeout(1000);
 
-      const errorMsg = page.locator('text=/định dạng|chữ hoa|ký tự đặc biệt|không hợp lệ|độ mạnh/i').first();
-      if (await errorMsg.count() > 0) {
-        await expect(errorMsg).toBeVisible();
-      }
+      // Bắt buộc phải hiển thị cảnh báo cần ít nhất 1 chữ hoa
+      const errorMsg = page.locator('text=/cần ít nhất 1 chữ hoa|ký tự đặc biệt|định dạng/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
     });
 
     test('PROFILE_PASS_VAL_003: Validate Mật khẩu mới trùng hệt với Mật khẩu hiện tại', async ({ page }) => {
@@ -369,10 +363,9 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       await saveBtn.click({ force: true });
       await page.waitForTimeout(1000);
 
-      const errorMsg = page.locator('text=/khác mật khẩu cũ|trùng mật khẩu|không được trùng|mới phải khác/i').first();
-      if (await errorMsg.count() > 0) {
-        await expect(errorMsg).toBeVisible();
-      }
+      // Bắt buộc phải hiển thị cảnh báo mật khẩu mới phải khác mật khẩu cũ
+      const errorMsg = page.locator('text=/mật khẩu mới phải khác mật khẩu cũ|khác mật khẩu cũ/i').first();
+      await expect(errorMsg).toBeVisible({ timeout: 5000 });
     });
 
     test('PROFILE_007: Thực hiện Đổi mật khẩu từ Enao@1234 sang Enao@123 và Đổi lại về Enao@1234 (Kiểm tra API response 200 OK)', async ({ page }) => {

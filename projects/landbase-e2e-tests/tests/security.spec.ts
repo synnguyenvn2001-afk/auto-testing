@@ -46,18 +46,25 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
       await page.evaluate(() => {
         localStorage.setItem('user_token_balance', '999999');
         localStorage.setItem('diamond_tokens', '999999');
+        localStorage.setItem('gold_tokens', '999999');
       });
 
-      await page.reload();
+      await page.goto(`${BASE_URL}/ban-do`);
       await page.waitForLoadState('domcontentloaded');
+      await page.waitForTimeout(1500);
 
-      // System should remain intact and not grant fake balance on backend actions
-      await expect(page.locator('body')).toBeVisible();
+      // Kiểm tra phần tử hiển thị token vàng trên Header
+      const tokenDisplay = page.locator('#tour-sidebar-gold, [class*="fa-coins"]').first();
+      await expect(tokenDisplay).toBeVisible({ timeout: 10000 });
+
+      // Server-side balance không được bị ghi đè thành 999999 bởi client tampering
+      const tokenText = await tokenDisplay.innerText();
+      expect(tokenText).not.toContain('999999');
     });
 
     test('SEC_031 & SEC_032: Chống replay request thanh toán hoặc replay request trừ token', async ({ request }) => {
       const payload = {
-        transactionId: 'TX_REPLAY_TEST_001',
+        transactionId: 'TX_REPLAY_TEST_' + Date.now(),
         amount: 100000,
         packageId: 'PKG_10_DIAMOND'
       };
@@ -72,8 +79,14 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
         data: payload
       });
 
-      // Backend should reject duplicate processing or handle idempotency / route isolation
-      expect([200, 400, 401, 403, 404, 409, 422]).toContain(replayRes.status());
+      // Replay request không được phép tạo giao dịch lặp hoặc trừ trùng:
+      // Phải trả mã từ chối (400, 409, 422, 403, 404) hoặc nếu 200 thì phải mang cờ idempotent chặn trùng
+      if (replayRes.status() === 200) {
+        const body = await replayRes.json().catch(() => ({}));
+        expect(body).toHaveProperty('duplicate', true);
+      } else {
+        expect([400, 409, 422, 403, 404]).toContain(replayRes.status());
+      }
     });
 
     test('SEC_036 & SEC_037: Từ chối HTTP Method không hợp lệ và Content-Type không hợp lệ', async ({ request }) => {
@@ -93,7 +106,7 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
       // 1. Oversized payload
       const hugePayload = { data: 'X'.repeat(50000) };
       const hugeRes = await request.post(`${BASE_URL}/api/search`, { data: hugePayload });
-      expect([400, 413, 401, 403, 404, 422, 200]).toContain(hugeRes.status());
+      expect([400, 413, 401, 403, 404, 422]).toContain(hugeRes.status());
 
       // 2. Missing required fields
       const emptyRes = await request.post(`${BASE_URL}/api/auth/login`, { data: {} });
@@ -103,7 +116,7 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
       const adminInjectRes = await request.post(`${BASE_URL}/api/user/profile`, {
         data: { name: 'Test User', isAdmin: true, role: 'admin' }
       });
-      expect([400, 401, 403, 404, 422, 200]).toContain(adminInjectRes.status());
+      expect([400, 401, 403, 404, 422]).toContain(adminInjectRes.status());
     });
   });
 
@@ -113,29 +126,27 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
   test.describe('2. Input Validation, XSS & Injection Protection', () => {
     test('SEC_051: Kiểm tra lọc và vô hiệu hóa tag HTML thô trong ô tìm kiếm', async ({ page }) => {
       const searchInput = page.locator('input[placeholder*="Tìm kiếm"], input[type="text"]').first();
-      if (await searchInput.isVisible()) {
-        const htmlPayload = '<p><strong>HTML Injection Test</strong></p>';
-        await searchInput.fill(htmlPayload);
-        await page.keyboard.press('Enter');
-        await page.waitForTimeout(1000);
+      await expect(searchInput).toBeVisible({ timeout: 10000 });
+      const htmlPayload = '<p><strong>HTML Injection Test</strong></p>';
+      await searchInput.fill(htmlPayload);
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1000);
 
-        // Page must not evaluate raw HTML into DOM structure
-        const injectedElement = page.locator('strong:has-text("HTML Injection Test")');
-        await expect(injectedElement).toHaveCount(0);
-      }
+      // Page must not evaluate raw HTML into DOM structure
+      const injectedElement = page.locator('strong:has-text("HTML Injection Test")');
+      await expect(injectedElement).toHaveCount(0);
     });
 
     test('SEC_052: Kiểm tra giới hạn độ dài chuỗi nhập vào (10.000 ký tự)', async ({ page }) => {
       const searchInput = page.locator('input[placeholder*="Tìm kiếm"], input[type="text"]').first();
-      if (await searchInput.isVisible()) {
-        const longText = 'SECURITY_LIMIT_'.repeat(700); // ~10,500 chars
-        await searchInput.fill(longText);
-        await page.keyboard.press('Enter');
-        await page.waitForTimeout(1000);
+      await expect(searchInput).toBeVisible({ timeout: 10000 });
+      const longText = 'SECURITY_LIMIT_'.repeat(700); // ~10,500 chars
+      await searchInput.fill(longText);
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1000);
 
-        // UI must not crash or break layout
-        await expect(searchInput).toBeVisible();
-      }
+      // UI must not crash or break layout
+      await expect(searchInput).toBeVisible();
     });
 
     test('XSS Payload Test: Thử nghiệm kịch bản XSS cơ bản và XSS Polyglot chuỗi vạn năng', async ({ page }) => {
