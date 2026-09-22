@@ -79,25 +79,30 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
     test('PROFILE_003: Cập nhật thông tin cá nhân (Họ tên, Số điện thoại, Giới thiệu) và bấm Lưu thay đổi (Kiểm tra API response 200 OK)', async ({ page }) => {
       const bioInput = page.locator('textarea[placeholder*="giới thiệu"i], textarea').first();
       await expect(bioInput).toBeVisible({ timeout: 10000 });
-      await bioInput.fill('Tài khoản tự động kiểm thử Playwright');
+
+      // Nhập nội dung giới thiệu mới để form chuyển sang trạng thái đã sửa (dirty)
+      const newBio = `Tài khoản tự động kiểm thử Playwright - ${Date.now()}`;
+      await bioInput.fill(newBio);
 
       const saveBtn = page.locator('button:has-text("Lưu thay đổi"), button:has-text("Cập nhật")').first();
       await expect(saveBtn).toBeVisible({ timeout: 10000 });
+      await expect(saveBtn).toBeEnabled({ timeout: 5000 });
 
-      // Listen for API response during save action
-      const apiResponsePromise = page.waitForResponse(
-        (res) => res.status() < 400,
-        { timeout: 10000 }
-      ).catch(() => null);
+      // Lắng nghe chính xác API cập nhật thông tin cá nhân của hệ thống
+      const updateResponsePromise = page.waitForResponse(
+        (res) => res.url().includes('/auth/users/update-information') && res.request().method() === 'POST',
+        { timeout: 15000 }
+      );
 
       await saveBtn.click({ force: true });
-      const response = await apiResponsePromise;
-      if (response) {
-        expect(response.status()).toBeLessThan(400); // Verify HTTP 200/201/204 Success
-      }
-      await page.waitForTimeout(1500);
+      const response = await updateResponsePromise;
+      expect(response.status()).toBe(200);
 
-      // Verify save action completed cleanly
+      const resBody = await response.json();
+      expect(resBody.status).toBe(1);
+
+      // Verify bio lưu thành công và giữ đúng giá trị vừa nhập
+      await expect(bioInput).toHaveValue(newBio);
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
 
@@ -150,26 +155,29 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
       const phoneInput = page.locator('input[placeholder*="điện thoại"i], input[name="phone"], input[name="phoneNumber"]').first();
       await expect(phoneInput).toBeVisible({ timeout: 10000 });
 
-      // Fill valid 10-digit phone number
-      await phoneInput.fill('0987654321');
-      await page.waitForTimeout(500);
+      // Nhập số điện thoại 10 chữ số hợp lệ khác để kích hoạt dirty form
+      const currentVal = await phoneInput.inputValue();
+      const newPhone = currentVal === '0987654321' ? '0912345678' : '0987654321';
+      await phoneInput.fill(newPhone);
 
       const saveBtn = page.locator('button:has-text("Lưu thay đổi"), button:has-text("Cập nhật")').first();
       await expect(saveBtn).toBeVisible({ timeout: 10000 });
+      await expect(saveBtn).toBeEnabled({ timeout: 5000 });
 
-      // Listen for API response status code
-      const apiResponsePromise = page.waitForResponse(
-        (res) => res.status() < 400,
-        { timeout: 10000 }
-      ).catch(() => null);
+      // Lắng nghe API cập nhật thông tin
+      const updateResponsePromise = page.waitForResponse(
+        (res) => res.url().includes('/auth/users/update-information') && res.request().method() === 'POST',
+        { timeout: 15000 }
+      );
 
       await saveBtn.click({ force: true });
-      const response = await apiResponsePromise;
-      if (response) {
-        expect(response.status()).toBeLessThan(400); // HTTP 200 Success
-      }
-      await page.waitForTimeout(1500);
+      const response = await updateResponsePromise;
+      expect(response.status()).toBe(200);
 
+      const resBody = await response.json();
+      expect(resBody.status).toBe(1);
+
+      await expect(phoneInput).toHaveValue(newPhone);
       await expect(page).toHaveURL(/tong-quan-tai-khoan/);
     });
 

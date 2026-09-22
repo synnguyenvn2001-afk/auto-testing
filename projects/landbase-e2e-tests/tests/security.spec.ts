@@ -74,18 +74,25 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
         data: payload
       });
 
+      // Nếu endpoint thanh toán chưa triển khai trên môi trường beta (404),
+      // Bắt buộc skip với lý do rõ ràng, tuyệt đối không chấp nhận 404 để pass giả
+      if (firstRes.status() === 404) {
+        test.skip(true, 'API payment/checkout chưa được triển khai trên môi trường beta (trả về 404)');
+        return;
+      }
+
       // Send replay request with same transactionId
       const replayRes = await request.post(`${BASE_URL}/api/payment/checkout`, {
         data: payload
       });
 
       // Replay request không được phép tạo giao dịch lặp hoặc trừ trùng:
-      // Phải trả mã từ chối (400, 409, 422, 403, 404) hoặc nếu 200 thì phải mang cờ idempotent chặn trùng
+      // Phải trả mã từ chối (400, 409, 422, 403) hoặc nếu 200 thì phải mang cờ idempotent chặn trùng
       if (replayRes.status() === 200) {
         const body = await replayRes.json().catch(() => ({}));
         expect(body).toHaveProperty('duplicate', true);
       } else {
-        expect([400, 409, 422, 403, 404]).toContain(replayRes.status());
+        expect([400, 409, 422, 403]).toContain(replayRes.status());
       }
     });
 
@@ -264,8 +271,26 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
       const res = await request.post(`${BASE_URL}/api/payment/create-order`, {
         data: fakeOrderPayload
       });
+
+      // Nếu endpoint payment create-order chưa được triển khai trên môi trường beta (404)
+      if (res.status() === 404) {
+        test.skip(true, 'API payment/create-order chưa được triển khai trên môi trường beta (trả về 404)');
+        return;
+      }
+
       // Backend must validate server-side package config and reject payload manipulation
-      expect([400, 401, 403, 404, 422, 200]).toContain(res.status());
+      if (res.status() === 200) {
+        const body = await res.json().catch(() => ({}));
+        // Server-side validation must not allow fake client amount (1000 VND) or fake tokenAmount (999999)
+        if (body.amount !== undefined) {
+          expect(body.amount).not.toBe(1000);
+        }
+        if (body.tokenAmount !== undefined) {
+          expect(body.tokenAmount).not.toBe(999999);
+        }
+      } else {
+        expect([400, 401, 403, 422]).toContain(res.status());
+      }
     });
 
     test('PAYTOK_019 & SEC_077: Từ chối Payment Callback có chữ ký (Signature) sai', async ({ request }) => {
@@ -280,8 +305,13 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
         data: invalidCallbackPayload
       });
 
+      if (res.status() === 404) {
+        test.skip(true, 'API payment/callback chưa được triển khai trên môi trường beta (trả về 404)');
+        return;
+      }
+
       // System must reject invalid signature callback
-      expect([400, 401, 403, 404, 422]).toContain(res.status());
+      expect([400, 401, 403, 422]).toContain(res.status());
     });
 
     test('PAYTOK_041 & PAYTOK_042: Chặn client tự gọi API addToken hoặc tự gửi status success', async ({ request }) => {
@@ -299,8 +329,13 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
     });
 
     test('SEC_079, SEC_080 & SEC_081: Bảo mật giao dịch token vàng / kim cương và chống số dư âm', async ({ page }) => {
-      // Ensure token balance display and operations do not allow negative tokens
-      await expect(page.locator('body')).toBeVisible();
+      // Kiểm tra phần tử hiển thị token vàng trên Header
+      const tokenDisplay = page.locator('#tour-sidebar-gold, [class*="fa-coins"]').first();
+      await expect(tokenDisplay).toBeVisible({ timeout: 10000 });
+
+      // Số dư token không được phép hiển thị giá trị âm (không chứa dấu trừ '-')
+      const tokenText = await tokenDisplay.innerText();
+      expect(tokenText).not.toContain('-');
     });
   });
 

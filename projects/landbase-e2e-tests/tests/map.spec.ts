@@ -535,28 +535,30 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     });
 
     test('Kiểm tra tìm kiếm khi bỏ trống Số thửa đất (Nút Tìm kiếm phải Vô hiệu hóa / Disabled)', async ({ page }) => {
+      await dismissGuideIfPresent(page);
+      const plotTab = page.locator('button[role="tab"], button').filter({ hasText: /^Tờ\/thửa$/i }).first();
+      if (await plotTab.isVisible({ timeout: 5000 }).catch(() => false)) {
+        await plotTab.click({ force: true }).catch(() => {});
+        await page.waitForTimeout(500);
+      }
+
       const sheetInput = page.locator('input[placeholder*="Số tờ"i]').first();
       const plotInput = page.locator('input[placeholder*="Số thửa"i]').first();
       const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
 
-      if (await plotInput.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await sheetInput.fill('20');
-        await plotInput.fill('');
-        await page.waitForTimeout(500);
+      await expect(sheetInput).toBeVisible({ timeout: 8000 });
+      await expect(plotInput).toBeVisible({ timeout: 8000 });
+      await sheetInput.fill('20');
+      await plotInput.fill('');
 
-        // Khẳng định nút Tìm kiếm bị vô hiệu hóa (disabled) khi bỏ trống Số thửa đất
-        if (await submitBtn.isVisible().catch(() => false)) {
-          await expect(submitBtn).toBeDisabled();
-        }
-      } else {
-        await expect(page.locator('body')).toBeVisible();
-      }
+      // Khẳng định nút Tìm kiếm bị vô hiệu hóa (disabled) khi bỏ trống Số thửa đất
+      await expect(submitBtn).toBeDisabled();
     });
 
     test('Kiểm tra tìm kiếm khi chưa chọn Tỉnh/Thành phố', async ({ page }) => {
       await dismissGuideIfPresent(page);
       const plotTab = page.locator('button[role="tab"], button').filter({ hasText: /^Tờ\/thửa$/i }).first();
-      if (await plotTab.isVisible().catch(() => false)) {
+      if (await plotTab.isVisible({ timeout: 5000 }).catch(() => false)) {
         await plotTab.click({ force: true }).catch(() => {});
         await page.waitForTimeout(500);
       }
@@ -568,7 +570,6 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await expect(sheetInput).toBeVisible({ timeout: 8000 });
       await sheetInput.fill('10');
       await plotInput.fill('20');
-      await page.waitForTimeout(500);
 
       // Nút Tìm kiếm và dropdown Tỉnh/Thành phố hiển thị (đơn vị hành chính là tùy chọn bổ sung)
       await expect(submitBtn).toBeVisible();
@@ -576,8 +577,14 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
       await expect(provinceDropdown).toBeVisible();
 
       await submitBtn.click({ force: true });
-      await page.waitForTimeout(1000);
-      await expect(sheetInput).toBeVisible();
+
+      // Bắt buộc hệ thống phải trả kết quả tìm kiếm theo tờ/thửa (Hiển thị phần Kết quả trong Search Panel)
+      const resultHeading = page.locator('#tour-map-search, [class*="search"]').locator('text=/Kết quả/i').first();
+      await expect(resultHeading).toBeVisible({ timeout: 15000 });
+
+      // Kiểm tra có ít nhất 1 mục kết quả địa chỉ/thửa đất hiển thị
+      const resultItem = page.locator('#tour-map-search').locator('text=/Hà Nội|Phường|Quận/i').first();
+      await expect(resultItem).toBeVisible({ timeout: 10000 });
     });
 
     test('Kiểm tra tìm kiếm với số tờ bản đồ và số thửa đất là giá trị số cực lớn', async ({ page }) => {

@@ -47,7 +47,6 @@ test.describe('Financial and Estimation Tools Tests', () => {
     await expect(calcBtn).toBeVisible({ timeout: 10000 });
     await expect(calcBtn).toBeEnabled({ timeout: 5000 });
     await calcBtn.click({ force: true });
-    await page.waitForTimeout(2000);
 
     // Verify calculated results exist in the right panel / modal
     const resultElement = dialogModal.locator('text=/Thông tin khoản vay|Bảng dự toán|VNĐ|tháng|gốc|lãi/i').first();
@@ -60,13 +59,12 @@ test.describe('Financial and Estimation Tools Tests', () => {
   test('should open savings interest calculator', async ({ page }) => {
     // Click "Tính lãi tiết kiệm" button
     const savingsToolBtn = page.getByText('Tính lãi tiết kiệm').first();
-    await expect(savingsToolBtn).toBeVisible();
+    await expect(savingsToolBtn).toBeVisible({ timeout: 10000 });
     await savingsToolBtn.click();
-    await page.waitForTimeout(2000);
 
     // Locate active dialog
     const dialogModal = page.locator('div[role="dialog"]');
-    await expect(dialogModal).toBeVisible();
+    await expect(dialogModal).toBeVisible({ timeout: 10000 });
 
     // Verify calculator inputs inside the modal
     const inputs = await dialogModal.locator('input').all();
@@ -80,16 +78,18 @@ test.describe('Financial and Estimation Tools Tests', () => {
     await expect(calcBtn).toBeVisible({ timeout: 5000 });
     await expect(calcBtn).toBeEnabled({ timeout: 5000 });
     await calcBtn.click();
-    await page.waitForTimeout(1500);
 
     const resultText = dialogModal.locator('text=/tiết kiệm|lãi|VNĐ/i').first();
     await expect(resultText).toBeVisible({ timeout: 10000 });
   });
 
   test('should open building cost estimator', async ({ page }) => {
+    test.setTimeout(60000);
+
     // Click "Ước tính chi phí xây nhà" button
     const buildToolBtn = page.locator('text=Ước tính chi phí xây nhà').first();
     await expect(buildToolBtn).toBeVisible({ timeout: 15000 });
+    await buildToolBtn.scrollIntoViewIfNeeded();
 
     // Check if card is marked "SẮP RA MẮT"
     const cardContainer = buildToolBtn.locator('xpath=ancestor::div[contains(@class, "rounded") or contains(@class, "card") or contains(@class, "border")][1]');
@@ -100,11 +100,10 @@ test.describe('Financial and Estimation Tools Tests', () => {
     }
 
     await buildToolBtn.click({ force: true });
-    await page.waitForTimeout(2000);
 
     // Locate active dialog modal
     const dialogModal = page.locator('div[role="dialog"]').first();
-    await expect(dialogModal).toBeVisible({ timeout: 10000 });
+    await dialogModal.waitFor({ state: 'visible', timeout: 15000 });
 
     // Verify modal header title "Ước tính chi phí xây nhà"
     const modalTitle = dialogModal.locator('text=/Ước tính chi phí xây nhà/i').first();
@@ -119,29 +118,26 @@ test.describe('Financial and Estimation Tools Tests', () => {
     const floorSelect = dialogModal.locator('button[data-slot="popover-trigger"], button').filter({ hasText: /Chọn số tầng/i }).first();
     await expect(floorSelect).toBeVisible({ timeout: 5000 });
     await floorSelect.click();
-    await page.waitForTimeout(400);
 
     const floorOption = page.locator('button, div, span').filter({ hasText: /^3 tầng$/i }).first();
-    await expect(floorOption).toBeVisible({ timeout: 5000 });
+    await floorOption.waitFor({ state: 'visible', timeout: 5000 });
     await floorOption.click();
-    await page.waitForTimeout(400);
+    await floorOption.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
 
     // Điền Chiều dài tường bao
     const wallInput = dialogModal.locator('input[placeholder*="40"]').first();
     await expect(wallInput).toBeVisible({ timeout: 5000 });
     await wallInput.fill('40'); // 40 m
-    await page.waitForTimeout(500);
 
     // Nút Tính toán phải enabled sau khi nhập đủ các trường bắt buộc
     const calcBtn = dialogModal.locator('button:has-text("Tính toán"), button:has-text("Tính")').first();
     await expect(calcBtn).toBeVisible({ timeout: 10000 });
-    await expect(calcBtn).toBeEnabled({ timeout: 5000 });
+    await expect(calcBtn).toBeEnabled({ timeout: 10000 });
     await calcBtn.click({ force: true });
-    await page.waitForTimeout(2000);
 
     // Bắt buộc kết quả dự toán chi phí phải xuất hiện (Không chấp nhận pass chỉ vì modal còn mở)
     const resultTable = dialogModal.locator('text=/Bảng dự toán chi phí|TỔNG CỘNG|Vật liệu|Nhân công/i').first();
-    await expect(resultTable).toBeVisible({ timeout: 10000 });
+    await expect(resultTable).toBeVisible({ timeout: 15000 });
 
     const totalAmount = dialogModal.locator('text=/TỔNG CỘNG/i');
     await expect(totalAmount).toBeVisible();
