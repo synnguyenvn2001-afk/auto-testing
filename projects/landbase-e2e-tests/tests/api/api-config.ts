@@ -9,6 +9,9 @@ export interface ApiEnvironmentConfig {
   xSessionRef: string;
   username?: string;
   password?: string;
+  validWardCode?: string;
+  searchKeyword?: string;
+  noMatchKeyword?: string;
   isConfigured: boolean;
 }
 
@@ -29,6 +32,9 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let xSessionRef = process.env.X_SESSION_REF || process.env.x_session_ref || '';
   let username = process.env.DEV_USERNAME || process.env.TEST_USERNAME || 'usert1';
   let password = process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123';
+  let validWardCode = process.env.VALID_WARD_CODE || '09552';
+  let searchKeyword = process.env.SEARCH_KEYWORD || 'Nguyễn Trãi';
+  let noMatchKeyword = process.env.NO_MATCH_KEYWORD || '__NO_MATCH_TEST_VALUE__';
 
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
@@ -99,6 +105,9 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     xSessionRef,
     username,
     password,
+    validWardCode,
+    searchKeyword,
+    noMatchKeyword,
     isConfigured,
   };
 }

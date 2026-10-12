@@ -149,6 +149,74 @@ export class LandBaseApiClient {
   }
 
   /**
+   * Kiểm tra xem JWT Token còn hạn hay không (ít nhất còn 30 giây).
+   */
+  public isTokenValid(token?: string): boolean {
+    if (!token) return false;
+    try {
+      const parts = token.split('.');
+      if (parts.length < 2) return false;
+      const payloadStr = Buffer.from(parts[1], 'base64').toString('utf8');
+      const payload = JSON.parse(payloadStr);
+      if (!payload.exp) return true;
+      const nowSec = Math.floor(Date.now() / 1000);
+      return payload.exp > (nowSec + 30);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Đăng nhập nhanh tự động thông qua NextAuth callback ngay trong browser context (< 1s)
+   */
+  public async programmaticLogin(page: Page): Promise<boolean> {
+    const username = this.config.username;
+    const password = this.config.password;
+    if (!username || !password) return false;
+
+    try {
+      console.log(`🔐 Đang tự động làm mới phiên đăng nhập cho [${username}] trên ${this.config.webappUrl}...`);
+
+      const loginSuccess = await page.evaluate(
+        async ({ username, password, callbackUrl }) => {
+          try {
+            const csrfRes = await window.fetch('/api/auth/csrf');
+            const { csrfToken } = await csrfRes.json();
+            const loginRes = await window.fetch('/api/auth/callback/credentials', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({
+                csrfToken,
+                userName: username,
+                password: password,
+                loginType: 'BASIC',
+                callbackUrl: callbackUrl || 'https://dev-webapp.laand.vn/',
+              }),
+            });
+            return loginRes.status === 200;
+          } catch {
+            return false;
+          }
+        },
+        { username, password, callbackUrl: this.config.webappUrl }
+      );
+
+      if (loginSuccess) {
+        await page.waitForTimeout(500);
+        const tokens = await this.extractTokensFromPage(page);
+        if (tokens?.accessToken && this.isTokenValid(tokens.accessToken)) {
+          console.log('✅ Đăng nhập làm mới token thành công!');
+          return true;
+        }
+      }
+    } catch (err: any) {
+      console.warn(`⚠️ Lỗi khi đăng nhập bằng NextAuth API: ${err.message}`);
+    }
+
+    return false;
+  }
+
+  /**
    * Tự động đăng nhập trên dev-webapp và trích xuất tokens nếu chưa có phiên hợp lệ.
    */
   public async ensureAuthenticated(page: Page): Promise<boolean> {
@@ -156,63 +224,56 @@ export class LandBaseApiClient {
       await page.goto(this.config.webappUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
     }
 
-    // 1. Kiểm tra xem phiên hiện tại trên trình duyệt đã có Token hợp lệ chưa
+    // 1. Kiểm tra xem phiên hiện tại trên trình duyệt đã có Token còn hạn hay chưa
     const existingTokens = await this.extractTokensFromPage(page);
-    if (existingTokens?.accessToken) {
+    if (existingTokens?.accessToken && this.isTokenValid(existingTokens.accessToken)) {
       return true;
     }
 
-    // 2. Nếu chưa có token, thử tự động đăng nhập nếu có username & password
-    const username = this.config.username;
-    const password = this.config.password;
+    // 2. Token đã hết hạn hoặc chưa có: Thực hiện đăng nhập nhanh
+    if (this.config.username && this.config.password) {
+      const fastLoginOk = await this.programmaticLogin(page);
+      if (fastLoginOk) return true;
 
-    if (!username || !password) {
-      return this.config.isConfigured;
-    }
-
-    console.log(`🔐 Đang thực hiện đăng nhập lần đầu bằng tài khoản [${username}] trên ${this.config.webappUrl}...`);
-
-    try {
-      // Đóng popup tour nếu có
-      const closeTourBtn = page.locator('.driver-popover-close-btn, button:has-text("×"), button.driver-close-btn').first();
-      if (await closeTourBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await closeTourBtn.click({ force: true }).catch(() => {});
-      }
-
-      // Mở modal đăng nhập
-      const loginTrigger = page.locator('#login-trigger-btn, button:has-text("Đăng nhập")').first();
-      if (await loginTrigger.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await loginTrigger.click({ force: true });
-        await page.waitForTimeout(1000);
-
-        const dialog = page.locator('div[role="dialog"]').first();
-        await dialog.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
-
-        const uInput = dialog.locator('input[placeholder*="tên đăng nhập"i], #login-username, input:not([type="password"])').first();
-        const pInput = dialog.locator('#login-password, input[type="password"]').first();
-        const submitBtn = dialog.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialog.locator('button[type="submit"]:not(:has-text("Google"))')).last();
-
-        await uInput.fill(username);
-        await pInput.fill(password);
-        await submitBtn.click({ force: true });
-
-        // Chờ xử lý callback
-        await page.waitForResponse(
-          res => res.url().includes('/api/auth/callback/credentials') || res.url().includes('/api/auth/session'),
-          { timeout: 15000 }
-        ).catch(() => null);
-
-        await page.waitForTimeout(3000);
-
-        // Trích xuất lại token sau khi login
-        const freshTokens = await this.extractTokensFromPage(page);
-        if (freshTokens?.accessToken) {
-          console.log('✅ Đăng nhập lần đầu thành công! Đã nạp Token mới cho API tests.');
-          return true;
+      // 3. Fallback: Nếu đăng nhập nhanh không thành công, thử qua form UI
+      console.log(`🔐 Đang thực hiện đăng nhập qua giao diện bằng tài khoản [${this.config.username}]...`);
+      try {
+        const closeTourBtn = page.locator('.driver-popover-close-btn, button:has-text("×"), button.driver-close-btn').first();
+        if (await closeTourBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await closeTourBtn.click({ force: true }).catch(() => {});
         }
+
+        const loginTrigger = page.locator('#login-trigger-btn, button:has-text("Đăng nhập")').first();
+        if (await loginTrigger.isVisible({ timeout: 4000 }).catch(() => false)) {
+          await loginTrigger.click({ force: true });
+          await page.waitForTimeout(1000);
+
+          const dialog = page.locator('div[role="dialog"]').first();
+          await dialog.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+
+          const uInput = dialog.locator('input:not([type="password"])').first();
+          const pInput = dialog.locator('input[type="password"]').first();
+          const submitBtn = dialog.locator('button[type="submit"]').last();
+
+          await uInput.fill(this.config.username);
+          await pInput.fill(this.config.password);
+          await submitBtn.click({ force: true });
+
+          await page.waitForResponse(
+            res => res.url().includes('/api/auth/callback/credentials') || res.url().includes('/api/auth/session'),
+            { timeout: 15000 }
+          ).catch(() => null);
+
+          await page.waitForTimeout(2000);
+          const freshTokens = await this.extractTokensFromPage(page);
+          if (freshTokens?.accessToken && this.isTokenValid(freshTokens.accessToken)) {
+            console.log('✅ Đăng nhập giao diện thành công! Đã nạp Token mới.');
+            return true;
+          }
+        }
+      } catch (err: any) {
+        console.warn(`⚠️ Quá trình đăng nhập giao diện gặp lỗi: ${err.message}`);
       }
-    } catch (err: any) {
-      console.warn(`⚠️ Quá trình tự động đăng nhập gặp lỗi: ${err.message}`);
     }
 
     return this.config.isConfigured;
@@ -288,6 +349,43 @@ export class LandBaseApiClient {
 
     if (evaluationResult.error) {
       throw new Error(`In-page fetch failed on ${this.config.webappUrl}: ${evaluationResult.error}`);
+    }
+
+    // Nếu request bị 401 Unauthorized do token vừa hết hạn trong lúc test và không phải testcase cố ý override token
+    if (evaluationResult.status === 401 && !options.overrideTokens && this.config.username && this.config.password) {
+      console.warn(`🔄 Token hết hạn (401) tại ${options.endpoint}. Tự động làm mới và gửi lại request...`);
+      const reloginOk = await this.programmaticLogin(page);
+      if (reloginOk) {
+        const retryHeaders = this.buildHeaders(options);
+        const retryResult = await page.evaluate(
+          async ({ url, method, headers, body }) => {
+            try {
+              const fetchOptions: RequestInit = { method, headers };
+              if (body && method !== 'GET') fetchOptions.body = body;
+              const response = await window.fetch(url, fetchOptions);
+              const rawText = await response.text();
+              const respHeaders: Record<string, string> = {};
+              response.headers.forEach((val, key) => { respHeaders[key.toLowerCase()] = val; });
+              let parsedJson: any = null;
+              try { parsedJson = JSON.parse(rawText); } catch {}
+              return { status: response.status, ok: response.ok, headers: respHeaders, rawText, data: parsedJson, error: null };
+            } catch (err: any) {
+              return { status: 0, ok: false, headers: {}, rawText: '', data: null, error: err.message || String(err) };
+            }
+          },
+          { url: fullUrl, method, headers: retryHeaders, body: bodyStr }
+        );
+
+        if (!retryResult.error) {
+          return {
+            status: retryResult.status,
+            ok: retryResult.ok,
+            headers: retryResult.headers,
+            data: retryResult.data,
+            rawText: retryResult.rawText,
+          };
+        }
+      }
     }
 
     return {
