@@ -23,7 +23,7 @@ const { chromium } = require('playwright');
     } catch (e) {}
   });
 
-  await page.goto('https://beta.landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
+  await page.goto('https://landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(2000);
 
   const isDriverActive = await page.evaluate(() => {

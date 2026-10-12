@@ -12,7 +12,7 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     await context.grantPermissions(['geolocation']);
     await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
 
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     const response = await page.goto(`${baseUrl}/ban-do`).catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
@@ -207,7 +207,7 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
     test('MAP_SEARCH_SUGGESTION_AUTH_NORMAL: Người dùng đã đăng nhập (Logged-in) click vào kết quả gợi ý tìm kiếm sẽ sử dụng bình thường (không hiện Prompt Đăng nhập)', async ({ page }) => {
       // Đăng nhập tài khoản trước
       await loginIfNeeded(page);
-      const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+      const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
       await page.goto(`${baseUrl}/ban-do`);
       await page.waitForLoadState('domcontentloaded');
       await skipOnboardingTour(page);
@@ -453,7 +453,7 @@ test.describe('Map & Search Page Tests (BĐS360 Map và tìm kiếm)', () => {
 
     test('MAP_SEARCH_002_AUTH: Người dùng Đã đăng nhập chọn Tỉnh/TP -> Phường/Xã, tự động chuyển tâm bản đồ', async ({ page }) => {
       await loginIfNeeded(page);
-      const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+      const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
       await page.goto(`${baseUrl}/ban-do`);
       await page.waitForLoadState('domcontentloaded');
       await skipOnboardingTour(page);

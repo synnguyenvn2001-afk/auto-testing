@@ -7,7 +7,7 @@ const authFile = AUTH_STATE_PATH;
 setup('authenticate user once and save storage state', async ({ page }) => {
   setup.setTimeout(60000);
 
-  const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+  const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
   console.log(`Navigating to ${baseUrl}...`);
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(2000);

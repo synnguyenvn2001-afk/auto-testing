@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
     viewport: { width: 1366, height: 768 }
   });
   const page = await context.newPage();
-  await page.goto('https://beta.landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
+  await page.goto('https://landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
 
   // Dismiss guide
   const closeBtn = page.locator('button.driver-popover-close-btn, button:has-text("×")').first();

@@ -107,7 +107,7 @@ const doc = new Document({
           spacing: { before: 50, after: 300 },
           children: [
             new TextRun({
-              text: 'Website: https://beta.landbase.vn | Quy trình chuẩn (Happy Case) kèm ảnh chụp minh họa',
+              text: 'Website: https://landbase.vn | Quy trình chuẩn (Happy Case) kèm ảnh chụp minh họa',
               italics: true,
               size: 22,
               color: '4A5568',
@@ -117,9 +117,9 @@ const doc = new Document({
 
         // 1. KHỞI ĐỘNG
         h1('1. KHỞI ĐỘNG & CẤP QUYỀN VỊ TRÍ BAN ĐẦU'),
-        p('Khi người dùng lần đầu tiên truy cập vào hệ thống Landbase tại https://beta.landbase.vn, trình duyệt web sẽ hiển thị hộp thoại xin cấp quyền truy cập vị trí địa lý:'),
-        bullet(' Mở trình duyệt web và truy cập: https://beta.landbase.vn', 'Bước 1:'),
-        bullet(' Khi xuất hiện hộp thoại thông báo “beta.landbase.vn muốn biết vị trí của bạn”, chọn “Cho phép khi sử dụng trang web” (hoặc Cho phép mỗi khi truy cập).', 'Bước 2:'),
+        p('Khi người dùng lần đầu tiên truy cập vào hệ thống Landbase tại https://landbase.vn, trình duyệt web sẽ hiển thị hộp thoại xin cấp quyền truy cập vị trí địa lý:'),
+        bullet(' Mở trình duyệt web và truy cập: https://landbase.vn', 'Bước 1:'),
+        bullet(' Khi xuất hiện hộp thoại thông báo “landbase.vn muốn biết vị trí của bạn”, chọn “Cho phép khi sử dụng trang web” (hoặc Cho phép mỗi khi truy cập).', 'Bước 2:'),
         createImage('image1.png', 520, 260),
         createCaption('Hình 1: Cho phép LandBase truy cập vị trí để tự động định vị bản đồ tới khu vực của bạn'),
 

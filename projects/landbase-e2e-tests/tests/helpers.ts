@@ -69,7 +69,7 @@ export async function loginIfNeeded(page: Page) {
   
   // Nếu chưa thấy nút Đăng nhập trên trang hiện tại, điều hướng về Trang chủ để nạp nút Đăng nhập
   if (!await loginTrigger.isVisible({ timeout: 3000 }).catch(() => false)) {
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
     await skipOnboardingTour(page);
   }

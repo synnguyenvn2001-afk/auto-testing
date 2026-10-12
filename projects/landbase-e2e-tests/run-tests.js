@@ -41,6 +41,7 @@ const webSuites = {
   '6': { name: 'Đăng nhập & Xác thực (Auth)', pattern: 'tests/auth.spec.ts' },
   '7': { name: 'Cẩm nang BĐS (Handbook)', pattern: 'tests/handbook.spec.ts' },
   '8': { name: 'Tài khoản & Công cụ (Profile & Tools)', pattern: 'tests/navigation.spec.ts tests/profile.spec.ts tests/tools.spec.ts' },
+  '9': { name: 'Kiểm thử API LandBase (API Gateway & BĐS đã lưu)', pattern: 'tests/api/' },
 };
 
 // Mobile suites mapping
@@ -72,7 +73,7 @@ async function main() {
   // Step 1: Select Platform (Web vs Mobile)
   if (!platformChoice) {
     console.log('--- BƯỚC 1: CHỌN NỀN TẢNG KIỂM THỬ ---');
-    console.log('  1. 🌐 Web App (Kiểm thử trang web Laand.vn)');
+    console.log('  1. 🌐 Web App (Kiểm thử trang web Landbase - https://landbase.vn)');
     console.log('  2. 📱 Mobile App (Kiểm thử ứng dụng Landbase Android APK)');
     const ans = await askQuestion('\n👉 Nhập lựa chọn Nền tảng (1-2) [Mặc định: 1 - Web]: ');
     platformChoice = ans.trim() === '2' ? '2' : '1';
@@ -128,7 +129,7 @@ async function main() {
     Object.keys(webSuites).forEach((key) => {
       console.log(`  ${key}. ${webSuites[key].name}`);
     });
-    const ans = await askQuestion('\n👉 Nhập lựa chọn Module Web (1-8) [Mặc định: 1]: ');
+    const ans = await askQuestion('\n👉 Nhập lựa chọn Module Web (1-9) [Mặc định: 1]: ');
     suiteChoice = ans.trim() || '1';
     if (!webSuites[suiteChoice]) suiteChoice = '1';
   }
@@ -160,7 +161,8 @@ async function main() {
     playwrightArgs.push(...selectedWebSuite.pattern.split(' '));
   }
 
-  playwrightArgs.push('--project=chromium');
+  const targetProject = selectedWebSuite.pattern.includes('tests/api') ? 'api' : 'chromium';
+  playwrightArgs.push(`--project=${targetProject}`);
 
   if (headedChoice === '2') {
     playwrightArgs.push('--headed');

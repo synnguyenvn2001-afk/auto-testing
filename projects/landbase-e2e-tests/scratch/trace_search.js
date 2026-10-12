@@ -24,7 +24,7 @@ const { chromium } = require('playwright');
     }
   });
 
-  await page.goto('https://beta.landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
+  await page.goto('https://landbase.vn/ban-do', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(1000);
 
   // Close guide

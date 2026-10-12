@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded } from './helpers';
 
 test.describe('Đăng nhập bằng Token vào Trang chủ (Token-based Authentication)', () => {
-  const HOME_URL = process.env.BASE_URL || 'https://beta.landbase.vn/';
+  const HOME_URL = process.env.BASE_URL || 'https://landbase.vn/';
 
   test('AUTH_TOKEN_001: Sử dụng Token/Cookie phiên làm việc để đăng nhập Trang chủ thành công', async ({ page, context }) => {
     test.setTimeout(45000);
@@ -42,7 +42,7 @@ test.describe('Đăng nhập bằng Token vào Trang chủ (Token-based Authenti
     await loginIfNeeded(page);
 
     // 2. Click chuyển sang trang Tổng quan tài khoản
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     await page.goto(`${baseUrl}/tong-quan-tai-khoan`, { waitUntil: 'domcontentloaded' });
     await skipOnboardingTour(page);
 

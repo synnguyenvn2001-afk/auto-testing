@@ -5,7 +5,7 @@ import { DEBUG_SCREENSHOTS_DIR } from './paths';
 
 test.describe('Financial and Estimation Tools Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     const response = await page.goto(baseUrl).catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);

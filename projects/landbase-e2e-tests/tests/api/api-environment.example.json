@@ -1,0 +1,37 @@
+{
+  "id": "f081fbd6-9835-4b39-aca6-b0d4d48a1ab1",
+  "name": "LandBase DEV - API Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://dev-gateway.laand.vn",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "webappUrl",
+      "value": "https://dev-webapp.laand.vn",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "access_token",
+      "value": "PASTE_FRESH_BEARER_TOKEN_HERE",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "x_auth_token",
+      "value": "PASTE_FRESH_X_AUTH_TOKEN_HERE",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "x_session_ref",
+      "value": "PASTE_FRESH_X_SESSION_REF_HERE",
+      "type": "secret",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

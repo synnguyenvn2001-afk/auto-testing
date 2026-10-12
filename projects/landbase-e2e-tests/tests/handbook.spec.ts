@@ -3,7 +3,7 @@ import { skipOnboardingTour } from './helpers';
 
 test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => {
   test('should load handbook list, search and view details', async ({ page }) => {
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     // 1. Navigate to Cẩm nang page
     await page.goto(`${baseUrl}/cam-nang`);
     await page.waitForLoadState('domcontentloaded');
@@ -37,7 +37,7 @@ test.describe('Handbook and Resources (Cẩm nang & Tài nguyên) Tests', () => 
 
   test('should load expert documents page', async ({ page }) => {
     // 2. Navigate to Tài liệu BĐS page with retry logic
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     const docUrl = `${baseUrl}/tai-lieu`;
     try {
       await page.goto(docUrl, { timeout: 35000 });

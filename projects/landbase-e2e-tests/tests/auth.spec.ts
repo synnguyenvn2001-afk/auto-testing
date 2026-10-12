@@ -6,7 +6,7 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
 
   test.beforeEach(async ({ context, page }) => {
     await context.clearCookies();
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     await page.goto(baseUrl, { waitUntil: 'commit', timeout: 15000 }).catch(() => {});
     await page.evaluate(() => {
       localStorage.clear();

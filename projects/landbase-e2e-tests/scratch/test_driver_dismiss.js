@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
     viewport: { width: 1366, height: 768 }
   });
   const page = await context.newPage();
-  await page.goto('https://beta.landbase.vn/ban-do');
+  await page.goto('https://landbase.vn/ban-do');
 
   // Wait for driver popover to appear
   const closeBtn = page.locator('.driver-popover-close-btn, button:has-text("×"), button.driver-close-btn');

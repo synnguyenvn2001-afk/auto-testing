@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded } from './helpers';
 
 test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức năng)', () => {
-  const BASE_URL = process.env.BASE_URL || 'https://beta.landbase.vn';
+  const BASE_URL = process.env.BASE_URL || 'https://landbase.vn';
 
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL);
@@ -74,10 +74,10 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
         data: payload
       });
 
-      // Nếu endpoint thanh toán chưa triển khai trên môi trường beta (404),
+      // Nếu endpoint thanh toán chưa triển khai trên môi trường hiện tại (404),
       // Bắt buộc skip với lý do rõ ràng, tuyệt đối không chấp nhận 404 để pass giả
       if (firstRes.status() === 404) {
-        test.skip(true, 'API payment/checkout chưa được triển khai trên môi trường beta (trả về 404)');
+        test.skip(true, 'API payment/checkout chưa được triển khai trên môi trường hiện tại (trả về 404)');
         return;
       }
 
@@ -272,9 +272,9 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
         data: fakeOrderPayload
       });
 
-      // Nếu endpoint payment create-order chưa được triển khai trên môi trường beta (404)
+      // Nếu endpoint payment create-order chưa được triển khai trên môi trường hiện tại (404)
       if (res.status() === 404) {
-        test.skip(true, 'API payment/create-order chưa được triển khai trên môi trường beta (trả về 404)');
+        test.skip(true, 'API payment/create-order chưa được triển khai trên môi trường hiện tại (trả về 404)');
         return;
       }
 
@@ -306,7 +306,7 @@ test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức n
       });
 
       if (res.status() === 404) {
-        test.skip(true, 'API payment/callback chưa được triển khai trên môi trường beta (trả về 404)');
+        test.skip(true, 'API payment/callback chưa được triển khai trên môi trường hiện tại (trả về 404)');
         return;
       }
 

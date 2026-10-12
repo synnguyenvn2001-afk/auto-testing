@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded, setupStrictApiCheck, checkAndSkipIf504, gotoAndSkipIf504 } from './helpers';
 
 test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm danh mục, Kết quả tìm kiếm, Lưu bộ lọc, Lưu tin tức)', () => {
-  const BASE_URL = (process.env.BASE_URL || 'https://beta.landbase.vn') + '/tin-tuc-thi-truong';
+  const BASE_URL = (process.env.BASE_URL || 'https://landbase.vn') + '/tin-tuc-thi-truong';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   test.beforeEach(async ({ page }) => {
@@ -1503,7 +1503,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_ARTICLE_SAVE_004: Điều hướng màn "Dữ liệu cá nhân" -> Chuyển Tab "Tin tức đã lưu" (Hiển thị tab gạch chân màu tím)', async ({ page }) => {
       await loginIfNeeded(page);
       if (!page.url().includes('/du-lieu-ca-nhan')) {
-        const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+        const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
         await gotoAndSkipIf504(page, `${baseUrl}/du-lieu-ca-nhan/bat-dong-san-da-luu`);
       }
 
@@ -1537,7 +1537,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
 
       // Đảm bảo ở trang Dữ liệu cá nhân
       if (!page.url().includes('/du-lieu-ca-nhan')) {
-        const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+        const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
         await gotoAndSkipIf504(page, `${baseUrl}/du-lieu-ca-nhan/bat-dong-san-da-luu`);
       }
 
@@ -1567,7 +1567,7 @@ test.describe('Market News Test Suite (Testcase NEWS - Trang chủ, Tìm kiếm 
     test('NEWS_ARTICLE_SAVE_006: Thao tác Bỏ lưu tin bài trực tiếp từ danh sách "Tin tức đã lưu" trong màn "Dữ liệu cá nhân"', async ({ page }) => {
       await loginIfNeeded(page);
       if (!page.url().includes('/du-lieu-ca-nhan/tin-da-luu')) {
-        const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+        const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
         await gotoAndSkipIf504(page, `${baseUrl}/du-lieu-ca-nhan/tin-da-luu`);
       }
 

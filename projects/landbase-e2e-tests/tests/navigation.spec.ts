@@ -3,7 +3,7 @@ import { skipOnboardingTour } from './helpers';
 
 test.describe('Navigation Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
     await page.goto(baseUrl);
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);
@@ -54,7 +54,7 @@ test.describe('Navigation Tests', () => {
     const homeLink = page.locator('a:has-text("Trang chủ"), button:has-text("Trang chủ")').first();
     await expect(homeLink).toBeVisible();
     await homeLink.click();
-    await expect(page).toHaveURL(/(https:\/\/(dev-webapp\.laand\.vn|beta\.landbase\.vn)\/?$)/);
+    await expect(page).toHaveURL(/(https:\/\/(dev-webapp\.laand\.vn|beta\.landbase\.vn|landbase\.vn)\/?$)/);
     await expect(page.locator('main, body')).toBeVisible();
   });
 });

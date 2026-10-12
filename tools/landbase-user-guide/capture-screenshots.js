@@ -31,7 +31,7 @@ async function skipOnboardingTour(page) {
   });
 
   const page = await context.newPage();
-  const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+  const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
 
   console.log('1. Chụp Trang chủ & Bản đồ...');
   try {

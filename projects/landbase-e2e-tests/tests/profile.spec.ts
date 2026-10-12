@@ -4,7 +4,7 @@ import path from 'node:path';
 import { AUTH_STATE_PATH, FIXTURES_DIR } from './paths';
 
 test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () => {
-  const PROFILE_URL = (process.env.BASE_URL || 'https://beta.landbase.vn') + '/tong-quan-tai-khoan';
+  const PROFILE_URL = (process.env.BASE_URL || 'https://landbase.vn') + '/tong-quan-tai-khoan';
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   // Đảm bảo các test case chạy tuần tự: Case đầu tiên Đăng nhập & Lưu Token, các case sau dùng Token để vào trực tiếp

@@ -13,7 +13,7 @@ fs.mkdirSync(outputDir, { recursive: true });
     storageState: fs.existsSync(authStatePath) ? authStatePath : undefined,
   });
   const page = await context.newPage();
-  const baseUrl = process.env.BASE_URL || 'https://beta.landbase.vn';
+  const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
   await page.goto(`${baseUrl}/ban-do`, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(3000);
   
