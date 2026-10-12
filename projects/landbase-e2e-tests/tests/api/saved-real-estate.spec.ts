@@ -524,4 +524,212 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
     expect(res.status).toBeGreaterThanOrEqual(400);
     expect(res.status).toBeLessThan(500);
   });
+
+  // =========================================================================
+  // 4. BỎ LƯU BẤT ĐỘNG SẢN ĐÃ LƯU (POST /api/v1.0/real-estate/real-estate-storage/remove/:id)
+  // =========================================================================
+  test('API_SAVED_013: POST - Bỏ lưu BĐS đã lưu từ Bản đồ (UUID)', async ({ page }, testInfo) => {
+    test.skip(
+      !config.confirmRemoveSaved || !config.runMapRemove,
+      'Skipped for safety: Mặc định bỏ qua để tránh xóa trạng thái lưu ngoài ý muốn. Đặt confirmRemoveSaved=true và runMapRemove=true khi sẵn sàng xóa bản ghi test.'
+    );
+
+    const mapId = config.mapSavedId || '190a1c1e-f49a-4726-b793-454863565ecd';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${mapId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'POST',
+      body: {},
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_013',
+      testName: `POST - Bỏ lưu BĐS đã lưu từ Bản đồ (id=${mapId})`,
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'POST',
+      expectedStatus: '200 OK (status=1, Bỏ lưu thành công)',
+      actualStatus: res.status,
+      requestHeaders: client.buildHeaders({ endpoint: removeEndpoint, body: {} }),
+      requestBody: {},
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBeGreaterThanOrEqual(200);
+    expect(res.status).toBeLessThan(300);
+
+    const body = res.data;
+    expect(body).toBeDefined();
+    expect(body).toHaveProperty('status', 1);
+    expect(body).toHaveProperty('data');
+    expect(body.data).toBe('Bỏ lưu thành công');
+  });
+
+  test('API_SAVED_014: POST - Bỏ lưu tin rao vặt (ID số)', async ({ page }, testInfo) => {
+    test.skip(
+      !config.confirmRemoveSaved || !config.runListingRemove,
+      'Skipped for safety: Mặc định bỏ qua để tránh xóa trạng thái lưu ngoài ý muốn. Đặt confirmRemoveSaved=true và runListingRemove=true khi sẵn sàng xóa bản ghi test.'
+    );
+
+    const listingId = config.listingSavedId || '238622';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${listingId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'POST',
+      body: {},
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_014',
+      testName: `POST - Bỏ lưu tin rao vặt (id=${listingId})`,
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'POST',
+      expectedStatus: '200 OK (status=1, data không rỗng)',
+      actualStatus: res.status,
+      requestHeaders: client.buildHeaders({ endpoint: removeEndpoint, body: {} }),
+      requestBody: {},
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBeGreaterThanOrEqual(200);
+    expect(res.status).toBeLessThan(300);
+
+    const body = res.data;
+    expect(body).toBeDefined();
+    expect(body).toHaveProperty('status', 1);
+    expect(body).toHaveProperty('data');
+    expect(String(body.data).length).toBeGreaterThan(0);
+  });
+
+  test('API_SAVED_015: POST - Chặn bỏ lưu khi không có Authentication Token (HTTP 401)', async ({ page }, testInfo) => {
+    const listingId = config.listingSavedId || '238622';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${listingId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'POST',
+      body: {},
+      overrideTokens: { accessToken: '', xAuthToken: '', xSessionRef: '' },
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_015',
+      testName: 'POST - Chặn bỏ lưu khi không có Token (401)',
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'POST',
+      expectedStatus: '401 Unauthorized',
+      actualStatus: res.status,
+      requestHeaders: client.buildHeaders({
+        endpoint: removeEndpoint,
+        body: {},
+        overrideTokens: { accessToken: '', xAuthToken: '', xSessionRef: '' },
+      }),
+      requestBody: {},
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBe(401);
+  });
+
+  test('API_SAVED_016: POST - Chặn bỏ lưu khi gửi Token giả mạo hoặc sai định dạng (HTTP 401)', async ({ page }, testInfo) => {
+    const listingId = config.listingSavedId || '238622';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${listingId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'POST',
+      body: {},
+      overrideTokens: {
+        accessToken: 'fake_jwt_token_invalid_signature_test',
+        xAuthToken: 'fake_x_auth_token_99999',
+        xSessionRef: 'fake_session_ref_88888',
+      },
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_016',
+      testName: 'POST - Chặn bỏ lưu với Token giả mạo (401)',
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'POST',
+      expectedStatus: '401 Unauthorized / 403 Forbidden',
+      actualStatus: res.status,
+      requestHeaders: client.buildHeaders({
+        endpoint: removeEndpoint,
+        body: {},
+        overrideTokens: {
+          accessToken: 'fake_jwt_token_invalid_signature_test',
+          xAuthToken: 'fake_x_auth_token_99999',
+          xSessionRef: 'fake_session_ref_88888',
+        },
+      }),
+      requestBody: {},
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([401, 403]).toContain(res.status);
+  });
+
+  test('API_SAVED_017: POST - Kiểm tra Header Contract: Bắt buộc có clientmessageid và clienttime (HTTP 400)', async ({ page }, testInfo) => {
+    const listingId = config.listingSavedId || '238622';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${listingId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'POST',
+      body: {},
+      customHeaders: {
+        clientmessageid: '',
+        clienttime: '',
+      },
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_017',
+      testName: 'POST - Kiểm tra Header Contract thiếu messageId/clienttime',
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'POST',
+      expectedStatus: '400 Bad Request',
+      actualStatus: res.status,
+      requestHeaders: client.buildHeaders({
+        endpoint: removeEndpoint,
+        body: {},
+        customHeaders: { clientmessageid: '', clienttime: '' },
+      }),
+      requestBody: {},
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([400, 401]).toContain(res.status);
+  });
+
+  test('API_SAVED_018: GET - Từ chối HTTP Method GET trên endpoint bỏ lưu (HTTP 405/4xx)', async ({ page }, testInfo) => {
+    const listingId = config.listingSavedId || '238622';
+    const removeEndpoint = `/api/v1.0/real-estate/real-estate-storage/remove/${listingId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: removeEndpoint,
+      method: 'GET',
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_018',
+      testName: 'GET - Từ chối HTTP Method GET trên endpoint remove',
+      endpoint: client.resolveUrl(removeEndpoint),
+      method: 'GET',
+      expectedStatus: '405 Method Not Allowed / 4xx',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([405, 400, 404, 403, 401]).toContain(res.status);
+    expect(res.status).toBeGreaterThanOrEqual(400);
+    expect(res.status).toBeLessThan(500);
+  });
 });

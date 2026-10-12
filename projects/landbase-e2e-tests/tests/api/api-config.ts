@@ -14,6 +14,11 @@ export interface ApiEnvironmentConfig {
   noMatchKeyword?: string;
   articleId?: string;
   isListingPost?: boolean;
+  mapSavedId?: string;
+  listingSavedId?: string;
+  confirmRemoveSaved?: boolean;
+  runMapRemove?: boolean;
+  runListingRemove?: boolean;
   isConfigured: boolean;
 }
 
@@ -39,6 +44,11 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let noMatchKeyword = process.env.NO_MATCH_KEYWORD || '__NO_MATCH_TEST_VALUE__';
   let articleId = process.env.ARTICLE_ID || process.env.articleId || '238622';
   let isListingPost = process.env.IS_LISTING_POST !== undefined ? process.env.IS_LISTING_POST === 'true' : true;
+  let mapSavedId = process.env.MAP_SAVED_ID || process.env.mapSavedId || '190a1c1e-f49a-4726-b793-454863565ecd';
+  let listingSavedId = process.env.LISTING_SAVED_ID || process.env.listingSavedId || '238622';
+  let confirmRemoveSaved = process.env.CONFIRM_REMOVE_SAVED === 'true';
+  let runMapRemove = process.env.RUN_MAP_REMOVE === 'true';
+  let runListingRemove = process.env.RUN_LISTING_REMOVE === 'true';
 
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
@@ -82,6 +92,21 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'isListingPost' && item.value !== undefined && process.env.IS_LISTING_POST === undefined) {
               isListingPost = String(item.value).toLowerCase() === 'true';
             }
+            if (item.key === 'mapSavedId' && item.value && !process.env.MAP_SAVED_ID) {
+              mapSavedId = item.value;
+            }
+            if (item.key === 'listingSavedId' && item.value && !process.env.LISTING_SAVED_ID) {
+              listingSavedId = item.value;
+            }
+            if (item.key === 'confirmRemoveSaved' && item.value !== undefined && process.env.CONFIRM_REMOVE_SAVED === undefined) {
+              confirmRemoveSaved = String(item.value).toLowerCase() === 'true';
+            }
+            if (item.key === 'runMapRemove' && item.value !== undefined && process.env.RUN_MAP_REMOVE === undefined) {
+              runMapRemove = String(item.value).toLowerCase() === 'true';
+            }
+            if (item.key === 'runListingRemove' && item.value !== undefined && process.env.RUN_LISTING_REMOVE === undefined) {
+              runListingRemove = String(item.value).toLowerCase() === 'true';
+            }
           }
         } else {
           // Plain key-value JSON
@@ -95,6 +120,17 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.articleId && !process.env.ARTICLE_ID) articleId = parsed.articleId;
           if (parsed.isListingPost !== undefined && process.env.IS_LISTING_POST === undefined) {
             isListingPost = Boolean(parsed.isListingPost);
+          }
+          if (parsed.mapSavedId && !process.env.MAP_SAVED_ID) mapSavedId = parsed.mapSavedId;
+          if (parsed.listingSavedId && !process.env.LISTING_SAVED_ID) listingSavedId = parsed.listingSavedId;
+          if (parsed.confirmRemoveSaved !== undefined && process.env.CONFIRM_REMOVE_SAVED === undefined) {
+            confirmRemoveSaved = Boolean(parsed.confirmRemoveSaved);
+          }
+          if (parsed.runMapRemove !== undefined && process.env.RUN_MAP_REMOVE === undefined) {
+            runMapRemove = Boolean(parsed.runMapRemove);
+          }
+          if (parsed.runListingRemove !== undefined && process.env.RUN_LISTING_REMOVE === undefined) {
+            runListingRemove = Boolean(parsed.runListingRemove);
           }
         }
         break;
@@ -124,6 +160,11 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     noMatchKeyword,
     articleId,
     isListingPost,
+    mapSavedId,
+    listingSavedId,
+    confirmRemoveSaved,
+    runMapRemove,
+    runListingRemove,
     isConfigured,
   };
 }

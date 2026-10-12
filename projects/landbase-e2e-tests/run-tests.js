@@ -58,11 +58,11 @@ const mobileSuites = {
 // API suites mapping (Tách riêng nền tảng thứ 3 cho API)
 const apiSuites = {
   '1': {
-    name: '🚀 Tất cả các module API (All API Tests - 45 test cases)',
+    name: '🚀 Tất cả các module API (All API Tests - 51 test cases)',
     pattern: 'tests/api/',
   },
   '2': {
-    name: '🏠 Bất động sản đã lưu - Danh sách & Chi tiết tin (Saved Real Estate & Detail)',
+    name: '🏠 Bất động sản đã lưu - Danh sách, Chi tiết & Bỏ lưu (Saved Real Estate, Detail & Remove)',
     pattern: 'tests/api/saved-real-estate.spec.ts',
   },
   '3': {
