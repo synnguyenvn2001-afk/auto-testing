@@ -12,6 +12,8 @@ export interface ApiEnvironmentConfig {
   validWardCode?: string;
   searchKeyword?: string;
   noMatchKeyword?: string;
+  articleId?: string;
+  isListingPost?: boolean;
   isConfigured: boolean;
 }
 
@@ -35,6 +37,8 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let validWardCode = process.env.VALID_WARD_CODE || '09552';
   let searchKeyword = process.env.SEARCH_KEYWORD || 'Nguyễn Trãi';
   let noMatchKeyword = process.env.NO_MATCH_KEYWORD || '__NO_MATCH_TEST_VALUE__';
+  let articleId = process.env.ARTICLE_ID || process.env.articleId || '238622';
+  let isListingPost = process.env.IS_LISTING_POST !== undefined ? process.env.IS_LISTING_POST === 'true' : true;
 
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
@@ -72,6 +76,12 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'password' && item.value && !password) {
               password = item.value;
             }
+            if (item.key === 'articleId' && item.value && !process.env.ARTICLE_ID) {
+              articleId = item.value;
+            }
+            if (item.key === 'isListingPost' && item.value !== undefined && process.env.IS_LISTING_POST === undefined) {
+              isListingPost = String(item.value).toLowerCase() === 'true';
+            }
           }
         } else {
           // Plain key-value JSON
@@ -82,6 +92,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.xSessionRef && !process.env.X_SESSION_REF) xSessionRef = parsed.xSessionRef;
           if (parsed.username && !username) username = parsed.username;
           if (parsed.password && !password) password = parsed.password;
+          if (parsed.articleId && !process.env.ARTICLE_ID) articleId = parsed.articleId;
+          if (parsed.isListingPost !== undefined && process.env.IS_LISTING_POST === undefined) {
+            isListingPost = Boolean(parsed.isListingPost);
+          }
         }
         break;
       } catch {
@@ -108,6 +122,8 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     validWardCode,
     searchKeyword,
     noMatchKeyword,
+    articleId,
+    isListingPost,
     isConfigured,
   };
 }

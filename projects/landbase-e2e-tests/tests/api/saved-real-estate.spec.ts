@@ -329,4 +329,199 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
       expect(res.data.message).toContain('Header information is not correct');
     }
   });
+
+  // =========================================================================
+  // 3. CHI TIẾT TIN BĐS ĐÃ LƯU / TIN RAO VẶT (GET /api/v1.0/elasticsearch/public/detail/:articleId)
+  // =========================================================================
+  test('API_SAVED_007: GET - Chi tiết tin rao vặt đã lưu (articleId hợp lệ)', async ({ page }, testInfo) => {
+    test.skip(
+      config.isListingPost === false,
+      'Skipped: API detail chỉ được gọi cho tin rao vặt. Đặt isListingPost=true khi fixture đúng loại.'
+    );
+
+    const articleId = config.articleId || '238622';
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${articleId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'GET',
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_007',
+      testName: `GET - Chi tiết tin rao vặt đã lưu (articleId=${articleId})`,
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'GET',
+      expectedStatus: '200 OK (2xx)',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBeGreaterThanOrEqual(200);
+    expect(res.status).toBeLessThan(300);
+
+    // Kiểm tra cấu trúc dữ liệu trả về theo đặc tả
+    expect(res.data).toBeDefined();
+    expect(res.data).toHaveProperty('data');
+    const detail = res.data.data;
+
+    expect(detail).toHaveProperty('id', articleId);
+    expect(detail).toHaveProperty('title');
+    expect(typeof detail.title).toBe('string');
+    expect(detail.title.length).toBeGreaterThan(0);
+
+    expect(detail).toHaveProperty('location');
+    expect(detail).toHaveProperty('conversionArea');
+    expect(typeof detail.conversionArea).toBe('number');
+
+    expect(detail).toHaveProperty('conversionPrice');
+    expect(typeof detail.conversionPrice).toBe('number');
+
+    expect(detail).toHaveProperty('locationAt');
+    expect(detail.locationAt).toHaveProperty('lat');
+    expect(detail.locationAt).toHaveProperty('lon');
+
+    expect(detail).toHaveProperty('provinceCode');
+  });
+
+  test('API_SAVED_008: GET - Chi tiết động: Lấy articleId từ danh sách BĐS đã lưu để xem chi tiết', async ({ page }, testInfo) => {
+    // 1. Gọi danh sách BĐS đã lưu
+    const listRes = await client.executeInPage(page, {
+      endpoint: ENDPOINT,
+      method: 'POST',
+      body: {
+        keySearch: '',
+        page: 0,
+        size: 5,
+        order: 'DESC',
+        sort: 'createdDate',
+      },
+    });
+
+    const savedItems = listRes.data?.data?.content || [];
+    const targetArticleId = savedItems.length > 0 ? savedItems[0].id : (config.articleId || '238622');
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${targetArticleId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'GET',
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_008',
+      testName: `GET - Chi tiết động theo ID từ danh sách đã lưu (id=${targetArticleId})`,
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'GET',
+      expectedStatus: '200 OK (2xx)',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBeGreaterThanOrEqual(200);
+    expect(res.status).toBeLessThan(300);
+    expect(res.data?.data).toBeDefined();
+    expect(res.data.data.id).toBe(targetArticleId);
+  });
+
+  test('API_SAVED_009: GET - Kiểm tra khi articleId không tồn tại (articleId=99999999 - HTTP 406/404)', async ({ page }, testInfo) => {
+    const invalidId = '99999999';
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${invalidId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'GET',
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_009',
+      testName: 'GET - Kiểm tra khi articleId không tồn tại (id=99999999)',
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'GET',
+      expectedStatus: '406 Not Acceptable / 404 Not Found',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([406, 404, 400]).toContain(res.status);
+    if (res.data?.message) {
+      expect(res.data.message).toMatch(/not\.found|không tìm thấy/i);
+    }
+  });
+
+  test('API_SAVED_010: GET - Kiểm tra khi articleId sai định dạng (articleId=abc - HTTP 406/400)', async ({ page }, testInfo) => {
+    const invalidId = 'abc';
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${invalidId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'GET',
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_010',
+      testName: 'GET - Kiểm tra khi articleId sai định dạng (id=abc)',
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'GET',
+      expectedStatus: '406 Not Acceptable / 400 Bad Request',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([406, 400, 422]).toContain(res.status);
+  });
+
+  test('API_SAVED_011: GET - Kiểm tra API chi tiết là Public (không cần gửi kèm Authentication Token)', async ({ page }, testInfo) => {
+    const articleId = config.articleId || '238622';
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${articleId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'GET',
+      overrideTokens: { accessToken: '', xAuthToken: '', xSessionRef: '' },
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_011',
+      testName: 'GET - Kiểm tra API chi tiết Public không cần đăng nhập',
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'GET',
+      expectedStatus: '200 OK',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.data?.data?.id).toBe(articleId);
+  });
+
+  test('API_SAVED_012: POST - Từ chối HTTP Method POST trên endpoint chi tiết chỉ hỗ trợ GET (HTTP 405/4xx)', async ({ page }, testInfo) => {
+    const articleId = config.articleId || '238622';
+    const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${articleId}`;
+
+    const res = await client.executeInPage(page, {
+      endpoint: detailEndpoint,
+      method: 'POST',
+      body: {},
+    });
+
+    await recordApiEvidence(page, testInfo, {
+      testId: 'API_SAVED_012',
+      testName: 'POST - Từ chối HTTP Method POST trên endpoint chi tiết',
+      endpoint: client.resolveUrl(detailEndpoint),
+      method: 'POST',
+      expectedStatus: '405 Method Not Allowed / 4xx',
+      actualStatus: res.status,
+      responseHeaders: res.headers,
+      responseBody: res.data,
+    });
+
+    expect([405, 400, 404, 403, 401]).toContain(res.status);
+    expect(res.status).toBeGreaterThanOrEqual(400);
+    expect(res.status).toBeLessThan(500);
+  });
 });
