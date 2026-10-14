@@ -597,10 +597,177 @@ const folderMapAndCategory = {
 };
 
 // -------------------------------------------------------------
+// FOLDER 0: XÁC THỰC & ĐĂNG NHẬP TỰ ĐỘNG
+// -------------------------------------------------------------
+const folderAuth = {
+  name: '00. Xác thực & Đăng nhập tự động (/api/auth)',
+  item: [
+    {
+      name: 'AUTH_001: Đăng nhập tự động & Cập nhật accessToken vào Environment',
+      event: [
+        {
+          listen: 'prerequest',
+          script: {
+            type: 'text/javascript',
+            exec: [
+              'const webapp = pm.environment.get("webappUrl") || "https://dev-webapp.laand.vn";',
+              'pm.sendRequest({ url: webapp + "/api/auth/csrf", method: "GET" }, function (err, res) {',
+              '  if (!err && res.code === 200) {',
+              '    pm.variables.set("csrfToken", res.json().csrfToken);',
+              '  }',
+              '});',
+            ],
+          },
+        },
+        {
+          listen: 'test',
+          script: {
+            type: 'text/javascript',
+            exec: [
+              'const webapp = pm.environment.get("webappUrl") || "https://dev-webapp.laand.vn";',
+              'pm.sendRequest({ url: webapp + "/api/auth/session", method: "GET" }, function (sessErr, sessRes) {',
+              '  if (!sessErr && sessRes.code === 200) {',
+              '    const session = sessRes.json();',
+              '    if (session && session.user && session.user.accessToken) {',
+              '      pm.environment.set("accessToken", session.user.accessToken);',
+              '      console.log("✅ Đã cập nhật accessToken mới vào Environment!");',
+              '    }',
+              '  }',
+              '});',
+              'pm.test("Đăng nhập thành công (302 Redirect hoặc 200 OK)", function () {',
+              '  pm.expect([200, 302]).to.include(pm.response.code);',
+              '});',
+            ],
+          },
+        },
+      ],
+      request: {
+        method: 'POST',
+        header: [
+          { key: 'Content-Type', value: 'application/x-www-form-urlencoded' },
+          { key: 'Origin', value: '{{webappUrl}}' },
+          { key: 'Referer', value: '{{webappUrl}}/' },
+        ],
+        body: {
+          mode: 'urlencoded',
+          urlencoded: [
+            { key: 'csrfToken', value: '{{csrfToken}}' },
+            { key: 'userName', value: '{{username}}' },
+            { key: 'password', value: '{{password}}' },
+            { key: 'loginType', value: 'BASIC' },
+            { key: 'callbackUrl', value: '{{webappUrl}}/' },
+          ],
+        },
+        url: {
+          raw: '{{webappUrl}}/api/auth/callback/credentials',
+          host: ['{{webappUrl}}'],
+          path: ['api', 'auth', 'callback', 'credentials'],
+        },
+      },
+    },
+    {
+      name: 'AUTH_002: Kiểm tra phiên hiện tại & Lấy accessToken (NextAuth /session)',
+      event: [
+        {
+          listen: 'test',
+          script: {
+            type: 'text/javascript',
+            exec: [
+              'pm.test("Status code is 200 OK", function () {',
+              '  pm.expect(pm.response.code).to.equal(200);',
+              '});',
+              'pm.test("Phiên đăng nhập hợp lệ và có chứa accessToken", function () {',
+              '  const data = pm.response.json();',
+              '  pm.expect(data).to.have.property("user");',
+              '  pm.expect(data.user).to.have.property("accessToken");',
+              '  pm.environment.set("accessToken", data.user.accessToken);',
+              '});',
+            ],
+          },
+        },
+      ],
+      request: {
+        method: 'GET',
+        header: [
+          { key: 'Accept', value: 'application/json' },
+          { key: 'Origin', value: '{{webappUrl}}' },
+          { key: 'Referer', value: '{{webappUrl}}/' },
+        ],
+        url: {
+          raw: '{{webappUrl}}/api/auth/session',
+          host: ['{{webappUrl}}'],
+          path: ['api', 'auth', 'session'],
+        },
+      },
+    },
+  ],
+};
+
+// -------------------------------------------------------------
 // FOLDER 4: BẤT ĐỘNG SẢN ĐÃ LƯU
 // -------------------------------------------------------------
 const folderSavedRealEstate = {
   name: '04. Bất động sản đã lưu (/real-estate/real-estate-storage & /detail)',
+  event: [
+    {
+      listen: 'prerequest',
+      script: {
+        type: 'text/javascript',
+        exec: [
+          '// Tự động kiểm tra và làm mới Token nếu hết hạn trước khi gọi API BĐS đã lưu',
+          'const currentToken = pm.environment.get("accessToken") || "";',
+          'function isTokenExpired(jwt) {',
+          '  if (!jwt || jwt.includes("PASTE_")) return true;',
+          '  try {',
+          '    const parts = jwt.split(".");',
+          '    if (parts.length < 2) return true;',
+          '    const payload = JSON.parse(atob(parts[1]));',
+          '    const now = Math.floor(Date.now() / 1000);',
+          '    return !payload.exp || payload.exp < (now + 60);',
+          '  } catch (e) { return true; }',
+          '}',
+          '',
+          'if (isTokenExpired(currentToken)) {',
+          '  console.log("🔄 [Auto-Auth] accessToken hết hạn hoặc chưa có. Đang tự động làm mới qua NextAuth...");',
+          '  const webapp = pm.environment.get("webappUrl") || "https://dev-webapp.laand.vn";',
+          '  const u = pm.environment.get("username") || "usert1";',
+          '  const p = pm.environment.get("password") || "Enao@123";',
+          '',
+          '  pm.sendRequest({ url: webapp + "/api/auth/csrf", method: "GET" }, function (err, res) {',
+          '    if (!err && res.code === 200) {',
+          '      const csrfToken = res.json().csrfToken;',
+          '      pm.sendRequest({',
+          '        url: webapp + "/api/auth/callback/credentials",',
+          '        method: "POST",',
+          '        header: { "Content-Type": "application/x-www-form-urlencoded" },',
+          '        body: {',
+          '          mode: "urlencoded",',
+          '          urlencoded: [',
+          '            { key: "csrfToken", value: csrfToken },',
+          '            { key: "userName", value: u },',
+          '            { key: "password", value: p },',
+          '            { key: "loginType", value: "BASIC" },',
+          '            { key: "callbackUrl", value: webapp + "/" }',
+          '          ]',
+          '        }',
+          '      }, function (loginErr, loginRes) {',
+          '        pm.sendRequest({ url: webapp + "/api/auth/session", method: "GET" }, function (sessErr, sessRes) {',
+          '          if (!sessErr && sessRes.code === 200) {',
+          '            const session = sessRes.json();',
+          '            if (session && session.user && session.user.accessToken) {',
+          '              pm.environment.set("accessToken", session.user.accessToken);',
+          '              console.log("✅ [Auto-Auth] Đã tự động cấp accessToken mới thành công!");',
+          '            }',
+          '          }',
+          '        });',
+          '      });',
+          '    }',
+          '  });',
+          '}',
+        ],
+      },
+    },
+  ],
   item: [
     makeRequest(
       'API_SAVED_001: Lấy danh sách BĐS đã lưu (get-list-saved) - 200 OK',
@@ -1055,14 +1222,15 @@ const collection = {
     { key: 'accessToken', value: accessToken, type: 'string' },
     { key: 'xAuthToken', value: xAuthToken, type: 'string' },
     { key: 'xSessionRef', value: xSessionRef, type: 'string' },
-    { key: 'articleId', value: '238622', type: 'string' },
-    { key: 'listingSavedId', value: '238622', type: 'string' },
+    { key: 'username', value: 'usert1', type: 'string' },
+    { key: 'password', value: 'Enao@123', type: 'string' },
     { key: 'geomancyBirth', value: '2026-10-13T17:00:00.000Z', type: 'string' },
     { key: 'geomancyGender', value: '0', type: 'string' },
     { key: 'geomancyDirection', value: 'Bắc', type: 'string' },
     { key: 'geomancyCategoryCode', value: 'BDS00035', type: 'string' },
   ],
   item: [
+    folderAuth,
     folderProvinceWard,
     folderPriceSearch,
     folderMapAndCategory,
@@ -1080,6 +1248,8 @@ const environment = {
   values: [
     { key: 'baseUrl', value: baseUrl, enabled: true },
     { key: 'webappUrl', value: webappUrl, enabled: true },
+    { key: 'username', value: 'usert1', enabled: true },
+    { key: 'password', value: 'Enao@123', enabled: true },
     { key: 'accessToken', value: accessToken, enabled: true },
     { key: 'xAuthToken', value: xAuthToken, enabled: true },
     { key: 'xSessionRef', value: xSessionRef, enabled: true },

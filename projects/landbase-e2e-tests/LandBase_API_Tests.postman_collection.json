@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "a65995d0-d661-4439-9f3b-5ad922342e76",
+    "_postman_id": "d8c3de47-f042-44b5-b03d-cf9154621ef1",
     "name": "LandBase API Automation & Validation Tests",
     "description": "Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và loại bỏ hoàn toàn mã lỗi 406 Not Acceptable để phát hiện chính xác lỗi của backend.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -18,7 +18,7 @@
     },
     {
       "key": "accessToken",
-      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJuYW1lXCI6XCJ1c2VydDFcIixcImVtYWlsXCI6XCJ3YW5vZ29kMzYzQGR5c29uYy5jb21cIixcImRpc3BsYXlOYW1lXCI6XCJkxJFkZFwiLFwiZXhwaXJlVGltZVwiOjYwMDAwMCxcInBob25lTnVtYmVyXCI6XCIwOTg3NjU0MzIxXCIsXCJ0eXBlXCI6XCJBQ0NFU1NcIn0iLCJleHAiOjE3OTE5NDQyMTUsImlhdCI6MTc5MTk0MzYxNX0.j2P7tyoT1W-UHCPQztO-oJZ78tnTuQF5XjyfJ_a11uNhR1Io-DU4Y2DUQo9s60tPYscVlNQNdipbJXjL6uaM5A",
+      "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJuYW1lXCI6XCJ1c2VydDFcIixcImVtYWlsXCI6XCJ3YW5vZ29kMzYzQGR5c29uYy5jb21cIixcImRpc3BsYXlOYW1lXCI6XCJkxJFkZFwiLFwiZXhwaXJlVGltZVwiOjYwMDAwMCxcInBob25lTnVtYmVyXCI6XCIwOTg3NjU0MzIxXCIsXCJ0eXBlXCI6XCJBQ0NFU1NcIn0iLCJleHAiOjE3OTE5NDczNTEsImlhdCI6MTc5MTk0Njc1MX0.vcCluZBR6NnCF0dq5Pb4_DMeC-gEyceEQE42jyR9PhlN0mTldk3eYfFtbqERJ69I1rTakQ72ISLIkJB6iJyiJQ",
       "type": "string"
     },
     {
@@ -32,13 +32,13 @@
       "type": "string"
     },
     {
-      "key": "articleId",
-      "value": "238622",
+      "key": "username",
+      "value": "usert1",
       "type": "string"
     },
     {
-      "key": "listingSavedId",
-      "value": "238622",
+      "key": "password",
+      "value": "Enao@123",
       "type": "string"
     },
     {
@@ -63,6 +63,155 @@
     }
   ],
   "item": [
+    {
+      "name": "00. Xác thực & Đăng nhập tự động (/api/auth)",
+      "item": [
+        {
+          "name": "AUTH_001: Đăng nhập tự động & Cập nhật accessToken vào Environment",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const webapp = pm.environment.get(\"webappUrl\") || \"https://dev-webapp.laand.vn\";",
+                  "pm.sendRequest({ url: webapp + \"/api/auth/csrf\", method: \"GET\" }, function (err, res) {",
+                  "  if (!err && res.code === 200) {",
+                  "    pm.variables.set(\"csrfToken\", res.json().csrfToken);",
+                  "  }",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const webapp = pm.environment.get(\"webappUrl\") || \"https://dev-webapp.laand.vn\";",
+                  "pm.sendRequest({ url: webapp + \"/api/auth/session\", method: \"GET\" }, function (sessErr, sessRes) {",
+                  "  if (!sessErr && sessRes.code === 200) {",
+                  "    const session = sessRes.json();",
+                  "    if (session && session.user && session.user.accessToken) {",
+                  "      pm.environment.set(\"accessToken\", session.user.accessToken);",
+                  "      console.log(\"✅ Đã cập nhật accessToken mới vào Environment!\");",
+                  "    }",
+                  "  }",
+                  "});",
+                  "pm.test(\"Đăng nhập thành công (302 Redirect hoặc 200 OK)\", function () {",
+                  "  pm.expect([200, 302]).to.include(pm.response.code);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Origin",
+                "value": "{{webappUrl}}"
+              },
+              {
+                "key": "Referer",
+                "value": "{{webappUrl}}/"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "csrfToken",
+                  "value": "{{csrfToken}}"
+                },
+                {
+                  "key": "userName",
+                  "value": "{{username}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}"
+                },
+                {
+                  "key": "loginType",
+                  "value": "BASIC"
+                },
+                {
+                  "key": "callbackUrl",
+                  "value": "{{webappUrl}}/"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{webappUrl}}/api/auth/callback/credentials",
+              "host": [
+                "{{webappUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "callback",
+                "credentials"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_002: Kiểm tra phiên hiện tại & Lấy accessToken (NextAuth /session)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "pm.test(\"Phiên đăng nhập hợp lệ và có chứa accessToken\", function () {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property(\"user\");",
+                  "  pm.expect(data.user).to.have.property(\"accessToken\");",
+                  "  pm.environment.set(\"accessToken\", data.user.accessToken);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Origin",
+                "value": "{{webappUrl}}"
+              },
+              {
+                "key": "Referer",
+                "value": "{{webappUrl}}/"
+              }
+            ],
+            "url": {
+              "raw": "{{webappUrl}}/api/auth/session",
+              "host": [
+                "{{webappUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "session"
+              ]
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "01. Bảng giá đất - Tỉnh Phường (/category/public/list-province)",
       "item": [
@@ -2254,6 +2403,66 @@
     },
     {
       "name": "04. Bất động sản đã lưu (/real-estate/real-estate-storage & /detail)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Tự động kiểm tra và làm mới Token nếu hết hạn trước khi gọi API BĐS đã lưu",
+              "const currentToken = pm.environment.get(\"accessToken\") || \"\";",
+              "function isTokenExpired(jwt) {",
+              "  if (!jwt || jwt.includes(\"PASTE_\")) return true;",
+              "  try {",
+              "    const parts = jwt.split(\".\");",
+              "    if (parts.length < 2) return true;",
+              "    const payload = JSON.parse(atob(parts[1]));",
+              "    const now = Math.floor(Date.now() / 1000);",
+              "    return !payload.exp || payload.exp < (now + 60);",
+              "  } catch (e) { return true; }",
+              "}",
+              "",
+              "if (isTokenExpired(currentToken)) {",
+              "  console.log(\"🔄 [Auto-Auth] accessToken hết hạn hoặc chưa có. Đang tự động làm mới qua NextAuth...\");",
+              "  const webapp = pm.environment.get(\"webappUrl\") || \"https://dev-webapp.laand.vn\";",
+              "  const u = pm.environment.get(\"username\") || \"usert1\";",
+              "  const p = pm.environment.get(\"password\") || \"Enao@123\";",
+              "",
+              "  pm.sendRequest({ url: webapp + \"/api/auth/csrf\", method: \"GET\" }, function (err, res) {",
+              "    if (!err && res.code === 200) {",
+              "      const csrfToken = res.json().csrfToken;",
+              "      pm.sendRequest({",
+              "        url: webapp + \"/api/auth/callback/credentials\",",
+              "        method: \"POST\",",
+              "        header: { \"Content-Type\": \"application/x-www-form-urlencoded\" },",
+              "        body: {",
+              "          mode: \"urlencoded\",",
+              "          urlencoded: [",
+              "            { key: \"csrfToken\", value: csrfToken },",
+              "            { key: \"userName\", value: u },",
+              "            { key: \"password\", value: p },",
+              "            { key: \"loginType\", value: \"BASIC\" },",
+              "            { key: \"callbackUrl\", value: webapp + \"/\" }",
+              "          ]",
+              "        }",
+              "      }, function (loginErr, loginRes) {",
+              "        pm.sendRequest({ url: webapp + \"/api/auth/session\", method: \"GET\" }, function (sessErr, sessRes) {",
+              "          if (!sessErr && sessRes.code === 200) {",
+              "            const session = sessRes.json();",
+              "            if (session && session.user && session.user.accessToken) {",
+              "              pm.environment.set(\"accessToken\", session.user.accessToken);",
+              "              console.log(\"✅ [Auto-Auth] Đã tự động cấp accessToken mới thành công!\");",
+              "            }",
+              "          }",
+              "        });",
+              "      });",
+              "    }",
+              "  });",
+              "}"
+            ]
+          }
+        }
+      ],
       "item": [
         {
           "name": "API_SAVED_001: Lấy danh sách BĐS đã lưu (get-list-saved) - 200 OK",
