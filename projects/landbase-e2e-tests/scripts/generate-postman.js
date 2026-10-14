@@ -896,7 +896,7 @@ const folderGeomancy = {
       ]
     ),
     makeRequest(
-      'PHONGTHUY-02: Kiểm tra birth không được truyền - Không phát sinh 5xx',
+      'PHONGTHUY-02: Kiểm tra khi thiếu birth - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -906,13 +906,16 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)", function () {',
+        '  pm.expect(pm.response.code).to.not.equal(406);',
+        '});',
+        'pm.test("Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)", function () {',
+        '  pm.expect([400, 422]).to.include(pm.response.code);',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-03: Kiểm tra birth sai định dạng ngày giờ - Không phát sinh 5xx',
+      'PHONGTHUY-03: Kiểm tra birth sai định dạng ngày giờ - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -923,13 +926,16 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)", function () {',
+        '  pm.expect(pm.response.code).to.not.equal(406);',
+        '});',
+        'pm.test("Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)", function () {',
+        '  pm.expect([400, 422]).to.include(pm.response.code);',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-04: Kiểm tra gender sai kiểu dữ liệu - Không phát sinh 5xx',
+      'PHONGTHUY-04: Kiểm tra gender sai kiểu dữ liệu - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -940,13 +946,16 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)", function () {',
+        '  pm.expect(pm.response.code).to.not.equal(406);',
+        '});',
+        'pm.test("Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)", function () {',
+        '  pm.expect([400, 422]).to.include(pm.response.code);',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-05: Kiểm tra direction với giá trị không xác định - Không phát sinh 5xx',
+      'PHONGTHUY-05: Kiểm tra direction với giá trị không xác định - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -957,13 +966,16 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)", function () {',
+        '  pm.expect(pm.response.code).to.not.equal(406);',
+        '});',
+        'pm.test("Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)", function () {',
+        '  pm.expect([400, 422]).to.include(pm.response.code);',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-06: Kiểm tra categoryCode không được truyền (Optional) - 200 OK / Không phát sinh 5xx',
+      'PHONGTHUY-06: Kiểm tra categoryCode không được truyền (Optional field) - 200 OK',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -973,16 +985,18 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
-        '});',
         'pm.test("HTTP response is 2xx", function () {',
         '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        'pm.test("Response body chứa dữ liệu phong thủy", function () {',
+        '  const body = pm.response.json();',
+        '  pm.expect(body).to.have.property("status", 1);',
+        '  pm.expect(body.data).to.have.property("yearName");',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-07: Kiểm tra categoryCode không tồn tại - 200 OK / Không phát sinh 5xx',
+      'PHONGTHUY-07: Kiểm tra categoryCode không tồn tại (Backend không lọc danh mục) - 200 OK',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -993,13 +1007,17 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("HTTP response is 2xx", function () {',
+        '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        'pm.test("Response body chứa dữ liệu phong thủy", function () {',
+        '  const body = pm.response.json();',
+        '  pm.expect(body).to.have.property("status", 1);',
         '});',
       ]
     ),
     makeRequest(
-      'PHONGTHUY-08: Kiểm tra gender là null - Không phát sinh 5xx',
+      'PHONGTHUY-08: Kiểm tra gender là null - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]',
       'POST',
       '{{baseUrl}}/api/v1.0/real-estate/public/geomancy/search',
       {
@@ -1010,8 +1028,11 @@ const folderGeomancy = {
       },
       buildStandardHeaders(false),
       [
-        'pm.test("Request does not cause an unhandled 5xx server error", function () {',
-        '  pm.expect(pm.response.code).to.be.below(500);',
+        'pm.test("Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)", function () {',
+        '  pm.expect(pm.response.code).to.not.equal(406);',
+        '});',
+        'pm.test("Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)", function () {',
+        '  pm.expect([400, 422]).to.include(pm.response.code);',
         '});',
       ]
     ),

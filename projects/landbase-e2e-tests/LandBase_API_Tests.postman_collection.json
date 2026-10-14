@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "6e7b56eb-f9b0-49ce-a6fb-d4ab395fb740",
+    "_postman_id": "a65995d0-d661-4439-9f3b-5ad922342e76",
     "name": "LandBase API Automation & Validation Tests",
     "description": "Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và loại bỏ hoàn toàn mã lỗi 406 Not Acceptable để phát hiện chính xác lỗi của backend.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -3555,15 +3555,18 @@
           }
         },
         {
-          "name": "PHONGTHUY-02: Kiểm tra birth không được truyền - Không phát sinh 5xx",
+          "name": "PHONGTHUY-02: Kiểm tra khi thiếu birth - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)\", function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(406);",
+                  "});",
+                  "pm.test(\"Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)\", function () {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
                   "});"
                 ]
               }
@@ -3627,15 +3630,18 @@
           }
         },
         {
-          "name": "PHONGTHUY-03: Kiểm tra birth sai định dạng ngày giờ - Không phát sinh 5xx",
+          "name": "PHONGTHUY-03: Kiểm tra birth sai định dạng ngày giờ - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)\", function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(406);",
+                  "});",
+                  "pm.test(\"Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)\", function () {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
                   "});"
                 ]
               }
@@ -3699,15 +3705,18 @@
           }
         },
         {
-          "name": "PHONGTHUY-04: Kiểm tra gender sai kiểu dữ liệu - Không phát sinh 5xx",
+          "name": "PHONGTHUY-04: Kiểm tra gender sai kiểu dữ liệu - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)\", function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(406);",
+                  "});",
+                  "pm.test(\"Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)\", function () {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
                   "});"
                 ]
               }
@@ -3771,15 +3780,18 @@
           }
         },
         {
-          "name": "PHONGTHUY-05: Kiểm tra direction với giá trị không xác định - Không phát sinh 5xx",
+          "name": "PHONGTHUY-05: Kiểm tra direction với giá trị không xác định - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)\", function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(406);",
+                  "});",
+                  "pm.test(\"Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)\", function () {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
                   "});"
                 ]
               }
@@ -3843,18 +3855,20 @@
           }
         },
         {
-          "name": "PHONGTHUY-06: Kiểm tra categoryCode không được truyền (Optional) - 200 OK / Không phát sinh 5xx",
+          "name": "PHONGTHUY-06: Kiểm tra categoryCode không được truyền (Optional field) - 200 OK",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
-                  "});",
                   "pm.test(\"HTTP response is 2xx\", function () {",
                   "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "pm.test(\"Response body chứa dữ liệu phong thủy\", function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property(\"status\", 1);",
+                  "  pm.expect(body.data).to.have.property(\"yearName\");",
                   "});"
                 ]
               }
@@ -3918,15 +3932,19 @@
           }
         },
         {
-          "name": "PHONGTHUY-07: Kiểm tra categoryCode không tồn tại - 200 OK / Không phát sinh 5xx",
+          "name": "PHONGTHUY-07: Kiểm tra categoryCode không tồn tại (Backend không lọc danh mục) - 200 OK",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"HTTP response is 2xx\", function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "pm.test(\"Response body chứa dữ liệu phong thủy\", function () {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property(\"status\", 1);",
                   "});"
                 ]
               }
@@ -3990,15 +4008,18 @@
           }
         },
         {
-          "name": "PHONGTHUY-08: Kiểm tra gender là null - Không phát sinh 5xx",
+          "name": "PHONGTHUY-08: Kiểm tra gender là null - [PHÁT HIỆN BUG BACKEND 406 (Kỳ vọng 400 Bad Request)]",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Request does not cause an unhandled 5xx server error\", function () {",
-                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "pm.test(\"Mã lỗi KHÔNG ĐƯỢC LÀ 406 Not Acceptable (Bug backend trả 406 kèm 500)\", function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(406);",
+                  "});",
+                  "pm.test(\"Kỳ vọng chuẩn REST là 400 Bad Request (hoặc 422)\", function () {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
                   "});"
                 ]
               }
