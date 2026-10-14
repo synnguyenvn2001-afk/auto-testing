@@ -168,7 +168,7 @@ test.describe('Bảng giá đất - 03. Tìm kiếm giá đất (/api/v1.0/categ
 
     // Theo Postman script: pm.expect(pm.response.code).to.be.below(500)
     expect(res.status).toBeLessThan(500);
-    expect([200, 400, 422, 406]).toContain(res.status);
+    expect([200, 400, 422]).toContain(res.status);
   });
 
   test('PRICE_SEARCH_005: Chặn request khi year sai kiểu dữ liệu (year="ABC" - VAL-04)', async ({ page }, testInfo) => {
@@ -190,7 +190,7 @@ test.describe('Bảng giá đất - 03. Tìm kiếm giá đất (/api/v1.0/categ
       testName: 'Kiểm tra khi year="ABC" (sai kiểu dữ liệu)',
       endpoint: client.resolveUrl(ENDPOINT),
       method: 'POST',
-      expectedStatus: '400 Bad Request / 4xx',
+      expectedStatus: '400 Bad Request / 422 Unprocessable Entity',
       actualStatus: res.status,
       requestHeaders: client.buildHeaders({ endpoint: ENDPOINT, body: payload }),
       requestBody: payload,
@@ -198,7 +198,7 @@ test.describe('Bảng giá đất - 03. Tìm kiếm giá đất (/api/v1.0/categ
       responseBody: res.data,
     });
 
-    expect([400, 422, 406]).toContain(res.status);
+    expect([400, 422]).toContain(res.status);
   });
 
   test('PRICE_SEARCH_006: Kiểm tra xử lý an toàn khi thiếu hoặc null codeProvince (VAL-08 & VAL-09)', async ({ page }, testInfo) => {
@@ -230,7 +230,7 @@ test.describe('Bảng giá đất - 03. Tìm kiếm giá đất (/api/v1.0/categ
 
     // Theo Postman script: pm.expect(pm.response.code).to.be.below(500)
     expect(res.status).toBeLessThan(500);
-    expect([200, 400, 422, 406]).toContain(res.status);
+    expect([200, 400, 422]).toContain(res.status);
   });
 
   // =========================================================================

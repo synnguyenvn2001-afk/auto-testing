@@ -400,7 +400,9 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
     });
 
     const savedItems = listRes.data?.data?.content || [];
-    const targetArticleId = savedItems.length > 0 ? savedItems[0].id : (config.articleId || '238622');
+    // API chi tiết elasticsearch chỉ dành cho Tin rao vặt (ID số). Nếu trong danh sách có tin rao vặt thì lấy, ngược lại dùng articleId mẫu
+    const listingItem = savedItems.find((x: any) => /^\d+$/.test(String(x.id)));
+    const targetArticleId = listingItem ? String(listingItem.id) : (config.articleId || '238622');
     const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${targetArticleId}`;
 
     const res = await client.executeInPage(page, {
@@ -425,7 +427,7 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
     expect(res.data.data.id).toBe(targetArticleId);
   });
 
-  test('API_SAVED_009: GET - Kiểm tra khi articleId không tồn tại (articleId=99999999 - HTTP 406/404)', async ({ page }, testInfo) => {
+  test('API_SAVED_009: GET - Kiểm tra khi articleId không tồn tại (articleId=99999999 - Kỳ vọng HTTP 404/400)', async ({ page }, testInfo) => {
     const invalidId = '99999999';
     const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${invalidId}`;
 
@@ -439,19 +441,19 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
       testName: 'GET - Kiểm tra khi articleId không tồn tại (id=99999999)',
       endpoint: client.resolveUrl(detailEndpoint),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 404 Not Found',
+      expectedStatus: '404 Not Found / 400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([406, 404, 400]).toContain(res.status);
+    expect([404, 400]).toContain(res.status);
     if (res.data?.message) {
       expect(res.data.message).toMatch(/not\.found|không tìm thấy/i);
     }
   });
 
-  test('API_SAVED_010: GET - Kiểm tra khi articleId sai định dạng (articleId=abc - HTTP 406/400)', async ({ page }, testInfo) => {
+  test('API_SAVED_010: GET - Kiểm tra khi articleId sai định dạng (articleId=abc - Kỳ vọng HTTP 400/422)', async ({ page }, testInfo) => {
     const invalidId = 'abc';
     const detailEndpoint = `/api/v1.0/elasticsearch/public/detail/${invalidId}`;
 
@@ -465,13 +467,13 @@ test.describe('LandBase API - Bất động sản đã lưu (get-list-saved)', (
       testName: 'GET - Kiểm tra khi articleId sai định dạng (id=abc)',
       endpoint: client.resolveUrl(detailEndpoint),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 400 Bad Request',
+      expectedStatus: '400 Bad Request / 422 Unprocessable Entity',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([406, 400, 422]).toContain(res.status);
+    expect([400, 422]).toContain(res.status);
   });
 
   test('API_SAVED_011: GET - Kiểm tra API chi tiết là Public (không cần gửi kèm Authentication Token)', async ({ page }, testInfo) => {

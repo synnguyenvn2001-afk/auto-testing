@@ -146,9 +146,9 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
   });
 
   // =========================================================================
-  // 3. KIỂM THỬ THAM SỐ KHÔNG HỢP LỆ (API-07 -> 19: KỲ VỌNG 406 / 4xx)
+  // 3. KIỂM THỬ THAM SỐ KHÔNG HỢP LỆ (API-07 -> 19: KỲ VỌNG 400 Bad Request / 4xx)
   // =========================================================================
-  test('API_01_007: Kiểm tra khi parentCode là chữ (parentCode=abc - Kỳ vọng 406 hoặc 4xx/200 rỗng)', async ({ page }, testInfo) => {
+  test('API_01_007: Kiểm tra khi parentCode là chữ (parentCode=abc - Kỳ vọng 200 rỗng hoặc 400 Bad Request)', async ({ page }, testInfo) => {
     const query = '?version=2&parentCode=abc';
     const res = await client.executeInPage(page, {
       endpoint: `${ENDPOINT}${query}`,
@@ -160,14 +160,13 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
       testName: 'Kiểm tra khi parentCode không hợp lệ (parentCode=abc)',
       endpoint: client.resolveUrl(`${ENDPOINT}${query}`),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 200 OK (Danh sách rỗng)',
+      expectedStatus: '200 OK (Danh sách rỗng) / 400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    // Excel ghi 406, Postman script thực tế kiểm tra 2xx/an toàn
-    expect([200, 406, 400, 422]).toContain(res.status);
+    expect([200, 400, 422]).toContain(res.status);
     if (res.status === 200) {
       const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
       expect(list).toHaveLength(0);
@@ -186,13 +185,13 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
       testName: 'Kiểm tra khi parentCode có ký tự đặc biệt (@#$)',
       endpoint: client.resolveUrl(`${ENDPOINT}${query}`),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 200 OK (Danh sách rỗng)',
+      expectedStatus: '200 OK (Danh sách rỗng) / 400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([200, 406, 400, 422]).toContain(res.status);
+    expect([200, 400, 422]).toContain(res.status);
     if (res.status === 200) {
       const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
       expect(list).toHaveLength(0);
@@ -211,20 +210,20 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
       testName: 'Kiểm tra khi parentCode là số âm (-1)',
       endpoint: client.resolveUrl(`${ENDPOINT}${query}`),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 200 OK (Danh sách rỗng)',
+      expectedStatus: '200 OK (Danh sách rỗng) / 400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([200, 406, 400, 422]).toContain(res.status);
+    expect([200, 400, 422]).toContain(res.status);
     if (res.status === 200) {
       const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
       expect(list).toHaveLength(0);
     }
   });
 
-  test('API_01_015: Kiểm tra khi không truyền version', async ({ page }, testInfo) => {
+  test('API_01_015: Kiểm tra khi không truyền version (Kỳ vọng 400 Bad Request)', async ({ page }, testInfo) => {
     const query = '?parentCode=01';
     const res = await client.executeInPage(page, {
       endpoint: `${ENDPOINT}${query}`,
@@ -236,16 +235,16 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
       testName: 'Kiểm tra khi không truyền version',
       endpoint: client.resolveUrl(`${ENDPOINT}${query}`),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 4xx',
+      expectedStatus: '400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([406, 400, 422]).toContain(res.status);
+    expect([400, 422]).toContain(res.status);
   });
 
-  test('API_01_017: Kiểm tra khi version sai định dạng (version=abc)', async ({ page }, testInfo) => {
+  test('API_01_017: Kiểm tra khi version sai định dạng (version=abc - Kỳ vọng 400 Bad Request)', async ({ page }, testInfo) => {
     const query = '?version=abc&parentCode=01';
     const res = await client.executeInPage(page, {
       endpoint: `${ENDPOINT}${query}`,
@@ -257,13 +256,13 @@ test.describe('Bảng giá đất - 01. Danh sách tỉnh-phường (/api/v1.0/c
       testName: 'Kiểm tra khi version không hợp lệ (version=abc)',
       endpoint: client.resolveUrl(`${ENDPOINT}${query}`),
       method: 'GET',
-      expectedStatus: '406 Not Acceptable / 4xx',
+      expectedStatus: '400 Bad Request',
       actualStatus: res.status,
       responseHeaders: res.headers,
       responseBody: res.data,
     });
 
-    expect([406, 400, 422]).toContain(res.status);
+    expect([400, 422]).toContain(res.status);
   });
 
   // =========================================================================

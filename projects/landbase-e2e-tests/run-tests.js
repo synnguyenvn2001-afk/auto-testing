@@ -58,7 +58,7 @@ const mobileSuites = {
 // API suites mapping (Tách riêng nền tảng thứ 3 cho API)
 const apiSuites = {
   '1': {
-    name: '🚀 Tất cả các module API (All API Tests - 51 test cases)',
+    name: '🚀 Tất cả các module API (All API Tests - 61 test cases)',
     pattern: 'tests/api/',
   },
   '2': {
@@ -84,6 +84,10 @@ const apiSuites = {
   '7': {
     name: '📑 Toàn bộ 4 tab Bảng giá đất (All Land Price Modules)',
     pattern: 'tests/api/land-price/',
+  },
+  '8': {
+    name: '🔮 Phong thủy: Tra cứu phong thủy (/real-estate/public/geomancy/search)',
+    pattern: 'tests/api/geomancy.spec.ts',
   },
 };
 

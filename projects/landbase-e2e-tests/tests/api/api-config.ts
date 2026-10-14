@@ -19,6 +19,10 @@ export interface ApiEnvironmentConfig {
   confirmRemoveSaved?: boolean;
   runMapRemove?: boolean;
   runListingRemove?: boolean;
+  geomancyBirth?: string;
+  geomancyGender?: number;
+  geomancyDirection?: string;
+  geomancyCategoryCode?: string;
   isConfigured: boolean;
 }
 
@@ -49,6 +53,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let confirmRemoveSaved = process.env.CONFIRM_REMOVE_SAVED === 'true';
   let runMapRemove = process.env.RUN_MAP_REMOVE === 'true';
   let runListingRemove = process.env.RUN_LISTING_REMOVE === 'true';
+  let geomancyBirth = process.env.GEOMANCY_BIRTH || '2026-10-13T17:00:00.000Z';
+  let geomancyGender = process.env.GEOMANCY_GENDER !== undefined ? Number(process.env.GEOMANCY_GENDER) : 0;
+  let geomancyDirection = process.env.GEOMANCY_DIRECTION || 'Bắc';
+  let geomancyCategoryCode = process.env.GEOMANCY_CATEGORY_CODE || 'BDS00035';
 
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
@@ -107,6 +115,18 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'runListingRemove' && item.value !== undefined && process.env.RUN_LISTING_REMOVE === undefined) {
               runListingRemove = String(item.value).toLowerCase() === 'true';
             }
+            if (item.key === 'geomancyBirth' && item.value && !process.env.GEOMANCY_BIRTH) {
+              geomancyBirth = item.value;
+            }
+            if (item.key === 'geomancyGender' && item.value !== undefined && process.env.GEOMANCY_GENDER === undefined) {
+              geomancyGender = Number(item.value);
+            }
+            if (item.key === 'geomancyDirection' && item.value && !process.env.GEOMANCY_DIRECTION) {
+              geomancyDirection = item.value;
+            }
+            if (item.key === 'geomancyCategoryCode' && item.value && !process.env.GEOMANCY_CATEGORY_CODE) {
+              geomancyCategoryCode = item.value;
+            }
           }
         } else {
           // Plain key-value JSON
@@ -131,6 +151,18 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           }
           if (parsed.runListingRemove !== undefined && process.env.RUN_LISTING_REMOVE === undefined) {
             runListingRemove = Boolean(parsed.runListingRemove);
+          }
+          if (parsed.geomancyBirth && !process.env.GEOMANCY_BIRTH) {
+            geomancyBirth = parsed.geomancyBirth;
+          }
+          if (parsed.geomancyGender !== undefined && process.env.GEOMANCY_GENDER === undefined) {
+            geomancyGender = Number(parsed.geomancyGender);
+          }
+          if (parsed.geomancyDirection && !process.env.GEOMANCY_DIRECTION) {
+            geomancyDirection = parsed.geomancyDirection;
+          }
+          if (parsed.geomancyCategoryCode && !process.env.GEOMANCY_CATEGORY_CODE) {
+            geomancyCategoryCode = parsed.geomancyCategoryCode;
           }
         }
         break;
@@ -165,6 +197,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     confirmRemoveSaved,
     runMapRemove,
     runListingRemove,
+    geomancyBirth,
+    geomancyGender,
+    geomancyDirection,
+    geomancyCategoryCode,
     isConfigured,
   };
 }
