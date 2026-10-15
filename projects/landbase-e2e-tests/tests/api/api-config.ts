@@ -23,6 +23,10 @@ export interface ApiEnvironmentConfig {
   geomancyGender?: number;
   geomancyDirection?: string;
   geomancyCategoryCode?: string;
+  feedbackName?: string;
+  feedbackEmail?: string;
+  feedbackErrorType?: string;
+  feedbackCookie?: string;
   isConfigured: boolean;
 }
 
@@ -57,6 +61,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let geomancyGender = process.env.GEOMANCY_GENDER !== undefined ? Number(process.env.GEOMANCY_GENDER) : 0;
   let geomancyDirection = process.env.GEOMANCY_DIRECTION || 'Bắc';
   let geomancyCategoryCode = process.env.GEOMANCY_CATEGORY_CODE || 'BDS00035';
+  let feedbackName = process.env.FEEDBACK_NAME || 'user';
+  let feedbackEmail = process.env.FEEDBACK_EMAIL || 'tamoco6090@nab4.com';
+  let feedbackErrorType = process.env.FEEDBACK_ERROR_TYPE || 'Dữ liệu';
+  let feedbackCookie = process.env.FEEDBACK_COOKIE || '';
 
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
@@ -127,6 +135,18 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'geomancyCategoryCode' && item.value && !process.env.GEOMANCY_CATEGORY_CODE) {
               geomancyCategoryCode = item.value;
             }
+            if (item.key === 'feedbackName' && item.value) {
+              feedbackName = item.value;
+            }
+            if (item.key === 'feedbackEmail' && item.value) {
+              feedbackEmail = item.value;
+            }
+            if (item.key === 'feedbackErrorType' && item.value) {
+              feedbackErrorType = item.value;
+            }
+            if (item.key === 'feedbackCookie' && item.value && !item.value.includes('PASTE_')) {
+              feedbackCookie = item.value;
+            }
           }
         } else {
           // Plain key-value JSON
@@ -164,6 +184,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.geomancyCategoryCode && !process.env.GEOMANCY_CATEGORY_CODE) {
             geomancyCategoryCode = parsed.geomancyCategoryCode;
           }
+          if (parsed.feedbackName) feedbackName = parsed.feedbackName;
+          if (parsed.feedbackEmail) feedbackEmail = parsed.feedbackEmail;
+          if (parsed.feedbackErrorType) feedbackErrorType = parsed.feedbackErrorType;
+          if (parsed.feedbackCookie && !parsed.feedbackCookie.includes('PASTE_')) feedbackCookie = parsed.feedbackCookie;
         }
         break;
       } catch {
@@ -201,6 +225,10 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     geomancyGender,
     geomancyDirection,
     geomancyCategoryCode,
+    feedbackName,
+    feedbackEmail,
+    feedbackErrorType,
+    feedbackCookie,
     isConfigured,
   };
 }

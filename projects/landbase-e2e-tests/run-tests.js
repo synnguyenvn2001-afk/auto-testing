@@ -58,7 +58,7 @@ const mobileSuites = {
 // API suites mapping (Tách riêng nền tảng thứ 3 cho API)
 const apiSuites = {
   '1': {
-    name: '🚀 Tất cả các module API (All API Tests - 61 test cases)',
+    name: '🚀 Tất cả các module API (All API Tests - 78 test cases)',
     pattern: 'tests/api/',
   },
   '2': {
@@ -88,6 +88,10 @@ const apiSuites = {
   '8': {
     name: '🔮 Phong thủy: Tra cứu phong thủy (/real-estate/public/geomancy/search)',
     pattern: 'tests/api/geomancy.spec.ts',
+  },
+  '9': {
+    name: '📬 Hòm thư Feedback (/api/feedback - 17 test cases)',
+    pattern: 'tests/api/feedback.spec.ts',
   },
 };
 
@@ -167,7 +171,7 @@ async function main() {
       Object.keys(apiSuites).forEach((key) => {
         console.log(`  ${key}. ${apiSuites[key].name}`);
       });
-      const ans = await askQuestion('\n👉 Nhập lựa chọn phần API muốn test (1-7, hoặc gõ nhiều số như 2,3) [Mặc định: 1 - Tất cả]: ');
+      const ans = await askQuestion('\n👉 Nhập lựa chọn phần API muốn test (1-9, hoặc gõ nhiều số như 2,3) [Mặc định: 1 - Tất cả]: ');
       apiChoice = ans.trim() || '1';
     }
 

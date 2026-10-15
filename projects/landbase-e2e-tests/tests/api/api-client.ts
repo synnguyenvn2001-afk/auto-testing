@@ -76,6 +76,9 @@ export class LandBaseApiClient {
       return endpoint;
     }
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    if (cleanEndpoint.startsWith('/api/feedback') || cleanEndpoint.startsWith('/api/auth')) {
+      return `${this.config.webappUrl}${cleanEndpoint}`;
+    }
     return `${this.config.gatewayUrl}${cleanEndpoint}`;
   }
 
@@ -287,6 +290,30 @@ export class LandBaseApiClient {
     const currentUrl = page.url();
     if (!currentUrl.startsWith(this.config.webappUrl)) {
       await page.goto(this.config.webappUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+    }
+
+    const cookieStr = options?.customHeaders?.Cookie || options?.customHeaders?.cookie || this.config.feedbackCookie;
+    if (cookieStr && cookieStr.includes('=') && !cookieStr.includes('PASTE_')) {
+      try {
+        const domain = new URL(this.config.webappUrl).hostname;
+        const cookiePairs = cookieStr.split(';');
+        const cookiesToAdd = cookiePairs
+          .map(pair => {
+            const [name, ...rest] = pair.trim().split('=');
+            return {
+              name: name?.trim() || '',
+              value: rest.join('=').trim(),
+              domain,
+              path: '/',
+            };
+          })
+          .filter(c => c.name && c.value);
+        if (cookiesToAdd.length > 0) {
+          await page.context().addCookies(cookiesToAdd).catch(() => {});
+        }
+      } catch {
+        // Silently ignore cookie parse errors
+      }
     }
 
     const fullUrl = this.resolveUrl(options.endpoint);

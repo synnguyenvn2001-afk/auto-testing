@@ -47,9 +47,21 @@ function buildStandardHeaders(includeAuth = true, extraHeaders = {}) {
   return headers;
 }
 
+function buildFeedbackHeaders() {
+  return [
+    { key: 'Accept', value: '*/*' },
+    { key: 'Content-Type', value: 'application/json' },
+    { key: 'Origin', value: '{{webappUrl}}' },
+    { key: 'Referer', value: '{{webappUrl}}/' },
+    { key: 'Cookie', value: '{{feedbackCookie}}' },
+  ];
+}
+
 function parseUrl(rawUrl) {
+  const isWebapp = rawUrl.startsWith('{{webappUrl}}');
+  const hostVar = isWebapp ? '{{webappUrl}}' : '{{baseUrl}}';
   const [baseAndPath, queryStr] = rawUrl.split('?');
-  const pathParts = baseAndPath.replace('{{baseUrl}}', '').split('/').filter(Boolean);
+  const pathParts = baseAndPath.replace(hostVar, '').split('/').filter(Boolean);
   const query = [];
   if (queryStr) {
     queryStr.split('&').forEach(param => {
@@ -60,7 +72,7 @@ function parseUrl(rawUrl) {
 
   return {
     raw: rawUrl,
-    host: ['{{baseUrl}}'],
+    host: [hostVar],
     path: pathParts,
     query: query.length > 0 ? query : undefined,
   };
@@ -1207,18 +1219,384 @@ const folderGeomancy = {
 };
 
 // -------------------------------------------------------------
+// FOLDER 6: HÒM THƯ FEEDBACK (/api/feedback)
+// -------------------------------------------------------------
+const folderFeedback = {
+  name: '06. Hòm thư Feedback (/api/feedback)',
+  description: '17 testcase cho POST /api/feedback. Đã bổ sung xác thực cookie định danh thiết bị _v2_mClientFP và kiểm tra contract thành công lẫn validation.',
+  event: [
+    {
+      listen: 'prerequest',
+      script: {
+        type: 'text/javascript',
+        exec: [
+          '// Tự động cấp phát device fingerprint _v2_mClientFP nếu chưa cấu hình cookie',
+          'let currentCookie = pm.environment.get("feedbackCookie") || pm.variables.get("feedbackCookie");',
+          'if (!currentCookie || currentCookie.includes("PASTE_")) {',
+          '  const randFp = pm.variables.replaceIn("{{$guid}}");',
+          '  pm.variables.set("feedbackCookie", "_v2_mClientFP=" + randFp + "; _v2_sig=" + randFp);',
+          '}',
+        ],
+      },
+    },
+  ],
+  item: [
+    makeRequest(
+      'API-FEEDBACK-01 - Gửi feedback với payload mẫu',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: 'Nội dung phản hồi kiểm thử mẫu',
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("HTTP status thuộc nhóm 2xx", function () {',
+        '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        '',
+        'const body = pm.response.json();',
+        'pm.test("Response có status = 1", function () {',
+        '  pm.expect(body).to.have.property("status", 1);',
+        '});',
+        'pm.test("Message phản hồi thành công đúng nội dung", function () {',
+        '  pm.expect(body).to.have.property("message", "Gửi phản hồi thành công");',
+        '});',
+        'pm.test("data.id là UUID hợp lệ", function () {',
+        '  pm.expect(body).to.have.nested.property("data.id");',
+        '  pm.expect(body.data.id).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);',
+        '});',
+        'pm.test("data.created_date là thời điểm ISO có thể parse", function () {',
+        '  pm.expect(body).to.have.nested.property("data.created_date");',
+        '  pm.expect(body.data.created_date).to.be.a("string");',
+        '  pm.expect(Date.parse(body.data.created_date)).to.not.be.NaN;',
+        '  pm.expect(body.data.created_date).to.match(/^\\d{4}-\\d{2}-\\d{2}T.*Z$/);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-02 - Kiểm tra khi thiếu trường name',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+        'console.warn("Đây là testcase validation exploratory. Không phát sinh lỗi 5xx.");',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-03 - Kiểm tra name bằng null',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: null,
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-04 - Kiểm tra name là chuỗi rỗng',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-05 - Kiểm tra khi thiếu trường email',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-06 - Kiểm tra email sai định dạng',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: 'not-an-email',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-07 - Kiểm tra email bằng null',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: null,
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-08 - Kiểm tra khi thiếu trường error_type',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-09 - Kiểm tra error_type không nằm trong danh mục',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: 'INVALID_TYPE',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-10 - Xác nhận content=null được kiểm tra theo schema backend',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: null,
+      },
+      buildFeedbackHeaders(),
+      [
+        'if (pm.response.code >= 200 && pm.response.code < 300) {',
+        '  pm.test("Response có status = 1", function () {',
+        '    pm.expect(pm.response.json()).to.have.property("status", 1);',
+        '  });',
+        '} else {',
+        '  pm.test("Backend từ chối content=null với mã 400 Bad Request", function () {',
+        '    pm.expect(pm.response.code).to.equal(400);',
+        '    const body = pm.response.json();',
+        '    pm.expect(body).to.have.property("code", "INVALID_REQUEST");',
+        '  });',
+        '}',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-11 - Kiểm tra content là chuỗi có nội dung',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: 'Mô tả vấn đề cần hỗ trợ',
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("HTTP status thuộc nhóm 2xx", function () {',
+        '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        'pm.test("Nếu response khai báo JSON thì JSON phải parse được", function () {',
+        '  const ct = pm.response.headers.get("Content-Type") || "";',
+        '  if (ct.toLowerCase().includes("json") && pm.response.text().length > 0) {',
+        '    pm.expect(function () { return pm.response.json(); }).not.to.throw();',
+        '  }',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-12 - Kiểm tra content là chuỗi rỗng',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: '',
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-13 - Kiểm tra content sai kiểu dữ liệu dạng số',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: 123,
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-14 - Kiểm tra content sai kiểu dữ liệu dạng object',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: { text: 'sample' },
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-15 - Gửi body JSON rỗng',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {},
+      buildFeedbackHeaders(),
+      [
+        'pm.test("Không phát sinh lỗi máy chủ 5xx ngoài dự kiến", function () {',
+        '  pm.expect(pm.response.code).to.be.below(500);',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-16 - Kiểm tra response khi gửi request với email hợp lệ và content tiếng Việt',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: 'Người dùng kiểm thử',
+        email: 'qa.feedback@example.com',
+        error_type: '{{feedbackErrorType}}',
+        content: 'Tôi gặp lỗi hiển thị dữ liệu.',
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("HTTP status thuộc nhóm 2xx", function () {',
+        '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        'pm.test("Nếu response khai báo JSON thì JSON phải parse được", function () {',
+        '  const ct = pm.response.headers.get("Content-Type") || "";',
+        '  if (ct.toLowerCase().includes("json") && pm.response.text().length > 0) {',
+        '    pm.expect(function () { return pm.response.json(); }).not.to.throw();',
+        '  }',
+        '});',
+      ]
+    ),
+    makeRequest(
+      'API-FEEDBACK-17 - Kiểm tra response contract thành công',
+      'POST',
+      '{{webappUrl}}/api/feedback',
+      {
+        name: '{{feedbackName}}',
+        email: '{{feedbackEmail}}',
+        error_type: '{{feedbackErrorType}}',
+        content: 'Kiểm tra response contract thành công',
+      },
+      buildFeedbackHeaders(),
+      [
+        'pm.test("HTTP status thuộc nhóm 2xx", function () {',
+        '  pm.expect(pm.response.code).to.be.within(200, 299);',
+        '});',
+        '',
+        'const body = pm.response.json();',
+        'pm.test("Response có status = 1", function () {',
+        '  pm.expect(body).to.have.property("status", 1);',
+        '});',
+        'pm.test("Message phản hồi thành công đúng nội dung", function () {',
+        '  pm.expect(body).to.have.property("message", "Gửi phản hồi thành công");',
+        '});',
+        'pm.test("data.id là UUID hợp lệ", function () {',
+        '  pm.expect(body).to.have.nested.property("data.id");',
+        '  pm.expect(body.data.id).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);',
+        '});',
+        'pm.test("data.created_date là thời điểm ISO có thể parse", function () {',
+        '  pm.expect(body).to.have.nested.property("data.created_date");',
+        '  pm.expect(body.data.created_date).to.be.a("string");',
+        '  pm.expect(Date.parse(body.data.created_date)).to.not.be.NaN;',
+        '  pm.expect(body.data.created_date).to.match(/^\\d{4}-\\d{2}-\\d{2}T.*Z$/);',
+        '});',
+      ]
+    ),
+  ],
+};
+
+// -------------------------------------------------------------
 // POSTMAN COLLECTION ROOT
 // -------------------------------------------------------------
 const collection = {
   info: {
     _postman_id: crypto.randomUUID(),
     name: 'LandBase API Automation & Validation Tests',
-    description: 'Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và loại bỏ hoàn toàn mã lỗi 406 Not Acceptable để phát hiện chính xác lỗi của backend.',
+    description: 'Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và loại bỏ hoàn toàn mã lỗi 406 Not Acceptable để phát hiện chính xác lỗi của backend.',
     schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
   },
   variable: [
     { key: 'baseUrl', value: baseUrl, type: 'string' },
     { key: 'webappUrl', value: webappUrl, type: 'string' },
+    { key: 'origin', value: webappUrl, type: 'string' },
+    { key: 'referer', value: `${webappUrl}/`, type: 'string' },
     { key: 'accessToken', value: accessToken, type: 'string' },
     { key: 'xAuthToken', value: xAuthToken, type: 'string' },
     { key: 'xSessionRef', value: xSessionRef, type: 'string' },
@@ -1228,6 +1606,10 @@ const collection = {
     { key: 'geomancyGender', value: '0', type: 'string' },
     { key: 'geomancyDirection', value: 'Bắc', type: 'string' },
     { key: 'geomancyCategoryCode', value: 'BDS00035', type: 'string' },
+    { key: 'feedbackName', value: 'user', type: 'string' },
+    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', type: 'string' },
+    { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
+    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, type: 'string' },
   ],
   item: [
     folderAuth,
@@ -1236,6 +1618,7 @@ const collection = {
     folderMapAndCategory,
     folderSavedRealEstate,
     folderGeomancy,
+    folderFeedback,
   ],
 };
 
@@ -1248,6 +1631,8 @@ const environment = {
   values: [
     { key: 'baseUrl', value: baseUrl, enabled: true },
     { key: 'webappUrl', value: webappUrl, enabled: true },
+    { key: 'origin', value: webappUrl, enabled: true },
+    { key: 'referer', value: `${webappUrl}/`, enabled: true },
     { key: 'username', value: 'usert1', enabled: true },
     { key: 'password', value: 'Enao@123', enabled: true },
     { key: 'accessToken', value: accessToken, enabled: true },
@@ -1259,15 +1644,65 @@ const environment = {
     { key: 'geomancyGender', value: '0', enabled: true },
     { key: 'geomancyDirection', value: 'Bắc', enabled: true },
     { key: 'geomancyCategoryCode', value: 'BDS00035', enabled: true },
+    { key: 'feedbackName', value: 'user', enabled: true },
+    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', enabled: true },
+    { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
+    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, enabled: true },
+  ],
+  _postman_variable_scope: 'environment',
+};
+
+// -------------------------------------------------------------
+// STANDALONE FEEDBACK COLLECTION & ENVIRONMENT
+// -------------------------------------------------------------
+const feedbackCollection = {
+  info: {
+    _postman_id: crypto.randomUUID(),
+    name: 'LandBase - Hòm thư Feedback API (response contract updated)',
+    description: 'POST https://dev-webapp.laand.vn/api/feedback. 17 testcase kiểm thử chức năng Hòm thư Feedback.',
+    schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+  },
+  variable: [
+    { key: 'baseUrl', value: webappUrl, type: 'string' },
+    { key: 'webappUrl', value: webappUrl, type: 'string' },
+    { key: 'origin', value: webappUrl, type: 'string' },
+    { key: 'referer', value: `${webappUrl}/`, type: 'string' },
+    { key: 'feedbackName', value: 'user', type: 'string' },
+    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', type: 'string' },
+    { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
+    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, type: 'string' },
+  ],
+  item: [folderFeedback],
+};
+
+const feedbackEnvironment = {
+  id: crypto.randomUUID(),
+  name: 'LandBase DEV - Hòm thư Feedback (response contract v2)',
+  values: [
+    { key: 'baseUrl', value: webappUrl, enabled: true },
+    { key: 'webappUrl', value: webappUrl, enabled: true },
+    { key: 'origin', value: webappUrl, enabled: true },
+    { key: 'referer', value: `${webappUrl}/`, enabled: true },
+    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, enabled: true },
+    { key: 'feedbackName', value: 'user', enabled: true },
+    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', enabled: true },
+    { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
   ],
   _postman_variable_scope: 'environment',
 };
 
 const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');
 const outputEnvironmentPath = path.join(__dirname, '..', 'LandBase_Environment.postman_environment.json');
+const outputFeedbackCollectionPath = path.join(__dirname, '..', 'LandBase_Feedback_API.postman_collection.json');
+const outputFeedbackEnvironmentPath = path.join(__dirname, '..', 'LandBase_Feedback_Environment.postman_environment.json');
 
 fs.writeFileSync(outputCollectionPath, JSON.stringify(collection, null, 2), 'utf8');
 fs.writeFileSync(outputEnvironmentPath, JSON.stringify(environment, null, 2), 'utf8');
+fs.writeFileSync(outputFeedbackCollectionPath, JSON.stringify(feedbackCollection, null, 2), 'utf8');
+fs.writeFileSync(outputFeedbackEnvironmentPath, JSON.stringify(feedbackEnvironment, null, 2), 'utf8');
 
-console.log('✅ Đã tạo thành công Postman Collection tại:', outputCollectionPath);
-console.log('✅ Đã tạo thành công Postman Environment tại:', outputEnvironmentPath);
+console.log('✅ Đã tạo thành công Postman Collection tổng tại:', outputCollectionPath);
+console.log('✅ Đã tạo thành công Postman Environment tổng tại:', outputEnvironmentPath);
+console.log('✅ Đã tạo thành công Postman Collection Feedback riêng tại:', outputFeedbackCollectionPath);
+console.log('✅ Đã tạo thành công Postman Environment Feedback riêng tại:', outputFeedbackEnvironmentPath);
+

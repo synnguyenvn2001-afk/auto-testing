@@ -55,6 +55,30 @@
       "value": "BDS00035",
       "type": "default",
       "enabled": true
+    },
+    {
+      "key": "feedbackCookie",
+      "value": "PASTE_FRESH_COOKIE_HEADER_VALUE_HERE",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "feedbackName",
+      "value": "user",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "feedbackEmail",
+      "value": "tamoco6090@nab4.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "feedbackErrorType",
+      "value": "Dữ liệu",
+      "type": "default",
+      "enabled": true
     }
   ],
   "_postman_variable_scope": "environment"
