@@ -11,12 +11,14 @@ Bộ kiểm thử web bằng Playwright và mobile Android bằng WebdriverIO/Ap
 - `playwright/.auth/`: trạng thái đăng nhập cục bộ, không commit.
 - `scripts/`: lệnh hỗ trợ như khởi động Appium.
 
-- `tests/api/`: kiểm thử API tự động theo ngữ cảnh bảo mật webapp (In-Page Fetch / Gateway).
+- `tests/api/`: kiểm thử API tự động toàn diện (78 test cases) gồm Bảng giá đất, BĐS đã lưu, Phong thủy và Hòm thư Feedback.
 
 Các lệnh chính được khai báo trong `package.json` ở gốc repository:
-- `npm run test`: Menu tương tác chọn module (chọn module 9 để chạy API).
-- `npm run test:api`: Chạy kiểm thử API (mở browser headed).
-- `npm run test:api:headless`: Chạy kiểm thử API nền (headless).
+- `npm run test`: Menu tương tác chọn module (chọn Platform 3 để kiểm thử API).
+- `npm run test:api`: Chạy kiểm thử API tương tác qua CLI.
+- `npm run test:api:all`: Chạy tất cả 78 API test cases.
+- `npm run test:api:feedback`: Chạy riêng 17 test cases của API Feedback.
+- `npm run postman:export`: Đồng bộ và xuất ra các file Postman Collection & Environment mới nhất.
 
 ## Cấu hình Token Test API
 Tạo file `api-environment.json` hoặc `.env` trong `projects/landbase-e2e-tests/`:

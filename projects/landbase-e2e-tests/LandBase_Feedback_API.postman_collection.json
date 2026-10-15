@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "7cf406da-c5a2-4bea-a4c4-2b77d7330d79",
+    "_postman_id": "e210b962-dc6c-4b3d-ad5d-79db4b7fac24",
     "name": "LandBase - Hòm thư Feedback API (response contract updated)",
     "description": "POST https://dev-webapp.laand.vn/api/feedback. 17 testcase kiểm thử chức năng Hòm thư Feedback.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -28,12 +28,12 @@
     },
     {
       "key": "feedbackName",
-      "value": "user",
+      "value": "{{$randomFullName}}",
       "type": "string"
     },
     {
       "key": "feedbackEmail",
-      "value": "tamoco6090@nab4.com",
+      "value": "{{$randomEmail}}",
       "type": "string"
     },
     {
@@ -43,26 +43,25 @@
     },
     {
       "key": "feedbackCookie",
-      "value": "_v2_mClientFP=WQLBeqrKWOOS; _v2_sig=WQLBeqrKWOOS",
+      "value": "_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}",
       "type": "string"
     }
   ],
   "item": [
     {
       "name": "06. Hòm thư Feedback (/api/feedback)",
-      "description": "17 testcase cho POST /api/feedback. Đã bổ sung xác thực cookie định danh thiết bị _v2_mClientFP và kiểm tra contract thành công lẫn validation.",
+      "description": "17 testcase cho POST /api/feedback. Đã bổ sung cơ chế tự động random device fingerprint _v2_mClientFP và email để không bao giờ bị dính rate-limit 5 phút.",
       "event": [
         {
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "// Tự động cấp phát device fingerprint _v2_mClientFP nếu chưa cấu hình cookie",
-              "let currentCookie = pm.environment.get(\"feedbackCookie\") || pm.variables.get(\"feedbackCookie\");",
-              "if (!currentCookie || currentCookie.includes(\"PASTE_\")) {",
-              "  const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
-              "  pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp);",
-              "}"
+              "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+              "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+              "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+              "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+              "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
             ]
           }
         }
@@ -71,6 +70,19 @@
         {
           "name": "API-FEEDBACK-01 - Gửi feedback với payload mẫu",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -150,6 +162,19 @@
           "name": "API-FEEDBACK-02 - Kiểm tra khi thiếu trường name",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -211,6 +236,19 @@
           "name": "API-FEEDBACK-03 - Kiểm tra name bằng null",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -270,6 +308,19 @@
         {
           "name": "API-FEEDBACK-04 - Kiểm tra name là chuỗi rỗng",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -331,6 +382,19 @@
           "name": "API-FEEDBACK-05 - Kiểm tra khi thiếu trường email",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -390,6 +454,19 @@
         {
           "name": "API-FEEDBACK-06 - Kiểm tra email sai định dạng",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -451,6 +528,19 @@
           "name": "API-FEEDBACK-07 - Kiểm tra email bằng null",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -510,6 +600,19 @@
         {
           "name": "API-FEEDBACK-08 - Kiểm tra khi thiếu trường error_type",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -571,6 +674,19 @@
           "name": "API-FEEDBACK-09 - Kiểm tra error_type không nằm trong danh mục",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -630,6 +746,19 @@
         {
           "name": "API-FEEDBACK-10 - Xác nhận content=null được kiểm tra theo schema backend",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -699,6 +828,19 @@
           "name": "API-FEEDBACK-11 - Kiểm tra content là chuỗi có nội dung",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -765,6 +907,19 @@
           "name": "API-FEEDBACK-12 - Kiểm tra content là chuỗi rỗng",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -824,6 +979,19 @@
         {
           "name": "API-FEEDBACK-13 - Kiểm tra content sai kiểu dữ liệu dạng số",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -885,6 +1053,19 @@
           "name": "API-FEEDBACK-14 - Kiểm tra content sai kiểu dữ liệu dạng object",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -945,6 +1126,19 @@
           "name": "API-FEEDBACK-15 - Gửi body JSON rỗng",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1004,6 +1198,19 @@
         {
           "name": "API-FEEDBACK-16 - Kiểm tra response khi gửi request với email hợp lệ và content tiếng Việt",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1070,6 +1277,19 @@
         {
           "name": "API-FEEDBACK-17 - Kiểm tra response contract thành công",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút",
+                  "const randFp = pm.variables.replaceIn(\"{{$guid}}\");",
+                  "pm.variables.set(\"feedbackCookie\", \"_v2_mClientFP=\" + randFp + \"; _v2_sig=\" + randFp + \"; _mClientFP_9d3a=\" + randFp);",
+                  "pm.variables.set(\"feedbackEmail\", \"test_\" + Date.now() + \"@example.com\");",
+                  "pm.variables.set(\"feedbackName\", \"User \" + pm.variables.replaceIn(\"{{$randomInt}}\"));"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {

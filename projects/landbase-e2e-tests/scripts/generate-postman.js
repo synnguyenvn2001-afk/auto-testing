@@ -57,6 +57,14 @@ function buildFeedbackHeaders() {
   ];
 }
 
+const feedbackPreRequest = [
+  '// Tự động RANDOM hóa device fingerprint và email cho mỗi lần gửi request để không bị dính rate-limit 5 phút',
+  'const randFp = pm.variables.replaceIn("{{$guid}}");',
+  'pm.variables.set("feedbackCookie", "_v2_mClientFP=" + randFp + "; _v2_sig=" + randFp + "; _mClientFP_9d3a=" + randFp);',
+  'pm.variables.set("feedbackEmail", "test_" + Date.now() + "@example.com");',
+  'pm.variables.set("feedbackName", "User " + pm.variables.replaceIn("{{$randomInt}}"));',
+];
+
 function parseUrl(rawUrl) {
   const isWebapp = rawUrl.startsWith('{{webappUrl}}');
   const hostVar = isWebapp ? '{{webappUrl}}' : '{{baseUrl}}';
@@ -78,16 +86,27 @@ function parseUrl(rawUrl) {
   };
 }
 
-function makeRequest(name, method, url, body, headers, tests) {
-  const testScript = tests && tests.length > 0 ? [
-    {
+function makeRequest(name, method, url, body, headers, tests, preRequest) {
+  const events = [];
+  const effectivePre = preRequest || (url.includes('/api/feedback') ? feedbackPreRequest : null);
+  if (effectivePre && effectivePre.length > 0) {
+    events.push({
+      listen: 'prerequest',
+      script: {
+        type: 'text/javascript',
+        exec: effectivePre,
+      },
+    });
+  }
+  if (tests && tests.length > 0) {
+    events.push({
       listen: 'test',
       script: {
         type: 'text/javascript',
         exec: tests,
       },
-    },
-  ] : [];
+    });
+  }
 
   const reqObj = {
     method,
@@ -109,7 +128,7 @@ function makeRequest(name, method, url, body, headers, tests) {
 
   return {
     name,
-    event: testScript,
+    event: events,
     request: reqObj,
   };
 }
@@ -1223,20 +1242,13 @@ const folderGeomancy = {
 // -------------------------------------------------------------
 const folderFeedback = {
   name: '06. Hòm thư Feedback (/api/feedback)',
-  description: '17 testcase cho POST /api/feedback. Đã bổ sung xác thực cookie định danh thiết bị _v2_mClientFP và kiểm tra contract thành công lẫn validation.',
+  description: '17 testcase cho POST /api/feedback. Đã bổ sung cơ chế tự động random device fingerprint _v2_mClientFP và email để không bao giờ bị dính rate-limit 5 phút.',
   event: [
     {
       listen: 'prerequest',
       script: {
         type: 'text/javascript',
-        exec: [
-          '// Tự động cấp phát device fingerprint _v2_mClientFP nếu chưa cấu hình cookie',
-          'let currentCookie = pm.environment.get("feedbackCookie") || pm.variables.get("feedbackCookie");',
-          'if (!currentCookie || currentCookie.includes("PASTE_")) {',
-          '  const randFp = pm.variables.replaceIn("{{$guid}}");',
-          '  pm.variables.set("feedbackCookie", "_v2_mClientFP=" + randFp + "; _v2_sig=" + randFp);',
-          '}',
-        ],
+        exec: feedbackPreRequest,
       },
     },
   ],
@@ -1606,10 +1618,10 @@ const collection = {
     { key: 'geomancyGender', value: '0', type: 'string' },
     { key: 'geomancyDirection', value: 'Bắc', type: 'string' },
     { key: 'geomancyCategoryCode', value: 'BDS00035', type: 'string' },
-    { key: 'feedbackName', value: 'user', type: 'string' },
-    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', type: 'string' },
+    { key: 'feedbackName', value: '{{$randomFullName}}', type: 'string' },
+    { key: 'feedbackEmail', value: '{{$randomEmail}}', type: 'string' },
     { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
-    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, type: 'string' },
+    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', type: 'string' },
   ],
   item: [
     folderAuth,
@@ -1644,10 +1656,10 @@ const environment = {
     { key: 'geomancyGender', value: '0', enabled: true },
     { key: 'geomancyDirection', value: 'Bắc', enabled: true },
     { key: 'geomancyCategoryCode', value: 'BDS00035', enabled: true },
-    { key: 'feedbackName', value: 'user', enabled: true },
-    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', enabled: true },
+    { key: 'feedbackName', value: '{{$randomFullName}}', enabled: true },
+    { key: 'feedbackEmail', value: '{{$randomEmail}}', enabled: true },
     { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
-    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, enabled: true },
+    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', enabled: true },
   ],
   _postman_variable_scope: 'environment',
 };
@@ -1667,10 +1679,10 @@ const feedbackCollection = {
     { key: 'webappUrl', value: webappUrl, type: 'string' },
     { key: 'origin', value: webappUrl, type: 'string' },
     { key: 'referer', value: `${webappUrl}/`, type: 'string' },
-    { key: 'feedbackName', value: 'user', type: 'string' },
-    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', type: 'string' },
+    { key: 'feedbackName', value: '{{$randomFullName}}', type: 'string' },
+    { key: 'feedbackEmail', value: '{{$randomEmail}}', type: 'string' },
     { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
-    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, type: 'string' },
+    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', type: 'string' },
   ],
   item: [folderFeedback],
 };
@@ -1683,9 +1695,9 @@ const feedbackEnvironment = {
     { key: 'webappUrl', value: webappUrl, enabled: true },
     { key: 'origin', value: webappUrl, enabled: true },
     { key: 'referer', value: `${webappUrl}/`, enabled: true },
-    { key: 'feedbackCookie', value: `_v2_mClientFP=${xSessionRef}; _v2_sig=${xAuthToken}`, enabled: true },
-    { key: 'feedbackName', value: 'user', enabled: true },
-    { key: 'feedbackEmail', value: 'tamoco6090@nab4.com', enabled: true },
+    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', enabled: true },
+    { key: 'feedbackName', value: '{{$randomFullName}}', enabled: true },
+    { key: 'feedbackEmail', value: '{{$randomEmail}}', enabled: true },
     { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
   ],
   _postman_variable_scope: 'environment',
