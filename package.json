@@ -11,6 +11,8 @@
     "test:map": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/map.spec.ts --project=chromium --headed --workers=1",
     "test:security": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/security.spec.ts --project=chromium --headed --workers=1",
     "test:ads": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/classified-ads.spec.ts --project=chromium --headed --workers=1",
+    "test:mailbox": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/feedback-mailbox.spec.ts --project=chromium --headed --workers=1",
+    "test:mailbox:headless": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/feedback-mailbox.spec.ts --project=chromium --workers=1",
     "test:api": "node projects/landbase-e2e-tests/run-tests.js --platform=3",
     "test:api:all": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/ --project=api --headed --workers=1",
     "test:api:headless": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/ --project=api --workers=1",

@@ -41,6 +41,7 @@ const webSuites = {
   '6': { name: 'Đăng nhập & Xác thực (Auth)', pattern: 'tests/auth.spec.ts' },
   '7': { name: 'Cẩm nang BĐS (Handbook)', pattern: 'tests/handbook.spec.ts' },
   '8': { name: 'Tài khoản & Công cụ (Profile & Tools)', pattern: 'tests/navigation.spec.ts tests/profile.spec.ts tests/tools.spec.ts' },
+  '9': { name: '📬 Hòm thư LandBase (Feedback Mailbox - UI & API Integration)', pattern: 'tests/feedback-mailbox.spec.ts' },
 };
 
 // Mobile suites mapping
@@ -251,7 +252,7 @@ async function main() {
     Object.keys(webSuites).forEach((key) => {
       console.log(`  ${key}. ${webSuites[key].name}`);
     });
-    const ans = await askQuestion('\n👉 Nhập lựa chọn Module Web (1-8) [Mặc định: 1]: ');
+    const ans = await askQuestion('\n👉 Nhập lựa chọn Module Web (1-9) [Mặc định: 1]: ');
     suiteChoice = ans.trim() || '1';
     if (!webSuites[suiteChoice]) suiteChoice = '1';
   }
