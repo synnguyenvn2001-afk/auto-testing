@@ -27,6 +27,20 @@ export interface ApiEnvironmentConfig {
   feedbackEmail?: string;
   feedbackErrorType?: string;
   feedbackCookie?: string;
+  chatBaseUrl?: string;
+  chatOrigin?: string;
+  chatReferer?: string;
+  chatAppCode?: string;
+  chatAppPassport?: string;
+  chatAccessToken?: string;
+  chatRefreshToken?: string;
+  chatCsrfToken?: string;
+  chatClientFP?: string;
+  chatInvalidAccessToken?: string;
+  chatInvalidAppPassport?: string;
+  chatConversationId?: string;
+  chatParentMessageId?: string;
+  confirmRunChatAI?: boolean;
   isConfigured: boolean;
 }
 
@@ -66,9 +80,26 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let feedbackErrorType = process.env.FEEDBACK_ERROR_TYPE || 'Dữ liệu';
   let feedbackCookie = process.env.FEEDBACK_COOKIE || '';
 
+  // Chat AI config values
+  let chatBaseUrl = process.env.CHAT_BASE_URL || 'http://192.168.1.95:18010';
+  let chatOrigin = process.env.CHAT_ORIGIN || 'http://192.168.1.95:18010';
+  let chatReferer = process.env.CHAT_REFERER || 'http://192.168.1.95:18010/chat/kbY43WhJqET9eT9R';
+  let chatAppCode = process.env.CHAT_APP_CODE || 'kbY43WhJqET9eT9R';
+  let chatAppPassport = process.env.CHAT_APP_PASSPORT || '';
+  let chatAccessToken = process.env.CHAT_ACCESS_TOKEN || '';
+  let chatRefreshToken = process.env.CHAT_REFRESH_TOKEN || '';
+  let chatCsrfToken = process.env.CHAT_CSRF_TOKEN || '';
+  let chatClientFP = process.env.CHAT_CLIENT_FP || 'REPLACE_WITH_TEST_CLIENT_FP';
+  let chatInvalidAccessToken = process.env.CHAT_INVALID_ACCESS_TOKEN || 'INVALID_ACCESS_TOKEN_FOR_TEST';
+  let chatInvalidAppPassport = process.env.CHAT_INVALID_APP_PASSPORT || 'INVALID_APP_PASSPORT_FOR_TEST';
+  let chatConversationId = process.env.CHAT_CONVERSATION_ID || '2f7e7263-701d-4f62-9cdf-e5e7609fb2d9';
+  let chatParentMessageId = process.env.CHAT_PARENT_MESSAGE_ID || 'f064bcce-2501-4691-a4bc-f4cd561e7a45';
+  let confirmRunChatAI = process.env.CONFIRM_RUN_CHAT_AI !== undefined ? process.env.CONFIRM_RUN_CHAT_AI === 'true' : false;
+
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
     path.join(__dirname, 'api-environment.json'),
+    path.join(__dirname, '..', '..', 'LandBase_Chat_AI_Environment.postman_environment.json'),
     path.join(__dirname, '..', '..', 'postman-environment.json'),
   ];
 
@@ -147,6 +178,49 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'feedbackCookie' && item.value && !item.value.includes('PASTE_')) {
               feedbackCookie = item.value;
             }
+            // Chat AI environment variables
+            if (item.key === 'baseUrl' && item.value && (item.value.includes('18010') || item.value.includes('chat'))) {
+              chatBaseUrl = item.value;
+            }
+            if (item.key === 'origin' && item.value && item.value.includes('18010')) {
+              chatOrigin = item.value;
+            }
+            if (item.key === 'referer' && item.value && item.value.includes('18010')) {
+              chatReferer = item.value;
+            }
+            if (item.key === 'appCode' && item.value) {
+              chatAppCode = item.value;
+            }
+            if (item.key === 'appPassport' && item.value && !item.value.includes('PASTE_')) {
+              chatAppPassport = item.value;
+            }
+            if (item.key === 'accessToken' && item.value && !item.value.includes('PASTE_') && (chatBaseUrl.includes('18010'))) {
+              chatAccessToken = item.value;
+            }
+            if (item.key === 'refreshToken' && item.value && !item.value.includes('PASTE_')) {
+              chatRefreshToken = item.value;
+            }
+            if (item.key === 'csrfToken' && item.value && !item.value.includes('PASTE_')) {
+              chatCsrfToken = item.value;
+            }
+            if (item.key === 'clientFP' && item.value && !item.value.includes('REPLACE_')) {
+              chatClientFP = item.value;
+            }
+            if (item.key === 'invalidAccessToken' && item.value) {
+              chatInvalidAccessToken = item.value;
+            }
+            if (item.key === 'invalidAppPassport' && item.value) {
+              chatInvalidAppPassport = item.value;
+            }
+            if (item.key === 'conversationId' && item.value) {
+              chatConversationId = item.value;
+            }
+            if (item.key === 'parentMessageId' && item.value) {
+              chatParentMessageId = item.value;
+            }
+            if (item.key === 'confirmRunChatAI' && item.value !== undefined && process.env.CONFIRM_RUN_CHAT_AI === undefined) {
+              confirmRunChatAI = String(item.value).toLowerCase() === 'true';
+            }
           }
         } else {
           // Plain key-value JSON
@@ -188,6 +262,16 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.feedbackEmail) feedbackEmail = parsed.feedbackEmail;
           if (parsed.feedbackErrorType) feedbackErrorType = parsed.feedbackErrorType;
           if (parsed.feedbackCookie && !parsed.feedbackCookie.includes('PASTE_')) feedbackCookie = parsed.feedbackCookie;
+          if (parsed.chatBaseUrl) chatBaseUrl = parsed.chatBaseUrl;
+          if (parsed.chatAppCode) chatAppCode = parsed.chatAppCode;
+          if (parsed.chatAppPassport) chatAppPassport = parsed.chatAppPassport;
+          if (parsed.chatAccessToken) chatAccessToken = parsed.chatAccessToken;
+          if (parsed.chatRefreshToken) chatRefreshToken = parsed.chatRefreshToken;
+          if (parsed.chatCsrfToken) chatCsrfToken = parsed.chatCsrfToken;
+          if (parsed.chatClientFP) chatClientFP = parsed.chatClientFP;
+          if (parsed.chatConversationId) chatConversationId = parsed.chatConversationId;
+          if (parsed.chatParentMessageId) chatParentMessageId = parsed.chatParentMessageId;
+          if (parsed.confirmRunChatAI !== undefined) confirmRunChatAI = Boolean(parsed.confirmRunChatAI);
         }
         break;
       } catch {
@@ -229,6 +313,20 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     feedbackEmail,
     feedbackErrorType,
     feedbackCookie,
+    chatBaseUrl: chatBaseUrl.replace(/\/+$/, ''),
+    chatOrigin,
+    chatReferer,
+    chatAppCode,
+    chatAppPassport,
+    chatAccessToken,
+    chatRefreshToken,
+    chatCsrfToken,
+    chatClientFP,
+    chatInvalidAccessToken,
+    chatInvalidAppPassport,
+    chatConversationId,
+    chatParentMessageId,
+    confirmRunChatAI,
     isConfigured,
   };
 }

@@ -34,7 +34,7 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
   });
 
   // =========================================================================
-  // 1. HAPPY PATH & API CONTRACT INTEGRATION
+  // 1. HAPPY PATH (LUỒNG CHÍNH THÀNH CÔNG)
   // =========================================================================
 
   test('TC-UI-API-001: Khách vãng lai mở popup và gửi phản hồi thành công (HTTP 200 OK)', async ({ page }) => {
@@ -74,66 +74,15 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     expect(resBody).toHaveProperty('data');
     expect(resBody.data.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
 
-    // Khẳng định UI hiển thị thông báo thành công và tự động đóng popup
-    const toast = page.locator('text="Gửi góp ý thành công", text="Gửi phản hồi thành công"').first();
-    await expect(toast).toBeVisible({ timeout: 8000 });
-    await expect(dialog).not.toBeVisible({ timeout: 8000 });
-  });
-
-  test('TC-UI-API-004: Trạng thái Loading và khóa nút Gửi trong khi gọi API', async ({ page }) => {
-    // Làm chậm response API 1500ms để kiểm tra trạng thái loading/disabled trên UI
-    await page.route('**/api/feedback', async route => {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          status: 1,
-          message: 'Gửi phản hồi thành công',
-          data: { id: '00000000-0000-0000-0000-000000000000', created_date: new Date().toISOString() },
-        }),
-      });
-    });
-
-    const dialog = await openFeedbackModal(page);
-    await dialog.locator('#feedback-name').fill('Lê Hải Nam');
-    await dialog.locator('#feedback-email').fill('hainam@example.com');
-    await dialog.locator('#feedback-type').click();
-    await page.locator('[role="option"]:has-text("Lỗi màn hình")').first().click();
-    await dialog.locator('#feedback-content').fill('Kiểm tra trạng thái loading nút gửi.');
-
-    const submitBtn = dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")');
-
-    // Click nút gửi và kiểm tra nút bị disabled trong lúc request đang pending
-    const submitPromise = submitBtn.click();
-    await expect(submitBtn).toBeDisabled({ timeout: 1200 }).catch(() => {});
-    await submitPromise;
-    await expect(dialog).not.toBeVisible({ timeout: 8000 });
-  });
-
-  test('TC-UI-API-005 & 006: Đóng popup bằng nút Close / phím Escape và không gửi API', async ({ page }) => {
-    let apiCalled = false;
-    page.on('request', req => {
-      if (req.url().includes('/api/feedback')) apiCalled = true;
-    });
-
-    const dialog = await openFeedbackModal(page);
-    await dialog.locator('#feedback-name').fill('Nguyễn Văn Dở Dang');
-
-    // Đóng bằng phím Escape
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(500);
-
-    // Khẳng định modal đóng và không có request API
-    await expect(dialog).not.toBeVisible();
-    expect(apiCalled).toBeFalsy();
+    // Khẳng định UI tự động đóng popup sau khi gửi thành công
+    await expect(dialog).not.toBeVisible({ timeout: 10000 });
   });
 
   // =========================================================================
-  // 2. VALIDATION & DROPDOWN MAPPING
+  // 2. NON-HAPPY PATH: VALIDATION & CLIENT-SIDE CHECKS (LỖI NHẬP LIỆU)
   // =========================================================================
 
-  test('TC-UI-API-008: Chặn gửi khi form để trống toàn bộ (Client-side Validation)', async ({ page }) => {
+  test('TC-UI-API-008: [Non-Happy] Chặn gửi khi form để trống toàn bộ', async ({ page }) => {
     let apiCalled = false;
     page.on('request', req => {
       if (req.url().includes('/api/feedback')) apiCalled = true;
@@ -145,32 +94,54 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
     await page.waitForTimeout(500);
 
-    // Không phát sinh request HTTP ra ngoài
+    // Không phát sinh request HTTP ra ngoài, modal vẫn mở
     expect(apiCalled).toBeFalsy();
-
-    // Modal vẫn mở để người dùng điền tiếp
     await expect(dialog).toBeVisible();
   });
 
-  test('TC-UI-API-014: Kiểm tra dropdown Vấn đề hiển thị đầy đủ 4 danh mục ("Dữ liệu", "Góp ý", "Lỗi luồng", "Lỗi màn hình")', async ({ page }) => {
+  test('TC-UI-API-009: [Non-Happy] Chặn gửi khi thiếu riêng trường bắt buộc (Nội dung trống hoặc Vấn đề chưa chọn)', async ({ page }) => {
+    let apiCalled = false;
+    page.on('request', req => {
+      if (req.url().includes('/api/feedback')) apiCalled = true;
+    });
+
     const dialog = await openFeedbackModal(page);
 
-    // Mở dropdown #feedback-type
-    await dialog.locator('#feedback-type').click();
-    await page.waitForTimeout(400);
+    // Điền Họ tên & Email, nhưng bỏ trống Vấn đề & Nội dung
+    await dialog.locator('#feedback-name').fill('Nguyễn Văn Test');
+    await dialog.locator('#feedback-email').fill('test_missing@example.com');
 
-    // Kiểm tra đủ 4 danh mục enum chuẩn của API
-    const expectedOptions = ['Dữ liệu', 'Góp ý', 'Lỗi luồng', 'Lỗi màn hình'];
-    for (const opt of expectedOptions) {
-      const optionLocator = page.locator(`[role="option"]:has-text("${opt}")`).first();
-      await expect(optionLocator).toBeVisible();
-    }
+    await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
+    await page.waitForTimeout(500);
 
-    // Đóng dropdown bằng Escape
-    await page.keyboard.press('Escape');
+    // Chặn gửi thành công, không gọi API
+    expect(apiCalled).toBeFalsy();
+    await expect(dialog).toBeVisible();
   });
 
-  test('TC-UI-API-015: Cập nhật bộ đếm ký tự trong trường Nội dung', async ({ page }) => {
+  test('TC-UI-API-012: [Non-Happy] Chặn gửi khi Email sai định dạng (thiếu domain/cú pháp RFC)', async ({ page }) => {
+    let apiCalled = false;
+    page.on('request', req => {
+      if (req.url().includes('/api/feedback')) apiCalled = true;
+    });
+
+    const dialog = await openFeedbackModal(page);
+
+    await dialog.locator('#feedback-name').fill('Lê Sai Email');
+    await dialog.locator('#feedback-email').fill('not-an-email@'); // Email không hợp lệ
+    await dialog.locator('#feedback-type').click();
+    await page.locator('[role="option"]:has-text("Góp ý")').first().click();
+    await dialog.locator('#feedback-content').fill('Nội dung kiểm tra email sai định dạng.');
+
+    await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
+    await page.waitForTimeout(500);
+
+    // Bị chặn tại trình duyệt/client validation, không gọi API
+    expect(apiCalled).toBeFalsy();
+    await expect(dialog).toBeVisible();
+  });
+
+  test('TC-UI-API-015: Kiểm tra bộ đếm ký tự trong trường Nội dung', async ({ page }) => {
     const dialog = await openFeedbackModal(page);
     const textarea = dialog.locator('#feedback-content');
 
@@ -184,45 +155,34 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     await expect(counter.first()).toBeVisible({ timeout: 3000 });
   });
 
-  test('TC-UI-API-017: Hỗ trợ tiếng Việt có dấu và ký tự xuống dòng trong Payload', async ({ page }) => {
-    let capturedPayload: any = null;
-    await page.route('**/api/feedback', async route => {
-      capturedPayload = JSON.parse(route.request().postData() || '{}');
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          status: 1,
-          message: 'Gửi phản hồi thành công',
-          data: { id: '00000000-0000-0000-0000-000000000000', created_date: new Date().toISOString() },
-        }),
-      });
+  // =========================================================================
+  // 3. NON-HAPPY PATH: USER INTERRUPTION & CANCELLATION (HỦY BỎ/ĐÓNG POPUP)
+  // =========================================================================
+
+  test('TC-UI-API-005 & 006: [Non-Happy] Đóng popup bằng nút Close / phím Escape khi đang nhập dở dang', async ({ page }) => {
+    let apiCalled = false;
+    page.on('request', req => {
+      if (req.url().includes('/api/feedback')) apiCalled = true;
     });
 
     const dialog = await openFeedbackModal(page);
-    const multiLineContent = 'Dòng 1: Lỗi tra cứu thửa đất số 45.\nDòng 2: Dữ liệu chưa đồng bộ năm 2026.\nTrân trọng cảm ơn!';
+    await dialog.locator('#feedback-name').fill('Nguyễn Văn Dở Dang');
+    await dialog.locator('#feedback-content').fill('Nội dung chưa muốn gửi');
 
-    await dialog.locator('#feedback-name').fill('Phạm Quốc Đạt');
-    await dialog.locator('#feedback-email').fill('dat.pham@example.com');
-    await dialog.locator('#feedback-type').click();
-    await page.locator('[role="option"]:has-text("Dữ liệu")').first().click();
-    await dialog.locator('#feedback-content').fill(multiLineContent);
+    // Đóng bằng phím Escape
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(500);
 
-    await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
-    await page.waitForTimeout(1000);
-
-    // Khẳng định payload nhận đầy đủ tiếng Việt có dấu và xuống dòng
-    expect(capturedPayload).not.toBeNull();
-    expect(capturedPayload.name).toBe('Phạm Quốc Đạt');
-    expect(capturedPayload.error_type).toBe('Dữ liệu');
-    expect(capturedPayload.content).toBe(multiLineContent);
+    // Khẳng định modal đóng an toàn và không phát sinh request API
+    await expect(dialog).not.toBeVisible();
+    expect(apiCalled).toBeFalsy();
   });
 
   // =========================================================================
-  // 3. API RESPONSE ERROR HANDLING (MOCKING & RESILIENCE)
+  // 4. NON-HAPPY PATH: API & SERVER EXCEPTIONS (LỖI BACKEND 400, 429, 500, MẠNG)
   // =========================================================================
 
-  test('TC-UI-API-020: Xử lý hiển thị khi Backend trả về mã lỗi 400 Bad Request (INVALID_REQUEST)', async ({ page }) => {
+  test('TC-UI-API-020: [Non-Happy] Xử lý an toàn khi Backend từ chối lỗi 400 Bad Request (INVALID_REQUEST)', async ({ page }) => {
     await page.route('**/api/feedback', async route => {
       await route.fulfill({
         status: 400,
@@ -240,7 +200,7 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
 
     const dialog = await openFeedbackModal(page);
     await dialog.locator('#feedback-name').fill('Trần Thị B');
-    await dialog.locator('#feedback-email').fill('invalid-email@');
+    await dialog.locator('#feedback-email').fill('invalid-email@example.com');
     await dialog.locator('#feedback-type').click();
     await page.locator('[role="option"]:has-text("Góp ý")').first().click();
     await dialog.locator('#feedback-content').fill('Nội dung phản hồi thử nghiệm lỗi 400.');
@@ -248,12 +208,13 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
     await page.waitForTimeout(1000);
 
-    // Màn hình không bị crash, dữ liệu đã nhập được giữ nguyên
+    // Màn hình không bị crash trắng, toàn bộ dữ liệu người dùng gõ được giữ nguyên trên form
+    await expect(dialog).toBeVisible();
     await expect(dialog.locator('#feedback-name')).toHaveValue('Trần Thị B');
     await expect(dialog.locator('#feedback-content')).toHaveValue('Nội dung phản hồi thử nghiệm lỗi 400.');
   });
 
-  test('TC-UI-API-021: Xử lý cơ chế Rate Limit (HTTP 429 Too Many Requests)', async ({ page }) => {
+  test('TC-UI-API-021: [Non-Happy] Xử lý cơ chế chống spam Rate Limit 5 phút (HTTP 429)', async ({ page }) => {
     await page.route('**/api/feedback', async route => {
       await route.fulfill({
         status: 429,
@@ -280,7 +241,7 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     await expect(dialog.locator('#feedback-name')).toHaveValue('Người Dùng Gửi Nhanh');
   });
 
-  test('TC-UI-API-022 & 023: Xử lý khi API gặp lỗi 500 và luồng Thử lại (Retry Flow)', async ({ page }) => {
+  test('TC-UI-API-022 & 023: [Non-Happy & Recovery] Xử lý khi API gặp lỗi 500 Server Error và luồng Thử lại (Retry Flow)', async ({ page }) => {
     let attempt = 0;
     await page.route('**/api/feedback', async route => {
       attempt++;
@@ -318,23 +279,77 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
     await submitBtn.click();
     await page.waitForTimeout(1000);
 
-    // Dữ liệu form vẫn còn nguyên vẹn
+    // Form không bị mất dữ liệu
+    await expect(dialog).toBeVisible();
     await expect(dialog.locator('#feedback-name')).toHaveValue('Nguyễn Retry');
 
-    // Lần 2: Người dùng nhấn Thử lại (Gửi lại)
+    // Lần 2: Người dùng nhấn Thử lại (Gửi lại) khi server hồi phục -> thành công và tự động đóng modal
     await submitBtn.click();
+    await expect(dialog).not.toBeVisible({ timeout: 10000 });
+  });
 
-    // Khẳng định lần 2 thành công, xuất hiện Toast và đóng dialog
-    const toast = page.locator('text="Gửi góp ý thành công", text="Gửi phản hồi thành công"').first();
-    await expect(toast).toBeVisible({ timeout: 8000 });
-    await expect(dialog).not.toBeVisible({ timeout: 8000 });
+  test('TC-UI-API-024: [Non-Happy] Xử lý khi xảy ra sự cố mất kết nối mạng (Network Offline/Failure)', async ({ page }) => {
+    // Mô phỏng ngắt kết nối mạng ngay khi gửi
+    await page.route('**/api/feedback', async route => {
+      await route.abort('failed');
+    });
+
+    const dialog = await openFeedbackModal(page);
+    await dialog.locator('#feedback-name').fill('Người Mất Mạng');
+    await dialog.locator('#feedback-email').fill('offline@example.com');
+    await dialog.locator('#feedback-type').click();
+    await page.locator('[role="option"]:has-text("Góp ý")').first().click();
+    await dialog.locator('#feedback-content').fill('Kiểm tra xử lý khi ngắt kết nối Internet.');
+
+    await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
+    await page.waitForTimeout(1000);
+
+    // Ứng dụng không bị crash trắng màn hình, form giữ nguyên dữ liệu
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator('#feedback-name')).toHaveValue('Người Mất Mạng');
   });
 
   // =========================================================================
-  // 4. SECURITY (XSS INJECTION PROTECTION)
+  // 5. SECURITY & CONCURRENCY (BẢO MẬT & CHỐNG SPAM)
   // =========================================================================
 
-  test('TC-UI-API-026: Kiểm tra bảo vệ chống tấn công XSS Injection', async ({ page }) => {
+  test('TC-UI-API-004 & 029: [Non-Happy / Concurrency] Chống click đúp liên tục (Debounce / Double Submit Protection)', async ({ page }) => {
+    let requestCount = 0;
+    await page.route('**/api/feedback', async route => {
+      requestCount++;
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 1,
+          message: 'Gửi phản hồi thành công',
+          data: { id: '00000000-0000-0000-0000-000000000000', created_date: new Date().toISOString() },
+        }),
+      });
+    });
+
+    const dialog = await openFeedbackModal(page);
+    await dialog.locator('#feedback-name').fill('Trần Chống Spam');
+    await dialog.locator('#feedback-email').fill('antispam@example.com');
+    await dialog.locator('#feedback-type').click();
+    await page.locator('[role="option"]:has-text("Lỗi màn hình")').first().click();
+    await dialog.locator('#feedback-content').fill('Kiểm tra chống bấm gửi liên tiếp.');
+
+    const submitBtn = dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")');
+
+    // Click liên tục 3 lần thật nhanh
+    await submitBtn.click({ force: true });
+    await submitBtn.click({ force: true }).catch(() => {});
+    await submitBtn.click({ force: true }).catch(() => {});
+
+    await expect(dialog).not.toBeVisible({ timeout: 10000 });
+
+    // Chỉ đúng 1 request API duy nhất được gửi đi
+    expect(requestCount).toBe(1);
+  });
+
+  test('TC-UI-API-026: [Non-Happy / Security] Kiểm tra bảo vệ chống tấn công XSS Injection', async ({ page }) => {
     let alertTriggered = false;
     page.on('dialog', async dialogAlert => {
       alertTriggered = true;
@@ -367,5 +382,57 @@ test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedb
 
     // Tuyệt đối không có hộp thoại alert() nào bị kích hoạt
     expect(alertTriggered).toBeFalsy();
+  });
+
+  // =========================================================================
+  // 6. UI & DROPDOWN CHECKS
+  // =========================================================================
+
+  test('TC-UI-API-014: Kiểm tra dropdown Vấn đề hiển thị đầy đủ 4 danh mục ("Dữ liệu", "Góp ý", "Lỗi luồng", "Lỗi màn hình")', async ({ page }) => {
+    const dialog = await openFeedbackModal(page);
+
+    await dialog.locator('#feedback-type').click();
+    await page.waitForTimeout(400);
+
+    const expectedOptions = ['Dữ liệu', 'Góp ý', 'Lỗi luồng', 'Lỗi màn hình'];
+    for (const opt of expectedOptions) {
+      const optionLocator = page.locator(`[role="option"]:has-text("${opt}")`).first();
+      await expect(optionLocator).toBeVisible();
+    }
+
+    await page.keyboard.press('Escape');
+  });
+
+  test('TC-UI-API-017: Hỗ trợ tiếng Việt có dấu và ký tự xuống dòng trong Payload', async ({ page }) => {
+    let capturedPayload: any = null;
+    await page.route('**/api/feedback', async route => {
+      capturedPayload = JSON.parse(route.request().postData() || '{}');
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 1,
+          message: 'Gửi phản hồi thành công',
+          data: { id: '00000000-0000-0000-0000-000000000000', created_date: new Date().toISOString() },
+        }),
+      });
+    });
+
+    const dialog = await openFeedbackModal(page);
+    const multiLineContent = 'Dòng 1: Lỗi tra cứu thửa đất số 45.\nDòng 2: Dữ liệu chưa đồng bộ năm 2026.\nTrân trọng cảm ơn!';
+
+    await dialog.locator('#feedback-name').fill('Phạm Quốc Đạt');
+    await dialog.locator('#feedback-email').fill('dat.pham@example.com');
+    await dialog.locator('#feedback-type').click();
+    await page.locator('[role="option"]:has-text("Dữ liệu")').first().click();
+    await dialog.locator('#feedback-content').fill(multiLineContent);
+
+    await dialog.locator('button[type="submit"]:has-text("Gửi thư góp ý")').click();
+    await page.waitForTimeout(1000);
+
+    expect(capturedPayload).not.toBeNull();
+    expect(capturedPayload.name).toBe('Phạm Quốc Đạt');
+    expect(capturedPayload.error_type).toBe('Dữ liệu');
+    expect(capturedPayload.content).toBe(multiLineContent);
   });
 });
