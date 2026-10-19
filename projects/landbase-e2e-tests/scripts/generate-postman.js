@@ -1595,13 +1595,26 @@ const folderFeedback = {
 };
 
 // -------------------------------------------------------------
+// CHAT AI MODULE (24 TESTCASES)
+// -------------------------------------------------------------
+const chatAiFolderPath = path.join(__dirname, 'chat-ai-folder.json');
+let folderChatAI = null;
+if (fs.existsSync(chatAiFolderPath)) {
+  try {
+    folderChatAI = JSON.parse(fs.readFileSync(chatAiFolderPath, 'utf8'));
+  } catch (e) {
+    console.warn('⚠️ Lỗi khi nạp Chat AI folder:', e.message);
+  }
+}
+
+// -------------------------------------------------------------
 // POSTMAN COLLECTION ROOT
 // -------------------------------------------------------------
 const collection = {
   info: {
-    _postman_id: crypto.randomUUID(),
+    _postman_id: 'c0fbfeba-bf36-4ad0-a02b-08bd38762b10',
     name: 'LandBase API Automation & Validation Tests',
-    description: 'Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và loại bỏ hoàn toàn mã lỗi 406 Not Acceptable để phát hiện chính xác lỗi của backend.',
+    description: 'Bộ kiểm thử tự động toàn diện LandBase API (Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback, Trợ lý AI - Chat AI Streaming). Đã chuẩn hóa toàn bộ mã lỗi HTTP (400, 404, 405, 422) và hỗ trợ Server-Sent Events (SSE).',
     schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
   },
   variable: [
@@ -1622,6 +1635,17 @@ const collection = {
     { key: 'feedbackEmail', value: '{{$randomEmail}}', type: 'string' },
     { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
     { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', type: 'string' },
+    { key: 'chatBaseUrl', value: 'http://192.168.1.95:18010', type: 'string' },
+    { key: 'chatOrigin', value: 'http://192.168.1.95:18010', type: 'string' },
+    { key: 'chatReferer', value: 'http://192.168.1.95:18010/chat/kbY43WhJqET9eT9R', type: 'string' },
+    { key: 'appCode', value: 'kbY43WhJqET9eT9R', type: 'string' },
+    { key: 'appPassport', value: '', type: 'string' },
+    { key: 'confirmRunChatAI', value: 'true', type: 'string' },
+    { key: 'clientFP', value: '{{$guid}}', type: 'string' },
+    { key: 'conversationId', value: '', type: 'string' },
+    { key: 'parentMessageId', value: '', type: 'string' },
+    { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', type: 'string' },
+    { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', type: 'string' },
   ],
   item: [
     folderAuth,
@@ -1631,6 +1655,7 @@ const collection = {
     folderSavedRealEstate,
     folderGeomancy,
     folderFeedback,
+    ...(folderChatAI ? [folderChatAI] : []),
   ],
 };
 
@@ -1638,7 +1663,7 @@ const collection = {
 // POSTMAN ENVIRONMENT ROOT
 // -------------------------------------------------------------
 const environment = {
-  id: crypto.randomUUID(),
+  id: 'd531002d-7817-41b4-ae7f-d46960b08f9a',
   name: 'LandBase DEV Environment',
   values: [
     { key: 'baseUrl', value: baseUrl, enabled: true },
@@ -1660,61 +1685,59 @@ const environment = {
     { key: 'feedbackEmail', value: '{{$randomEmail}}', enabled: true },
     { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
     { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', enabled: true },
+    { key: 'chatBaseUrl', value: 'http://192.168.1.95:18010', enabled: true },
+    { key: 'chatOrigin', value: 'http://192.168.1.95:18010', enabled: true },
+    { key: 'chatReferer', value: 'http://192.168.1.95:18010/chat/kbY43WhJqET9eT9R', enabled: true },
+    { key: 'appCode', value: 'kbY43WhJqET9eT9R', enabled: true },
+    { key: 'appPassport', value: '', enabled: true },
+    { key: 'confirmRunChatAI', value: 'true', enabled: true },
+    { key: 'clientFP', value: '{{$guid}}', enabled: true },
+    { key: 'conversationId', value: '', enabled: true },
+    { key: 'parentMessageId', value: '', enabled: true },
+    { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', enabled: true },
+    { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', enabled: true },
+    { key: 'query10000', value: 'A'.repeat(10000), enabled: true },
+    { key: 'query10001', value: 'A'.repeat(10001), enabled: true },
   ],
   _postman_variable_scope: 'environment',
 };
 
-// -------------------------------------------------------------
-// STANDALONE FEEDBACK COLLECTION & ENVIRONMENT
-// -------------------------------------------------------------
-const feedbackCollection = {
-  info: {
-    _postman_id: crypto.randomUUID(),
-    name: 'LandBase - Hòm thư Feedback API (response contract updated)',
-    description: 'POST https://dev-webapp.laand.vn/api/feedback. 17 testcase kiểm thử chức năng Hòm thư Feedback.',
-    schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
-  },
-  variable: [
-    { key: 'baseUrl', value: webappUrl, type: 'string' },
-    { key: 'webappUrl', value: webappUrl, type: 'string' },
-    { key: 'origin', value: webappUrl, type: 'string' },
-    { key: 'referer', value: `${webappUrl}/`, type: 'string' },
-    { key: 'feedbackName', value: '{{$randomFullName}}', type: 'string' },
-    { key: 'feedbackEmail', value: '{{$randomEmail}}', type: 'string' },
-    { key: 'feedbackErrorType', value: 'Dữ liệu', type: 'string' },
-    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', type: 'string' },
-  ],
-  item: [folderFeedback],
-};
+async function exportAll() {
+  // Lấy passport token hợp lệ từ server DEV nếu có thể
+  let initialPassport = '';
+  try {
+    const pRes = await fetch('http://192.168.1.95:18010/api/passport', {
+      headers: { 'x-app-code': 'kbY43WhJqET9eT9R' },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (pRes.ok) {
+      const pJson = await pRes.json();
+      if (pJson && pJson.access_token) {
+        initialPassport = pJson.access_token;
+        console.log('🔑 Đã lấy trước Passport token DEV thành công cho Environment file.');
+      }
+    }
+  } catch (err) {
+    console.warn('⚠️ DEV server không phản hồi token lúc export, Postman sẽ tự lấy lúc chạy:', err.message);
+  }
 
-const feedbackEnvironment = {
-  id: crypto.randomUUID(),
-  name: 'LandBase DEV - Hòm thư Feedback (response contract v2)',
-  values: [
-    { key: 'baseUrl', value: webappUrl, enabled: true },
-    { key: 'webappUrl', value: webappUrl, enabled: true },
-    { key: 'origin', value: webappUrl, enabled: true },
-    { key: 'referer', value: `${webappUrl}/`, enabled: true },
-    { key: 'feedbackCookie', value: '_v2_mClientFP={{$guid}}; _v2_sig={{$guid}}; _mClientFP_9d3a={{$guid}}', enabled: true },
-    { key: 'feedbackName', value: '{{$randomFullName}}', enabled: true },
-    { key: 'feedbackEmail', value: '{{$randomEmail}}', enabled: true },
-    { key: 'feedbackErrorType', value: 'Dữ liệu', enabled: true },
-  ],
-  _postman_variable_scope: 'environment',
-};
+  // Cập nhật initialPassport vào collection variables & environment
+  if (initialPassport) {
+    const collPassportVar = collection.variable.find(v => v.key === 'appPassport');
+    if (collPassportVar) collPassportVar.value = initialPassport;
+    const envPassportVar = environment.values.find(v => v.key === 'appPassport');
+    if (envPassportVar) envPassportVar.value = initialPassport;
+  }
 
-const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');
-const outputEnvironmentPath = path.join(__dirname, '..', 'LandBase_Environment.postman_environment.json');
-const outputFeedbackCollectionPath = path.join(__dirname, '..', 'LandBase_Feedback_API.postman_collection.json');
-const outputFeedbackEnvironmentPath = path.join(__dirname, '..', 'LandBase_Feedback_Environment.postman_environment.json');
+  const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');
+  const outputEnvironmentPath = path.join(__dirname, '..', 'LandBase_Environment.postman_environment.json');
 
-fs.writeFileSync(outputCollectionPath, JSON.stringify(collection, null, 2), 'utf8');
-fs.writeFileSync(outputEnvironmentPath, JSON.stringify(environment, null, 2), 'utf8');
-fs.writeFileSync(outputFeedbackCollectionPath, JSON.stringify(feedbackCollection, null, 2), 'utf8');
-fs.writeFileSync(outputFeedbackEnvironmentPath, JSON.stringify(feedbackEnvironment, null, 2), 'utf8');
+  fs.writeFileSync(outputCollectionPath, JSON.stringify(collection, null, 2), 'utf8');
+  fs.writeFileSync(outputEnvironmentPath, JSON.stringify(environment, null, 2), 'utf8');
 
-console.log('✅ Đã tạo thành công Postman Collection tổng tại:', outputCollectionPath);
-console.log('✅ Đã tạo thành công Postman Environment tổng tại:', outputEnvironmentPath);
-console.log('✅ Đã tạo thành công Postman Collection Feedback riêng tại:', outputFeedbackCollectionPath);
-console.log('✅ Đã tạo thành công Postman Environment Feedback riêng tại:', outputFeedbackEnvironmentPath);
+  console.log('✅ Đã tạo thành công Postman Collection tổng tại:', outputCollectionPath);
+  console.log('✅ Đã tạo thành công Postman Environment tổng tại:', outputEnvironmentPath);
+}
+
+exportAll();
 

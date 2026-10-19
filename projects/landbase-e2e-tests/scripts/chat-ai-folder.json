@@ -1,18 +1,116 @@
 {
-  "info": {
-    "_postman_id": "8a182832-2964-4a51-ab7c-bfce745aa753",
-    "name": "LandBase - Chat AI API (v2)",
-    "description": "API: POST http://192.168.1.95:18010/api/chat-messages. Body dựa trên cURL người dùng cung cấp; response stream được trích từ Pasted text(1).txt. Trace theo SRS Chat AI cho streaming, giới hạn 10.000 ký tự và quy tắc phạm vi trả lời. Lịch sử chat/đổi tên/xóa hội thoại không nằm trong scope testcase này. Set confirmRunChatAI=true chỉ với tài khoản/conversation test. Không có token/cookie thật trong collection.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
+  "name": "07. Trợ lý AI - Chat AI Streaming (/api/chat-messages)",
+  "description": "API: POST http://192.168.1.95:18010/api/chat-messages. Gồm 24 testcases (1 cấp passport + 23 testcases kiểm thử streaming SSE, xác thực, định dạng và phạm vi trả lời AI).",
+  "event": [
     {
-      "key": "baseUrl",
-      "value": "http://192.168.1.95:18010",
-      "type": "string"
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Tự động cấp mới Passport token từ DEV server (/api/passport) nếu chưa có",
+          "const baseUrl = pm.environment.get('chatBaseUrl') || 'http://192.168.1.95:18010';",
+          "const appCode = pm.environment.get('appCode') || 'kbY43WhJqET9eT9R';",
+          "const currentPassport = pm.environment.get('appPassport');",
+          "if (!currentPassport || currentPassport.includes('PASTE_')) {",
+          "    pm.sendRequest({",
+          "        url: baseUrl + '/api/passport',",
+          "        method: 'GET',",
+          "        header: { 'x-app-code': appCode }",
+          "    }, function (err, res) {",
+          "        if (!err && res.code === 200) {",
+          "            const json = res.json();",
+          "            if (json && json.access_token) {",
+          "                pm.environment.set('appPassport', json.access_token);",
+          "            }",
+          "        }",
+          "    });",
+          "}",
+          "",
+          "// Chuẩn hóa request body: Xóa conversation_id và parent_message_id nếu rỗng để tránh lỗi DB PostgreSQL UUID",
+          "if (pm.request && pm.request.body && pm.request.body.mode === 'raw') {",
+          "    try {",
+          "        let resolved = pm.variables.replaceIn(pm.request.body.raw);",
+          "        let parsed = JSON.parse(resolved);",
+          "        let modified = false;",
+          "        if (!parsed.conversation_id || parsed.conversation_id === '' || parsed.conversation_id === '\"\"' || parsed.conversation_id === '{{conversationId}}') {",
+          "            delete parsed.conversation_id;",
+          "            modified = true;",
+          "        }",
+          "        if (!parsed.parent_message_id || parsed.parent_message_id === '' || parsed.parent_message_id === '\"\"' || parsed.parent_message_id === '{{parentMessageId}}') {",
+          "            delete parsed.parent_message_id;",
+          "            modified = true;",
+          "        }",
+          "        if (modified) {",
+          "            pm.request.body.raw = JSON.stringify(parsed, null, 2);",
+          "        }",
+          "    } catch (e) {}",
+          "}"
+        ]
+      }
     }
   ],
   "item": [
+    {
+      "name": "00 - Xác thực AI / Cấp mới Passport token (/api/passport)",
+      "description": "Lấy Passport token để xác thực với AI backend.",
+      "item": [
+        {
+          "name": "CHAT-API-000 - Cấp mới Passport token (/api/passport)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*"
+              },
+              {
+                "key": "x-app-code",
+                "value": "{{appCode}}"
+              },
+              {
+                "key": "Origin",
+                "value": "{{chatOrigin}}"
+              },
+              {
+                "key": "Referer",
+                "value": "{{chatReferer}}"
+              }
+            ],
+            "url": {
+              "raw": "{{chatBaseUrl}}/api/passport",
+              "host": [
+                "{{chatBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "passport"
+              ]
+            },
+            "description": "Endpoint cấp mới JWT Passport token dùng cho các request Chat AI tiếp theo. Token trả về sẽ được tự động lưu vào biến môi trường appPassport."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status 200 OK\", function () {",
+                  "    pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "pm.test(\"Response chứa access_token hợp lệ\", function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property(\"access_token\");",
+                  "    pm.expect(json.access_token).to.be.a(\"string\").and.not.empty;",
+                  "    pm.environment.set(\"appPassport\", json.access_token);",
+                  "    console.log(\"🔑 Đã cập nhật appPassport mới vào environment\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "01 - Streaming / Response contract",
       "item": [
@@ -38,12 +136,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -77,9 +175,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -165,12 +263,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -204,9 +302,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -297,12 +395,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -336,9 +434,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -421,12 +519,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -460,9 +558,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -554,12 +652,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -593,9 +691,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -677,12 +775,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -716,9 +814,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -805,12 +903,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -844,9 +942,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -920,12 +1018,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -959,9 +1057,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1035,12 +1133,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1074,9 +1172,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1158,12 +1256,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1197,9 +1295,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1273,12 +1371,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1312,9 +1410,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1396,12 +1494,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1435,9 +1533,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1519,12 +1617,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1558,9 +1656,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1634,12 +1732,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1673,9 +1771,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1749,12 +1847,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1788,9 +1886,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1869,12 +1967,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -1908,9 +2006,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -1993,12 +2091,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2032,9 +2130,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2117,12 +2215,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2156,9 +2254,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2241,12 +2339,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2280,9 +2378,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2365,12 +2463,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2404,9 +2502,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2489,12 +2587,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2528,9 +2626,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2618,12 +2716,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2642,9 +2740,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
@@ -2720,12 +2818,12 @@
               },
               {
                 "key": "Origin",
-                "value": "{{origin}}",
+                "value": "{{chatOrigin}}",
                 "type": "text"
               },
               {
                 "key": "Referer",
-                "value": "{{referer}}",
+                "value": "{{chatReferer}}",
                 "type": "text"
               },
               {
@@ -2759,9 +2857,9 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/chat-messages",
+              "raw": "{{chatBaseUrl}}/api/chat-messages",
               "host": [
-                "{{baseUrl}}"
+                "{{chatBaseUrl}}"
               ],
               "path": [
                 "api",
