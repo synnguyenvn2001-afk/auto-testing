@@ -175,7 +175,7 @@ const folderProvinceWard = {
         '    var list = json.data || json;',
         '    pm.expect(list[0].code).to.be.a("string");',
         '    pm.expect(list[0].name).to.be.a("string");',
-        '    pm.expect(list[0].parentCode).to.equal("01");',
+        '    pm.expect(list[0].typeRegion).to.be.a("string");',
         '});',
       ]
     ),

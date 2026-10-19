@@ -76,7 +76,7 @@ export class LandBaseApiClient {
       return endpoint;
     }
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    if (cleanEndpoint.startsWith('/api/feedback') || cleanEndpoint.startsWith('/api/auth')) {
+    if (cleanEndpoint.startsWith('/api/feedback') || cleanEndpoint.startsWith('/api/auth') || cleanEndpoint.startsWith('/api/chat') || cleanEndpoint.startsWith('/api/ai')) {
       return `${this.config.webappUrl}${cleanEndpoint}`;
     }
     return `${this.config.gatewayUrl}${cleanEndpoint}`;
