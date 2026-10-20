@@ -113,7 +113,7 @@
     },
     {
       "key": "appPassport",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5ZTZmODJkNS0zYjk0LTQ5NGItOTMxYS1kY2M0NmY0YThkOTMiLCJzdWIiOiJXZWIgQVBJIFBhc3Nwb3J0IiwiYXBwX2lkIjoiOWU2ZjgyZDUtM2I5NC00OTRiLTkzMWEtZGNjNDZmNGE4ZDkzIiwiYXBwX2NvZGUiOiJrYlk0M1doSnFFVDllVDlSIiwiZW5kX3VzZXJfaWQiOiIwMjIzMTEzZi1jYWRkLTQ4OWQtYTIxNC03NTQ1NzZlNTc2ZDAifQ.vCm0j_ssXZzmPD2ZuLiuCqHeav6IJXOi4MQV4lXYgy8",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5ZTZmODJkNS0zYjk0LTQ5NGItOTMxYS1kY2M0NmY0YThkOTMiLCJzdWIiOiJXZWIgQVBJIFBhc3Nwb3J0IiwiYXBwX2lkIjoiOWU2ZjgyZDUtM2I5NC00OTRiLTkzMWEtZGNjNDZmNGE4ZDkzIiwiYXBwX2NvZGUiOiJrYlk0M1doSnFFVDllVDlSIiwiZW5kX3VzZXJfaWQiOiI1YzhjOWVhNi0wOTZhLTQzYjMtOGE3OC0zZTZkMTRhNzhlMWUifQ.Y8QWWr2EM3fv50g8h2IGd3g2yGB6jiSlYsFOuixnAu0",
       "type": "string"
     },
     {
@@ -144,6 +144,11 @@
     {
       "key": "invalidAppPassport",
       "value": "INVALID_APP_PASSPORT_FOR_TEST",
+      "type": "string"
+    },
+    {
+      "key": "webSessionCookie",
+      "value": "__Host-authjs.csrf-token=dd6725028d73f74ffca4cac7d2a42dc09542ce1b4c86455619a5904057a41d79%7C233e52107bd514e938db601bf41c9228d65bb33322239ca46bf972acf92f15c9; __Secure-authjs.callback-url=https%3A%2F%2Fdev-webapp.laand.vn; __Secure-authjs.callback-url=https%3A%2F%2Fdev-webapp.laand.vn%2F; __Secure-authjs.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiRDNwcWd1OG5tb3dEdnpqMnBGRTVfcmt0NHZZbWt5MzViQmFhWkxlUXk0eFFja1ZNd01tWFVlVXBwdUJHdnVrbU9hM0JEb2ZCYWdnR0phOUhsMzdUbmcifQ..cRIQNkRZ9CKLiJ5RxSF4VQ.5aKIF06Gx4NvM3m7U6_iwsMU0449bXX7TUUHQR_h7Q8CeZQajfZkfsxpHWVBtsKdhGQKtevWrFgnIRO8FoHRAsbsEiphso0FUlKydtO1lbLVfqMYxbBAme1USnLhcEzy-OG9sI3tr6GFz217Mnkf8-BTCiGJHL7g4ZpZwGnty6wloekbiLUz1Bv-2-HSYcFTwabxkDaGxEO3ZoPf_a7_pucpYNg52anttGRLJqJ32YUwR1gkI2h6kX8Vg5joJxwqB6vGjyio33YBVap3DH7cW-MQkqNVbmcB41LG3u2saQxArl0RhigjbGki1evOYnlLioZPLxPtKWS3Wawtv-VTntOjaKMpiCiz4o3EszxPCuG4SmWrN0q7vmpNEM2zxKFoMFMyorAdJ2QMyWYhVHKGOgAZUHVKPAGfgvEYPpM57qxI1KZpxt0DrQke6anBk-vsIT7Gc3fPYLkxVAot6jB974wmEdf8Hlj88zz2xTHb516WGmeEkr8DdqqFaMRpK3cn3oVvn3JevrjxjveToOBHs23pIZ0sJRHuWPP3kmNuWhkgvOYl0pFpbb2HXYGM65y4wZxsEuHrC30_zriE1Hr01we4If7gMQ-F-PrE-z_zEz_uQxR7ALdJCrtcz0L4-Bop80ywdy6TQeti4JCMr2UGBFy_zwWpp9N57eCyL838DMOg5AHZ7TfSmYnJlHfCdz_22114kiQoJBRe3B_xmNUcxigjmSUPY_u3Yc9HXri42L3ZA_2RH0w6JqAPhGj_kH8ry1jjQj7RoWcstk6C18H41TfAGG2DxmNXjUNJfe2-wjlTj3TiDXczuqFI8hoMiK3VQogesRUOn9ZzfI3oco-1zUWR7u0dB3R_14ehIihnjhWAT85u03F4IXLrKx_Wn67Gi0iQcMRFBw4B8BXvl7uItMj9NqaOGb7rucdMuEV0lDQM9o5JGcCi0CdCgIY26WlxXWqEYg0wfNkjAiNg1MMnu6pR5ymZaEbFJQF0GdNJ_P6GIiuVbjpusHSJkjgxaSXsKbe8N_yvJen5jOLUs48kuIXTYeJlntEzuSQUlvjKQUiNFZRvxcyJ0xjpqiLMhIILiTJJ200eNIN9bAvLNITgYVSkQnmIrPfv9ihtQ-HBn0r-xPrn8IFZS0oOGXdClhtjk3SUgfGkKD2yButFV-e0QVirxuitthup5d4E8MIexmrazcAMgm3Nst1yUrKrpoqgb74JMk71GY1T4ZIuEBP_gwjTr2gZfVXWB-1sgiNtKwIV0cxxfI7hyyo9qWw2HhffPqCu1Zzr7n2AU4xKl4uQkjOrvkgbzkWtNltDL7VAUECvUoqBkv_OHWnGiiMetzRQVFCWzd5VVXcXieOnzpjfDFZ-9YK4Eo3uUR1uwK2KfCPnLVUUx6Q4MvxkXWgpCaiOT-k25JDwpR6MZO9HJ1yuFGrWYCERV_TTKIvv0sD_bzRhuMgKtZF-sex22V-wgtROtZHr7MlbyZyJDwslSovhgAFJ313AhsTva3wqLwznLS6vp5bk7S9NSosHV09KJ6bNb4EGcqM0pIXAaYxGxxNgy2n0fKLQpjS5Spa0bpBdu5daKlefw1Yy9moa1WJKgSsdrMAbE6NIjjcbRrDFaqKAi9U8qHUnGU9yn-yV9ouJBHt7CiM5jtlo99RdxOnHEOQknWFOkGK80CbviBIuej7n3IgHIVjSQhGoK5HAfaFUujBz7YHQf0qezZaTFq8kzhEzS6C1GuYeFYKuajmGpw7YnjF7OTm-81s59LgEn2tTbRzhH_MmutUDmtaXR78b7uM2r3NyomP6QmeK4P9vYfnHTNcEndtynPry1SB6vemLOG9t7LEEC_JWHUmy22bAyQFhBobmp52OurDe3SyxNBtUt4RbikK93A-OCIxdUbJQLd-yNPEzyPYHLHsaJdKBpOgkBor3ScBp4hNOZ0kxEpciAA.RrrFLwNJRt2pQrhqLqE6VNUpSjGCmkgYO3FwKPbhKSQ",
       "type": "string"
     }
   ],
@@ -5707,17 +5712,23 @@
             "type": "text/javascript",
             "exec": [
               "// Tự động kiểm tra và đăng nhập WebApp NextAuth để cấp session cookie cho Chat AI trên DEV",
-              "const webapp = pm.environment.get('webappUrl') || 'https://dev-webapp.laand.vn';",
-              "const username = pm.environment.get('username') || 'usert1';",
-              "const password = pm.environment.get('password') || 'Enao@123';",
-              "if (!pm.environment.get('webappSessionReady')) {",
+              "const webapp = pm.environment.get('webappUrl') || pm.variables.get('webappUrl') || 'https://dev-webapp.laand.vn';",
+              "const currentCookie = pm.environment.get('webSessionCookie') || pm.variables.get('webSessionCookie');",
+              "if (!currentCookie) {",
+              "  const username = pm.environment.get('username') || pm.variables.get('username') || 'usert1';",
+              "  const password = pm.environment.get('password') || pm.variables.get('password') || 'Enao@123';",
               "  pm.sendRequest({ url: webapp + '/api/auth/csrf', method: 'GET' }, function (err, res) {",
               "    if (!err && res.code === 200) {",
               "      const csrf = res.json().csrfToken;",
+              "      const setCookies = res.headers.all().filter(h => h.key.toLowerCase() === 'set-cookie').map(h => h.value.split(';')[0]);",
+              "      const csrfCookie = setCookies.join('; ');",
               "      pm.sendRequest({",
               "        url: webapp + '/api/auth/callback/credentials',",
               "        method: 'POST',",
-              "        header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+              "        header: {",
+              "          'Content-Type': 'application/x-www-form-urlencoded',",
+              "          'Cookie': csrfCookie",
+              "        },",
               "        body: {",
               "          mode: 'urlencoded',",
               "          urlencoded: [",
@@ -5730,8 +5741,13 @@
               "        }",
               "      }, function (loginErr, loginRes) {",
               "        if (!loginErr) {",
-              "          pm.environment.set('webappSessionReady', 'true');",
-              "          console.log('✅ Đã thiết lập phiên đăng nhập WebApp thành công cho Chat AI');",
+              "          const sessionCookies = loginRes.headers.all().filter(h => h.key.toLowerCase() === 'set-cookie').map(h => h.value.split(';')[0]);",
+              "          const fullCookie = [...(csrfCookie ? [csrfCookie] : []), ...sessionCookies].join('; ');",
+              "          if (fullCookie) {",
+              "            pm.environment.set('webSessionCookie', fullCookie);",
+              "            pm.collectionVariables.set('webSessionCookie', fullCookie);",
+              "            console.log('✅ Đã tự động cấp mới session cookie WebApp cho Chat AI');",
+              "          }",
               "        }",
               "      });",
               "    }",
@@ -5755,6 +5771,11 @@
                     "key": "Content-Type",
                     "value": "application/x-www-form-urlencoded",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{csrfCookie}}",
+                    "type": "text"
                   }
                 ],
                 "url": {
@@ -5773,6 +5794,10 @@
                 "body": {
                   "mode": "urlencoded",
                   "urlencoded": [
+                    {
+                      "key": "csrfToken",
+                      "value": "{{csrfToken}}"
+                    },
                     {
                       "key": "userName",
                       "value": "{{username}}"
@@ -5794,14 +5819,40 @@
               },
               "event": [
                 {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const webapp = pm.environment.get('webappUrl') || pm.variables.get('webappUrl') || 'https://dev-webapp.laand.vn';",
+                      "pm.sendRequest({ url: webapp + '/api/auth/csrf', method: 'GET' }, function (err, res) {",
+                      "  if (!err && res.code === 200) {",
+                      "    const csrf = res.json().csrfToken;",
+                      "    pm.variables.set('csrfToken', csrf);",
+                      "    const setCookies = res.headers.all().filter(h => h.key.toLowerCase() === 'set-cookie').map(h => h.value.split(';')[0]);",
+                      "    if (setCookies.length > 0) {",
+                      "      pm.variables.set('csrfCookie', setCookies.join('; '));",
+                      "    }",
+                      "  }",
+                      "});"
+                    ]
+                  }
+                },
+                {
                   "listen": "test",
                   "script": {
                     "type": "text/javascript",
                     "exec": [
-                      "pm.test(\"HTTP status 200 OK hoặc 302 Redirect hợp lệ\", function () {",
+                      "pm.test('HTTP status 200 OK hoặc 302 Redirect hợp lệ', function () {",
                       "  pm.expect([200, 302]).to.include(pm.response.code);",
                       "});",
-                      "pm.environment.set(\"webappSessionReady\", \"true\");"
+                      "const setCookies = pm.response.headers.all().filter(h => h.key.toLowerCase() === 'set-cookie').map(h => h.value.split(';')[0]);",
+                      "const csrfCookie = pm.variables.get('csrfCookie') || '';",
+                      "const fullCookie = [...(csrfCookie ? [csrfCookie] : []), ...setCookies].join('; ');",
+                      "if (fullCookie) {",
+                      "  pm.environment.set('webSessionCookie', fullCookie);",
+                      "  pm.collectionVariables.set('webSessionCookie', fullCookie);",
+                      "  console.log('🔑 Đã cấp mới và lưu webSessionCookie vào Environment & Collection!');",
+                      "}"
                     ]
                   }
                 }
@@ -5830,6 +5881,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -5903,6 +5959,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -5974,6 +6035,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6047,6 +6113,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6119,6 +6190,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6190,6 +6266,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6268,6 +6349,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6339,6 +6425,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6412,6 +6503,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6483,6 +6579,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6556,6 +6657,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6627,6 +6733,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6700,6 +6811,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6772,6 +6888,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6843,6 +6964,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -6921,6 +7047,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -6992,6 +7123,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -7065,6 +7201,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -7136,6 +7277,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -7209,6 +7355,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -7280,6 +7431,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],
@@ -7404,13 +7560,13 @@
                     "type": "text"
                   },
                   {
-                    "key": "Cookie",
-                    "value": "next-auth.session-token=INVALID_SESSION_TOKEN_123",
+                    "key": "Referer",
+                    "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
                   },
                   {
-                    "key": "Referer",
-                    "value": "{{webappUrl}}/chat-ai",
+                    "key": "Cookie",
+                    "value": "next-auth.session-token={{invalidAccessToken}}",
                     "type": "text"
                   }
                 ],
@@ -7531,6 +7687,11 @@
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
                     "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -7590,6 +7751,11 @@
                   {
                     "key": "Referer",
                     "value": "{{webappUrl}}/chat-ai",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "{{webSessionCookie}}",
                     "type": "text"
                   }
                 ],

@@ -21,6 +21,7 @@
     "test:api:geomancy": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/geomancy.spec.ts --project=api --workers=1",
     "test:api:feedback": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/feedback.spec.ts --project=api --workers=1",
     "test:api:chat": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/chat-ai.spec.ts --project=api --workers=1",
+    "test:chat:ui": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/chat-ai-e2e.spec.ts --project=chromium --workers=1",
     "token:get": "node projects/landbase-e2e-tests/scripts/capture-dev-tokens.js",
     "postman:export": "node projects/landbase-e2e-tests/scripts/generate-postman.js",
     "test:mobile": "wdio run projects/landbase-e2e-tests/wdio.conf.js",

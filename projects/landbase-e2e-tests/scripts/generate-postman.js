@@ -1646,6 +1646,7 @@ const collection = {
     { key: 'parentMessageId', value: '', type: 'string' },
     { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', type: 'string' },
     { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', type: 'string' },
+    { key: 'webSessionCookie', value: '', type: 'string' },
   ],
   item: [
     folderAuth,
@@ -1696,6 +1697,7 @@ const environment = {
     { key: 'parentMessageId', value: '', enabled: true },
     { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', enabled: true },
     { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', enabled: true },
+    { key: 'webSessionCookie', value: '', enabled: true },
     { key: 'query10000', value: 'A'.repeat(10000), enabled: true },
     { key: 'query10001', value: 'A'.repeat(10001), enabled: true },
   ],
@@ -1703,7 +1705,7 @@ const environment = {
 };
 
 async function exportAll() {
-  // Lấy passport token hợp lệ từ server DEV nếu có thể
+  // 1. Tự động lấy trước Passport token DEV nếu có
   let initialPassport = '';
   try {
     const pRes = await fetch('http://192.168.1.95:18010/api/passport', {
@@ -1721,12 +1723,67 @@ async function exportAll() {
     console.warn('⚠️ DEV server không phản hồi token lúc export, Postman sẽ tự lấy lúc chạy:', err.message);
   }
 
+  // 2. Tự động đăng nhập WebApp DEV và lấy trước WebSessionCookie cho Chat AI
+  let initialWebSessionCookie = '';
+  try {
+    const csrfRes = await fetch(`${webappUrl}/api/auth/csrf`, { signal: AbortSignal.timeout(5000) });
+    if (csrfRes.ok) {
+      const csrfJson = await csrfRes.json();
+      const csrfCookies = csrfRes.headers.getSetCookie
+        ? csrfRes.headers.getSetCookie().map(c => c.split(';')[0])
+        : [];
+
+      const loginRes = await fetch(`${webappUrl}/api/auth/callback/credentials`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Cookie': csrfCookies.join('; '),
+        },
+        body: new URLSearchParams({
+          csrfToken: csrfJson.csrfToken,
+          userName: 'usert1',
+          password: 'Enao@123',
+          loginType: 'BASIC',
+          callbackUrl: `${webappUrl}/`,
+        }),
+        redirect: 'manual',
+        signal: AbortSignal.timeout(5000),
+      });
+
+      const sessionCookies = loginRes.headers.getSetCookie
+        ? loginRes.headers.getSetCookie().map(c => c.split(';')[0])
+        : [];
+
+      initialWebSessionCookie = [...csrfCookies, ...sessionCookies].join('; ');
+      console.log('🔑 Đã lấy trước WebApp Session Cookie thành công cho Environment & Collection.');
+    }
+  } catch (err) {
+    console.warn('⚠️ DEV server không phản hồi session cookie lúc export:', err.message);
+  }
+
   // Cập nhật initialPassport vào collection variables & environment
   if (initialPassport) {
     const collPassportVar = collection.variable.find(v => v.key === 'appPassport');
     if (collPassportVar) collPassportVar.value = initialPassport;
     const envPassportVar = environment.values.find(v => v.key === 'appPassport');
     if (envPassportVar) envPassportVar.value = initialPassport;
+  }
+
+  // Cập nhật initialWebSessionCookie vào collection variables & environment
+  if (initialWebSessionCookie) {
+    const collCookieVar = collection.variable.find(v => v.key === 'webSessionCookie');
+    if (collCookieVar) collCookieVar.value = initialWebSessionCookie;
+    const envCookieVar = environment.values.find(v => v.key === 'webSessionCookie');
+    if (envCookieVar) envCookieVar.value = initialWebSessionCookie;
+  }
+
+  // Luôn nạp phiên bản chat-ai-folder.json mới nhất
+  const currentChatFolder = JSON.parse(fs.readFileSync(chatAiFolderPath, 'utf8'));
+  const chatIdx = collection.item.findIndex(it => it.name && it.name.includes('Trợ lý AI'));
+  if (chatIdx >= 0) {
+    collection.item[chatIdx] = currentChatFolder;
+  } else {
+    collection.item.push(currentChatFolder);
   }
 
   const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');

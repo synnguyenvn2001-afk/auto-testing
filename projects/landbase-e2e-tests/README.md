@@ -18,7 +18,8 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 - `npm run test:api`: Chạy kiểm thử API tương tác qua CLI.
 - `npm run test:api:all`: Chạy tất cả các API test cases.
 - `npm run test:api:feedback`: Chạy riêng 17 test cases của API Feedback.
-- `npm run test:api:chat`: Chạy 23 test cases của API Chat AI (/api/chat-messages).
+- `npm run test:api:chat`: Chạy 23 test cases của API Chat AI (/api/chat).
+- `npm run test:chat:ui`: Chạy bộ test tự động thao tác người dùng E2E cho chức năng Chat AI (UI kết hợp API SSE stream).
 - `npm run postman:export`: Đồng bộ và xuất ra các file Postman Collection & Environment mới nhất.
 
 ## Kiểm thử Chat AI API (/api/chat-messages)
