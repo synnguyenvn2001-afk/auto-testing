@@ -695,9 +695,9 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
     await submitBtn.click({ force: true });
     await page.waitForTimeout(500);
 
-    // Không mở popover kết quả hoặc trường address báo lỗi bắt buộc
-    const isRequired = await addressInput.getAttribute('required');
-    expect(isRequired !== null || !(await page.locator('text=/Chọn phương pháp định giá/i').first().isVisible())).toBeTruthy();
+    // Xác thực hệ thống hiển thị thông báo lỗi bắt buộc nhập địa chỉ
+    const errorMsg = dialogModal.locator('text=/Vui lòng nhập địa chỉ/i').first();
+    await expect(errorMsg).toBeVisible({ timeout: 5000 });
 
     const closeBtn = dialogModal.locator('button[aria-label*="close"i], button:has-text("✕"), svg.lucide-x').first();
     await closeBtn.click({ force: true }).catch(() => page.keyboard.press('Escape'));
@@ -718,21 +718,33 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
     const addressInput = dialogModal.locator('#address, input[placeholder*="Cầu Giấy"]').first();
     await addressInput.fill('456 Đường Nguyễn Trãi, Thanh Xuân, Hà Nội');
 
+    const streetWidthInput = dialogModal.locator('#streetWidth, input[placeholder*="6"]').first();
+    if (await streetWidthInput.isVisible()) await streetWidthInput.fill('6');
+
+    const legalAreaInput = dialogModal.locator('#legalArea, input[placeholder*="100"]').first();
+    if (await legalAreaInput.isVisible()) await legalAreaInput.fill('100');
+
+    const frontageInput = dialogModal.locator('#frontage, input[placeholder*="5"]').first();
+    if (await frontageInput.isVisible()) await frontageInput.fill('5');
+
     const submitBtn = dialogModal.locator('button').filter({ hasText: /^Định giá$/i }).last();
     await submitBtn.click({ force: true });
     await page.waitForTimeout(1000);
 
-    const methodPopover = page.locator('text=/Chọn phương pháp định giá/i').first();
-    if (await methodPopover.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // Chọn phương pháp khác (ví dụ: Chi phí hoặc Dòng tiền hoặc Giá nhà nước)
-      const altMethod = page.locator('label, div, span').filter({ hasText: /Chi phí|Dòng tiền|nhà nước/i }).first();
-      if (await altMethod.isVisible()) {
-        await altMethod.click({ force: true });
-      }
-      const applyBtn = page.locator('button').filter({ hasText: /^Áp dụng$/i }).first();
-      await applyBtn.click({ force: true });
-      await page.waitForTimeout(1000);
+    const methodDialog = page.locator('div[role="dialog"]').filter({ hasText: /Chọn phương pháp định giá/i }).first();
+    await expect(methodDialog).toBeVisible({ timeout: 8000 });
+
+    // Toggle một phương pháp bên trong methodDialog (ví dụ: Chi phí)
+    const costCheckbox = methodDialog.getByRole('checkbox', { name: 'Chi phí' }).or(methodDialog.locator('text=Chi phí')).first();
+    if (await costCheckbox.isVisible()) {
+      await costCheckbox.click({ force: true });
+      await page.waitForTimeout(300);
     }
+
+    const applyBtn = methodDialog.getByRole('button', { name: 'Áp dụng' }).or(methodDialog.locator('button:has-text("Áp dụng")')).first();
+    await expect(applyBtn).toBeVisible({ timeout: 5000 });
+    await applyBtn.click({ force: true });
+    await page.waitForTimeout(1500);
 
     const closeBtn = dialogModal.locator('button[aria-label*="close"i], button:has-text("✕"), svg.lucide-x').first();
     await closeBtn.click({ force: true }).catch(() => page.keyboard.press('Escape'));
