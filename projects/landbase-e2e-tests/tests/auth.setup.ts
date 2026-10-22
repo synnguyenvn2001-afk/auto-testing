@@ -1,4 +1,5 @@
 import { test as setup, expect } from '@playwright/test';
+import path from 'node:path';
 import { skipOnboardingTour } from './helpers';
 import { AUTH_STATE_PATH } from './paths';
 
@@ -8,7 +9,13 @@ setup('authenticate user once and save storage state', async ({ page }) => {
   setup.setTimeout(60000);
 
   const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
-  console.log(`Navigating to ${baseUrl}...`);
+  const isDev = (process.env.TEST_ENV === 'dev') || baseUrl.includes('dev');
+  const defaultUsername = isDev ? 'usert1' : 'user';
+  const defaultPassword = isDev ? 'Enao@123' : 'Enao@1234';
+  const username = process.env.TEST_USERNAME || defaultUsername;
+  const password = process.env.TEST_PASSWORD || defaultPassword;
+
+  console.log(`Navigating to ${baseUrl} [${isDev ? 'DEV' : 'PROD'}]...`);
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(2000);
   await skipOnboardingTour(page);
@@ -29,9 +36,9 @@ setup('authenticate user once and save storage state', async ({ page }) => {
   const submitBtn = dialogModal.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialogModal.locator('button[type="submit"]:not(:has-text("Google"))')).last();
 
   await expect(usernameInput).toBeVisible({ timeout: 10000 });
-  console.log('Filling credentials: user / Enao@1234...');
-  await usernameInput.fill('user');
-  await passwordInput.fill('Enao@1234');
+  console.log(`Filling credentials: ${username} / ${password}...`);
+  await usernameInput.fill(username);
+  await passwordInput.fill(password);
 
   // Đợi phản hồi API callback / session
   const authResponsePromise = page.waitForResponse(
@@ -52,4 +59,8 @@ setup('authenticate user once and save storage state', async ({ page }) => {
   // 3. Lưu toàn bộ Cookies, LocalStorage và Session Tokens vào file
   await page.context().storageState({ path: authFile });
   console.log(`✅ Saved storage state to ${authFile}`);
+  if (!isDev) {
+    const legacyPath = path.join(path.dirname(authFile), 'user.json');
+    await page.context().storageState({ path: legacyPath }).catch(() => {});
+  }
 });

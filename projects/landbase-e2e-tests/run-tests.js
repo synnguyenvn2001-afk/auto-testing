@@ -101,6 +101,55 @@ const apiSuites = {
   },
 };
 
+// Cấu hình các môi trường kiểm thử (Environments)
+const envConfigs = {
+  prod: {
+    key: 'prod',
+    name: 'Production (Môi trường Thật)',
+    baseUrl: 'https://landbase.vn',
+    webappUrl: 'https://landbase.vn',
+    gatewayUrl: 'https://dev-gateway.laand.vn',
+    username: process.env.TEST_USERNAME || 'user',
+    password: process.env.TEST_PASSWORD || 'Enao@1234',
+    badge: '🚀 Production (https://landbase.vn)',
+  },
+  dev: {
+    key: 'dev',
+    name: 'Development (Môi trường DEV)',
+    baseUrl: 'https://dev-webapp.laand.vn',
+    webappUrl: 'https://dev-webapp.laand.vn',
+    gatewayUrl: 'https://dev-gateway.laand.vn',
+    username: process.env.DEV_USERNAME || process.env.TEST_USERNAME || 'usert1',
+    password: process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123',
+    badge: '🛠️ Development (https://dev-webapp.laand.vn)',
+  },
+};
+
+const resolveEnv = (rawChoice, defaultKey = 'prod') => {
+  if (!rawChoice) return envConfigs[defaultKey];
+  const val = String(rawChoice).trim().toLowerCase();
+  if (val === '1' || val === 'prod' || val === 'production' || val.includes('landbase.vn')) {
+    return envConfigs.prod;
+  }
+  if (val === '2' || val === 'dev' || val === 'development' || val.includes('dev-webapp') || val.includes('laand.vn')) {
+    return envConfigs.dev;
+  }
+  if (val.startsWith('http://') || val.startsWith('https://')) {
+    const isDev = val.includes('dev');
+    return {
+      key: isDev ? 'dev' : 'prod',
+      name: `Custom URL (${val})`,
+      baseUrl: val,
+      webappUrl: val,
+      gatewayUrl: envConfigs.dev.gatewayUrl,
+      username: isDev ? 'usert1' : 'user',
+      password: isDev ? 'Enao@123' : 'Enao@1234',
+      badge: `🌐 Custom URL (${val})`,
+    };
+  }
+  return envConfigs[defaultKey];
+};
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -113,14 +162,37 @@ async function main() {
   console.log('   BỘ CÔNG CỤ CHẠY KIỂM THỬ TỰ ĐỘNG LANDBASE (WEB, MOBILE & API)');
   console.log('===============================================================\n');
 
-  let platformChoice = getArgVal('--platform');
+  // =========================================================================
+  // BƯỚC 1: CHỌN MÔI TRƯỜNG KIỂM THỬ (PRODUCTION vs DEVELOPMENT)
+  // =========================================================================
+  let selectedEnv;
+  let cliEnv = getArgVal('--env') || getArgVal('--environment');
+  let cliUrl = getArgVal('--url') || getArgVal('--base-url');
 
-  // Step 1: Select Platform (Web vs Mobile vs API)
+  if (cliUrl) {
+    selectedEnv = resolveEnv(cliUrl, 'prod');
+    console.log(`✅ Môi trường từ tham số dòng lệnh: ${selectedEnv.badge}\n`);
+  } else if (cliEnv) {
+    selectedEnv = resolveEnv(cliEnv, 'prod');
+    console.log(`✅ Môi trường từ tham số dòng lệnh: ${selectedEnv.badge}\n`);
+  } else {
+    console.log('--- BƯỚC 1: CHỌN MÔI TRƯỜNG KIỂM THỬ (ENVIRONMENT) ---');
+    console.log('  1. 🚀 Production  (Môi trường Thật - https://landbase.vn)');
+    console.log('  2. 🛠️ Development (Môi trường DEV  - https://dev-webapp.laand.vn)');
+    const envAns = await askQuestion('\n👉 Nhập lựa chọn Môi trường (1-2) [Mặc định: 1 - Production]: ');
+    selectedEnv = resolveEnv(envAns, 'prod');
+    console.log(`\n✅ Đã chọn môi trường: ${selectedEnv.badge}\n`);
+  }
+
+  // =========================================================================
+  // BƯỚC 2: CHỌN NỀN TẢNG KIỂM THỬ (Web vs Mobile vs API)
+  // =========================================================================
+  let platformChoice = getArgVal('--platform');
   if (!platformChoice) {
-    console.log('--- BƯỚC 1: CHỌN NỀN TẢNG KIỂM THỬ ---');
-    console.log('  1. 🌐 Web App (Kiểm thử giao diện Web - https://landbase.vn)');
+    console.log('--- BƯỚC 2: CHỌN NỀN TẢNG KIỂM THỬ ---');
+    console.log(`  1. 🌐 Web App (Kiểm thử giao diện Web - ${selectedEnv.baseUrl})`);
     console.log('  2. 📱 Mobile App (Kiểm thử ứng dụng Landbase Android APK)');
-    console.log('  3. ⚡ API Testing (Kiểm thử API Gateway & In-Page Context - https://dev-webapp.laand.vn)');
+    console.log(`  3. ⚡ API Testing (Kiểm thử API Gateway & In-Page Context - ${selectedEnv.baseUrl})`);
     const ans = await askQuestion('\n👉 Nhập lựa chọn Nền tảng (1-3) [Mặc định: 1 - Web]: ');
     platformChoice = ans.trim() || '1';
     if (!['1', '2', '3'].includes(platformChoice)) platformChoice = '1';
@@ -130,7 +202,7 @@ async function main() {
   // RUN MOBILE APP TEST SUITE (PLATFORM 2)
   // =========================================================================
   if (platformChoice === '2') {
-    console.log('\n--- BƯỚC 2: CHỌN MODULE MOBILE APP ---');
+    console.log('\n--- BƯỚC 3: CHỌN MODULE MOBILE APP ---');
     Object.keys(mobileSuites).forEach((key) => {
       console.log(`  ${key}. ${mobileSuites[key].name}`);
     });
@@ -157,6 +229,15 @@ async function main() {
       stdio: 'inherit',
       shell: true,
       cwd: projectRoot,
+      env: {
+        ...process.env,
+        TEST_ENV: selectedEnv.key,
+        BASE_URL: selectedEnv.baseUrl,
+        WEBAPP_BASE_URL: selectedEnv.webappUrl,
+        API_BASE_URL: selectedEnv.gatewayUrl,
+        TEST_USERNAME: selectedEnv.username,
+        TEST_PASSWORD: selectedEnv.password,
+      },
     });
     child.on('exit', (code) => {
       console.log(`\n✨ Quá trình kiểm thử Mobile App hoàn tất với mã thoát: ${code}`);
@@ -165,7 +246,7 @@ async function main() {
   }
 
   // =========================================================================
-  // RUN API TEST SUITE (PLATFORM 3 - TÁCH RIÊNG & MỞ DANH SÁCH CHỌN PHẦN TEST)
+  // RUN API TEST SUITE (PLATFORM 3)
   // =========================================================================
   if (platformChoice === '3') {
     let apiChoice = getArgVal('--suite');
@@ -173,7 +254,7 @@ async function main() {
     let workerChoice = getArgVal('--workers');
 
     if (!apiChoice) {
-      console.log('\n--- BƯỚC 2: CHỌN PHẦN API MUỐN KIỂM THỬ ---');
+      console.log('\n--- BƯỚC 3: CHỌN PHẦN API MUỐN KIỂM THỬ ---');
       Object.keys(apiSuites).forEach((key) => {
         console.log(`  ${key}. ${apiSuites[key].name}`);
       });
@@ -196,7 +277,7 @@ async function main() {
     console.log('');
 
     if (!headedChoice) {
-      console.log('--- BƯỚC 3: CHỌN CHẾ ĐỘ HIỂN THỊ TRÌNH DUYỆT (BROWSER) ---');
+      console.log('--- BƯỚC 4: CHỌN CHẾ ĐỘ HIỂN THỊ TRÌNH DUYỆT (BROWSER) ---');
       console.log('  1. Chạy ẩn (Headless - Nhanh nhất, chạy ngầm trong nền)');
       console.log('  2. Mở trình duyệt trực quan (Headed - Xem trực quan & lưu Card bằng chứng)');
       console.log('  3. Mở Playwright UI Mode (--ui - Giao diện trực quan chọn từng test & xem live)');
@@ -205,7 +286,7 @@ async function main() {
     }
 
     if (!workerChoice) {
-      console.log('\n--- BƯỚC 4: SỐ LƯỢNG WORKER CHẠY SONG SONG ---');
+      console.log('\n--- BƯỚC 5: SỐ LƯỢNG WORKER CHẠY SONG SONG ---');
       console.log('  (Khuyến nghị worker=1 khi test API để token đăng nhập được đồng bộ tốt nhất)');
       const ans = await askQuestion('👉 Nhập số lượng Worker (1, 2, 4...) [Mặc định: 1]: ');
       workerChoice = ans.trim() || '1';
@@ -230,12 +311,23 @@ async function main() {
 
     console.log('===============================================================');
     console.log(`🚀 ĐANG KÍCH HOẠT LỆNH TEST API: npx ${playwrightArgs.join(' ')}`);
+    console.log(`🌍 Môi trường: ${selectedEnv.badge}`);
+    console.log(`👤 Tài khoản test: ${selectedEnv.username}`);
     console.log('===============================================================\n');
 
     const child = spawn('npx', playwrightArgs, {
       stdio: 'inherit',
       shell: true,
       cwd: projectRoot,
+      env: {
+        ...process.env,
+        TEST_ENV: selectedEnv.key,
+        BASE_URL: selectedEnv.baseUrl,
+        WEBAPP_BASE_URL: selectedEnv.webappUrl,
+        API_BASE_URL: selectedEnv.gatewayUrl,
+        TEST_USERNAME: selectedEnv.username,
+        TEST_PASSWORD: selectedEnv.password,
+      },
     });
 
     child.on('exit', (code) => {
@@ -253,7 +345,7 @@ async function main() {
   let workerChoice = getArgVal('--workers');
 
   if (!suiteChoice || !webSuites[suiteChoice]) {
-    console.log('\n--- BƯỚC 2: CHỌN MODULE WEB APP ---');
+    console.log('\n--- BƯỚC 3: CHỌN MODULE WEB APP ---');
     Object.keys(webSuites).forEach((key) => {
       console.log(`  ${key}. ${webSuites[key].name}`);
     });
@@ -266,7 +358,7 @@ async function main() {
   console.log(`\n✅ Đã chọn Web Module: ${selectedWebSuite.name}\n`);
 
   if (!headedChoice) {
-    console.log('--- BƯỚC 3: CHỌN CHẾ ĐỘ HIỂN THỊ TRÌNH DUYỆT (BROWSER) ---');
+    console.log('--- BƯỚC 4: CHỌN CHẾ ĐỘ HIỂN THỊ TRÌNH DUYỆT (BROWSER) ---');
     console.log('  1. Chạy ẩn (Headless - Chạy ngầm trong nền, nhanh nhất)');
     console.log('  2. Mở trình duyệt trực quan (Headed - Mở cửa sổ browser để người dùng xem live)');
     console.log('  3. Mở Playwright UI Mode (--ui - Giao diện trực quan chọn từng test & xem live)');
@@ -275,7 +367,7 @@ async function main() {
   }
 
   if (!workerChoice) {
-    console.log('\n--- BƯỚC 4: SỐ LƯỢNG WORKER CHẠY SONG SONG ---');
+    console.log('\n--- BƯỚC 5: SỐ LƯỢNG WORKER CHẠY SONG SONG ---');
     const ans = await askQuestion('👉 Nhập số lượng Worker (1, 2, 4...) [Mặc định: 1]: ');
     workerChoice = ans.trim() || '1';
   }
@@ -303,12 +395,23 @@ async function main() {
 
   console.log('===============================================================');
   console.log(`🚀 ĐANG KÍCH HOẠT LỆNH TEST WEB: npx ${playwrightArgs.join(' ')}`);
+  console.log(`🌍 Môi trường: ${selectedEnv.badge}`);
+  console.log(`👤 Tài khoản test: ${selectedEnv.username}`);
   console.log('===============================================================\n');
 
   const child = spawn('npx', playwrightArgs, {
     stdio: 'inherit',
     shell: true,
     cwd: projectRoot,
+    env: {
+      ...process.env,
+      TEST_ENV: selectedEnv.key,
+      BASE_URL: selectedEnv.baseUrl,
+      WEBAPP_BASE_URL: selectedEnv.webappUrl,
+      API_BASE_URL: selectedEnv.gatewayUrl,
+      TEST_USERNAME: selectedEnv.username,
+      TEST_PASSWORD: selectedEnv.password,
+    },
   });
 
   child.on('exit', (code) => {

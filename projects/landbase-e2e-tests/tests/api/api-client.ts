@@ -193,7 +193,7 @@ export class LandBaseApiClient {
                 userName: username,
                 password: password,
                 loginType: 'BASIC',
-                callbackUrl: callbackUrl || 'https://dev-webapp.laand.vn/',
+                callbackUrl: callbackUrl || window.location.origin || 'https://landbase.vn/',
               }),
             });
             return loginRes.status === 200;

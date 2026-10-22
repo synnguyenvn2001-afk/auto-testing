@@ -2,8 +2,8 @@ import { test, expect, Page } from '@playwright/test';
 import { skipOnboardingTour } from './helpers';
 
 test.describe('E2E Web UI - Chức năng Hòm thư LandBase theo API (/api/feedback)', () => {
-  // Ưu tiên chạy trên dev-webapp nơi có API /api/feedback và tính năng Hòm thư
-  const WEBAPP_URL = process.env.WEBAPP_BASE_URL || 'https://dev-webapp.laand.vn';
+  // Ưu tiên chạy trên webapp theo môi trường được cấu hình
+  const WEBAPP_URL = process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https://dev-webapp.laand.vn';
 
   /**
    * Helper mở popup Hòm thư LandBase một cách tin cậy

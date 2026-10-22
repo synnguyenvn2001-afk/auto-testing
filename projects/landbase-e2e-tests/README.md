@@ -13,8 +13,33 @@ Bộ kiểm thử web bằng Playwright và mobile Android bằng WebdriverIO/Ap
 
 - `tests/api/`: kiểm thử API tự động toàn diện (101 test cases) gồm Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback và Trợ lý AI (Chat AI).
 
+## Tùy chọn Môi trường Kiểm thử (Environment Selection)
+Bộ test tự động hỗ trợ linh hoạt chạy trên cả 2 môi trường:
+- 🚀 **Production (Môi trường Thật)**: `https://landbase.vn` (Tài khoản test: `user` / `Enao@1234`)
+- 🛠️ **Development (Môi trường DEV)**: `https://dev-webapp.laand.vn` (Tài khoản test: `usert1` / `Enao@123`)
+
+Khi khởi chạy `npm run test`, hệ thống sẽ tự động hiển thị menu tương tác để bạn chọn môi trường:
+```
+--- BƯỚC 2: CHỌN MÔI TRƯỜNG KIỂM THỬ (ENVIRONMENT) ---
+  1. 🚀 Production  - https://landbase.vn (Môi trường Thật)
+  2. 🛠️ Development - https://dev-webapp.laand.vn (Môi trường DEV)
+👉 Nhập lựa chọn Môi trường (1-2) [Mặc định: 1 - Production]: 
+```
+
+Bạn cũng có thể chỉ định môi trường trực tiếp qua lệnh hoặc cờ CLI:
+- `npm run test:prod`: Chạy kiểm thử Web trên môi trường Production (`landbase.vn`).
+- `npm run test:dev`: Chạy kiểm thử Web trên môi trường Development (`dev-webapp.laand.vn`).
+- `npm run test:api:dev`: Chạy kiểm thử API trên môi trường Development.
+- `npm run test:api:prod`: Chạy kiểm thử API trên môi trường Production.
+- Hoặc truyền tham số dòng lệnh:
+  ```bash
+  node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=prod
+  node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=dev
+  node projects/landbase-e2e-tests/run-tests.js --url=https://your-custom-domain.vn
+  ```
+
 Các lệnh chính được khai báo trong `package.json` ở gốc repository:
-- `npm run test`: Menu tương tác chọn module (chọn Platform 3 để kiểm thử API).
+- `npm run test`: Menu tương tác toàn diện chọn Nền tảng, Môi trường và Module.
 - `npm run test:api`: Chạy kiểm thử API tương tác qua CLI.
 - `npm run test:api:all`: Chạy tất cả các API test cases.
 - `npm run test:api:feedback`: Chạy riêng 17 test cases của API Feedback.

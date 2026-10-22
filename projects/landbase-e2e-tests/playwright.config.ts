@@ -1,8 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'node:path';
+import fs from 'node:fs';
 
 const projectRoot = __dirname;
-const authStatePath = path.join(projectRoot, 'playwright', '.auth', 'user.json');
+const envKey = process.env.TEST_ENV || ((process.env.BASE_URL || '').includes('dev') ? 'dev' : 'prod');
+const authDir = path.join(projectRoot, 'playwright', '.auth');
+const specificAuth = path.join(authDir, `user-${envKey}.json`);
+const fallbackAuth = path.join(authDir, 'user.json');
+const authStatePath = fs.existsSync(specificAuth)
+  ? specificAuth
+  : (envKey === 'prod' && fs.existsSync(fallbackAuth) ? fallbackAuth : specificAuth);
 const artifactsDir = path.join(projectRoot, 'artifacts');
 
 /**
@@ -18,7 +25,7 @@ const artifactsDir = path.join(projectRoot, 'artifacts');
  */
 export default defineConfig({
   testDir: path.join(projectRoot, 'tests'),
-  testIgnore: '**/mobile/**',
+  testIgnore: /.*mobile.*/,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -62,12 +69,12 @@ export default defineConfig({
       testMatch: /tests[\\/]api[\\/].*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'https://dev-webapp.laand.vn',
+        baseURL: process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https://dev-webapp.laand.vn',
       },
     },
     {
       name: 'chromium',
-      testIgnore: '**/api/**',
+      testIgnore: [/api/, /mobile/],
       use: {
         ...devices['Desktop Chrome'],
         storageState: authStatePath,
@@ -77,6 +84,7 @@ export default defineConfig({
 
     {
       name: 'firefox',
+      testIgnore: [/api/, /mobile/],
       use: {
         ...devices['Desktop Firefox'],
         storageState: authStatePath,
@@ -86,6 +94,7 @@ export default defineConfig({
 
     {
       name: 'webkit',
+      testIgnore: [/api/, /mobile/],
       use: {
         ...devices['Desktop Safari'],
         storageState: authStatePath,

@@ -54,13 +54,14 @@ const DEFAULT_CONFIG_FILE = path.join(__dirname, '..', '..', 'api-environment.js
  * 3. Default fallback values
  */
 export function loadApiConfig(): ApiEnvironmentConfig {
-  let webappUrl = process.env.WEBAPP_BASE_URL || 'https://dev-webapp.laand.vn';
+  let webappUrl = process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https://dev-webapp.laand.vn';
   let gatewayUrl = process.env.API_BASE_URL || process.env.GATEWAY_BASE_URL || 'https://dev-gateway.laand.vn';
   let accessToken = process.env.ACCESS_TOKEN || process.env.access_token || '';
   let xAuthToken = process.env.X_AUTH_TOKEN || process.env.x_auth_token || '';
   let xSessionRef = process.env.X_SESSION_REF || process.env.x_session_ref || '';
-  let username = process.env.DEV_USERNAME || process.env.TEST_USERNAME || 'usert1';
-  let password = process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123';
+  const isDev = (process.env.TEST_ENV === 'dev') || webappUrl.includes('dev');
+  let username = process.env.DEV_USERNAME || process.env.TEST_USERNAME || (isDev ? 'usert1' : 'user');
+  let password = process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || (isDev ? 'Enao@123' : 'Enao@1234');
   let validWardCode = process.env.VALID_WARD_CODE || '09552';
   let searchKeyword = process.env.SEARCH_KEYWORD || 'Nguyễn Trãi';
   let noMatchKeyword = process.env.NO_MATCH_KEYWORD || '__NO_MATCH_TEST_VALUE__';

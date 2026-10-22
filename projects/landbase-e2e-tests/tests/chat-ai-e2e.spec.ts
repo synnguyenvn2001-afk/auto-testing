@@ -19,13 +19,17 @@ import { skipOnboardingTour } from './helpers';
  * 12. Exception: Hỏi về khu vực ngoài lãnh thổ Việt Nam (Tokyo Nhật Bản) -> Xử lý mượt mà, không crash hệ thống
  */
 
-const WEBAPP_URL = process.env.WEBAPP_BASE_URL || 'https://dev-webapp.laand.vn';
+const WEBAPP_URL = process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https://dev-webapp.laand.vn';
 
 /**
  * Đăng nhập tự động NextAuth và nạp session cookie vào Playwright Browser Context
  */
 async function ensureAuthenticatedSession(context: BrowserContext) {
   try {
+    const isDev = (process.env.TEST_ENV === 'dev') || WEBAPP_URL.includes('dev');
+    const testUsername = process.env.TEST_USERNAME || (isDev ? 'usert1' : 'user');
+    const testPassword = process.env.TEST_PASSWORD || (isDev ? 'Enao@123' : 'Enao@1234');
+
     const csrfRes = await fetch(`${WEBAPP_URL}/api/auth/csrf`);
     const csrfJson = await csrfRes.json();
     const csrfCookies = (csrfRes.headers as any).getSetCookie
@@ -40,8 +44,8 @@ async function ensureAuthenticatedSession(context: BrowserContext) {
       },
       body: new URLSearchParams({
         csrfToken: csrfJson.csrfToken,
-        userName: 'usert1',
-        password: 'Enao@123',
+        userName: testUsername,
+        password: testPassword,
         loginType: 'BASIC',
         callbackUrl: `${WEBAPP_URL}/`,
       }),
@@ -171,6 +175,10 @@ test.describe('LandBase Web UI & API - Trợ lý AI Bất Động Sản (Chat AI
 
     // 3. Kiểm tra phản hồi API trả về 200 OK
     expect(chatResponse.status()).toBe(200);
+
+    // 4. Kiểm tra câu trả lời của AI tương ứng với câu hỏi (Hiển thị bản đồ khu vực Đống Đa)
+    const aiResponse = page.locator('text=/bản đồ.*Đống Đa|khu vực Phường Đống Đa|Dưới đây là các bản đồ/i').first();
+    await expect(aiResponse).toBeVisible({ timeout: 25000 });
   });
 
   // =========================================================================
@@ -199,6 +207,10 @@ test.describe('LandBase Web UI & API - Trợ lý AI Bất Động Sản (Chat AI
       { timeout: 45000 }
     );
 
+    // Kiểm tra câu trả lời lượt 1 tương ứng với chủ đề tiện ích Đống Đa
+    const turn1AiResponse = page.locator('text=/tiện ích.*Đống Đa|tiện ích xung quanh/i').first();
+    await expect(turn1AiResponse).toBeVisible({ timeout: 25000 });
+
     // Đợi AI streaming xong, khung nhập mở khóa (không còn disabled)
     await expect(chatInput).toBeEnabled({ timeout: 60000 });
 
@@ -216,6 +228,11 @@ test.describe('LandBase Web UI & API - Trợ lý AI Bất Động Sản (Chat AI
       (res) => res.url().includes('/api/chat') && res.status() === 200,
       { timeout: 45000 }
     );
+    await expect(chatInput).toBeEnabled({ timeout: 60000 });
+
+    // Kiểm tra câu trả lời lượt 2 tương ứng với ngữ cảnh trường học khu vực Đống Đa
+    const turn2AiResponse = page.locator('text=/trường học.*Đống Đa|trường học nổi bật/i').first();
+    await expect(turn2AiResponse).toBeVisible({ timeout: 25000 });
   });
 
   test('CHAT-UI-005 - Tương tác click vào câu hỏi gợi ý liên quan (Suggested Questions)', async ({ page }) => {
@@ -398,5 +415,9 @@ test.describe('LandBase Web UI & API - Trợ lý AI Bất Động Sản (Chat AI
     // Hệ thống không bị crash, giao diện phản hồi an toàn
     await expect(chatInput).toBeEnabled({ timeout: 60000 });
     await expect(page.locator(`text=${outsideVnQuery}`).first()).toBeVisible({ timeout: 15000 });
+
+    // Kiểm tra câu trả lời tương ứng: AI nhận diện đúng địa danh Tokyo
+    const tokyoResponse = page.locator('text=/Tokyo|nhà đất.*Tokyo|căn hộ tại Tokyo/i').first();
+    await expect(tokyoResponse).toBeVisible({ timeout: 25000 });
   });
 });

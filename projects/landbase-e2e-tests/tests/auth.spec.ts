@@ -236,8 +236,12 @@ test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', 
       const passwordInput = dialogModal.locator('#login-password, input[type="password"]').first();
       await expect(usernameInput).toBeVisible();
 
-      await usernameInput.fill('user');
-      await passwordInput.fill('Enao@1234');
+      const isDev = (process.env.TEST_ENV === 'dev') || (process.env.BASE_URL || '').includes('dev');
+      const testUsername = process.env.TEST_USERNAME || (isDev ? 'usert1' : 'user');
+      const testPassword = process.env.TEST_PASSWORD || (isDev ? 'Enao@123' : 'Enao@1234');
+
+      await usernameInput.fill(testUsername);
+      await passwordInput.fill(testPassword);
 
       const submitBtn = dialogModal.locator('button').filter({ hasText: /^đăng nhập$/i }).or(dialogModal.locator('button[type="submit"]:not(:has-text("Google")), button:not(:has-text("Google")):has-text("Đăng nhập")')).last();
       await submitBtn.click({ force: true });

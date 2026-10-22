@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "test": "node projects/landbase-e2e-tests/run-tests.js",
+    "test:prod": "node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=prod",
+    "test:dev": "node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=dev",
     "test:all": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts --project=chromium --headed --workers=1",
     "test:headless": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts --project=chromium --workers=1",
     "test:ui": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts --ui",
@@ -14,6 +16,8 @@
     "test:mailbox": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/feedback-mailbox.spec.ts --project=chromium --headed --workers=1",
     "test:mailbox:headless": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/feedback-mailbox.spec.ts --project=chromium --workers=1",
     "test:api": "node projects/landbase-e2e-tests/run-tests.js --platform=3",
+    "test:api:dev": "node projects/landbase-e2e-tests/run-tests.js --platform=3 --env=dev",
+    "test:api:prod": "node projects/landbase-e2e-tests/run-tests.js --platform=3 --env=prod",
     "test:api:all": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/ --project=api --headed --workers=1",
     "test:api:headless": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/ --project=api --workers=1",
     "test:api:saved": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/saved-real-estate.spec.ts --project=api --workers=1",
