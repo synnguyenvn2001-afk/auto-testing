@@ -29,6 +29,8 @@
     "test:chat:ui": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/chat-ai-e2e.spec.ts --project=chromium --workers=1",
     "token:get": "node projects/landbase-e2e-tests/scripts/capture-dev-tokens.js",
     "postman:export": "node projects/landbase-e2e-tests/scripts/generate-postman.js",
+    "test:geocode": "node projects/landbase-e2e-tests/scripts/run-geocode-check.js --limit=100",
+    "test:geocode:all": "node projects/landbase-e2e-tests/scripts/run-geocode-check.js --limit=0",
     "test:mobile": "wdio run projects/landbase-e2e-tests/wdio.conf.js",
     "test:mobile:auth": "wdio run projects/landbase-e2e-tests/wdio.conf.js --spec projects/landbase-e2e-tests/tests/mobile/app-auth.spec.ts",
     "test:mobile:profile": "wdio run projects/landbase-e2e-tests/wdio.conf.js --spec projects/landbase-e2e-tests/tests/mobile/app-profile.spec.ts",

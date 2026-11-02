@@ -1,0 +1,47 @@
+name: Kiểm tra Vị trí 6.944 Tuyến đường Hà Nội (Geocode V2 Cloud)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ward_filter:
+        description: 'Tên Phường/Xã muốn kiểm tra (Để trống hoặc gõ "Tất cả" để chạy toàn Hà Nội, VD: Phường Cầu Giấy)'
+        required: false
+        default: 'Tất cả'
+      road_limit:
+        description: 'Số lượng tuyến đường kiểm tra (Nhập 0 để kiểm tra toàn bộ 6.944 tuyến)'
+        required: false
+        default: '500'
+      max_dist_meters:
+        description: 'Ngưỡng độ lệch tọa độ tối đa cho phép (mét)'
+        required: false
+        default: '1000'
+
+jobs:
+  check-roads:
+    name: Kiểm tra Vị trí Tuyến đường Hà Nội (DEV)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Chạy kiểm tra vị trí tuyến đường trên DEV
+        env:
+          WARD_FILTER: ${{ inputs.ward_filter }}
+          ROAD_LIMIT: ${{ inputs.road_limit }}
+          MAX_DIST_METERS: ${{ inputs.max_dist_meters }}
+        run: node projects/landbase-e2e-tests/scripts/run-geocode-check.js
+
+      - name: Tải lên file Báo cáo HTML đầy đủ
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Bao-Cao-Vi-Tri-Tuyen-Duong-HaNoi-DEV
+          path: projects/landbase-e2e-tests/artifacts/Bao_Cao_Vi_Tri_Tuyen_Duong_HaNoi_DEV.html
+          retention-days: 30
+
