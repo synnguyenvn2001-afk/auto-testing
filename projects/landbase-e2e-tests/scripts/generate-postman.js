@@ -1608,6 +1608,19 @@ if (fs.existsSync(chatAiFolderPath)) {
 }
 
 // -------------------------------------------------------------
+// SUBSCRIPTION ORDER MODULE (18 TESTCASES)
+// -------------------------------------------------------------
+const subOrderFolderPath = path.join(__dirname, 'subscription-order-folder.json');
+let folderSubOrder = null;
+if (fs.existsSync(subOrderFolderPath)) {
+  try {
+    folderSubOrder = JSON.parse(fs.readFileSync(subOrderFolderPath, 'utf8'));
+  } catch (e) {
+    console.warn('⚠️ Lỗi khi nạp Subscription Order folder:', e.message);
+  }
+}
+
+// -------------------------------------------------------------
 // POSTMAN COLLECTION ROOT
 // -------------------------------------------------------------
 const collection = {
@@ -1646,7 +1659,11 @@ const collection = {
     { key: 'parentMessageId', value: '', type: 'string' },
     { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', type: 'string' },
     { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', type: 'string' },
+    { key: 'invalidXAuthToken', value: 'INVALID_X_AUTH_TOKEN_FOR_TEST', type: 'string' },
     { key: 'webSessionCookie', value: '', type: 'string' },
+    { key: 'sessionCookie', value: '', type: 'string' },
+    { key: 'confirmCreateSubscriptionOrder', value: 'false', type: 'string' },
+    { key: 'orderCode', value: '1792730478', type: 'string' },
   ],
   item: [
     folderAuth,
@@ -1657,6 +1674,7 @@ const collection = {
     folderGeomancy,
     folderFeedback,
     ...(folderChatAI ? [folderChatAI] : []),
+    ...(folderSubOrder ? [folderSubOrder] : []),
   ],
 };
 
@@ -1697,7 +1715,12 @@ const environment = {
     { key: 'parentMessageId', value: '', enabled: true },
     { key: 'invalidAccessToken', value: 'INVALID_ACCESS_TOKEN_FOR_TEST', enabled: true },
     { key: 'invalidAppPassport', value: 'INVALID_APP_PASSPORT_FOR_TEST', enabled: true },
+    { key: 'invalidXAuthToken', value: 'INVALID_X_AUTH_TOKEN_FOR_TEST', enabled: true },
     { key: 'webSessionCookie', value: '', enabled: true },
+    { key: 'sessionCookie', value: '', enabled: true },
+    { key: 'confirmCreateSubscriptionOrder', value: 'true', enabled: true },
+    { key: 'packageCode', value: 'PRO', enabled: true },
+    { key: 'orderCode', value: '1792730478', enabled: true },
     { key: 'query10000', value: 'A'.repeat(10000), enabled: true },
     { key: 'query10001', value: 'A'.repeat(10001), enabled: true },
   ],
@@ -1784,6 +1807,17 @@ async function exportAll() {
     collection.item[chatIdx] = currentChatFolder;
   } else {
     collection.item.push(currentChatFolder);
+  }
+
+  // Luôn nạp phiên bản subscription-order-folder.json mới nhất
+  if (fs.existsSync(subOrderFolderPath)) {
+    const currentSubOrderFolder = JSON.parse(fs.readFileSync(subOrderFolderPath, 'utf8'));
+    const subIdx = collection.item.findIndex(it => it.name && it.name.includes('Subscription'));
+    if (subIdx >= 0) {
+      collection.item[subIdx] = currentSubOrderFolder;
+    } else {
+      collection.item.push(currentSubOrderFolder);
+    }
   }
 
   const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');

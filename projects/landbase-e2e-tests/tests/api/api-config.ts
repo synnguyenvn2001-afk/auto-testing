@@ -41,6 +41,11 @@ export interface ApiEnvironmentConfig {
   chatConversationId?: string;
   chatParentMessageId?: string;
   confirmRunChatAI?: boolean;
+  subscriptionOrderCookie?: string;
+  subscriptionInvalidAccessToken?: string;
+  subscriptionInvalidXAuthToken?: string;
+  subscriptionOrderCode?: number | string;
+  confirmCreateSubscriptionOrder?: boolean;
   isConfigured: boolean;
 }
 
@@ -97,9 +102,19 @@ export function loadApiConfig(): ApiEnvironmentConfig {
   let chatParentMessageId = process.env.CHAT_PARENT_MESSAGE_ID || 'f064bcce-2501-4691-a4bc-f4cd561e7a45';
   let confirmRunChatAI = process.env.CONFIRM_RUN_CHAT_AI !== undefined ? process.env.CONFIRM_RUN_CHAT_AI === 'true' : false;
 
+  // Subscription Order config values
+  let subscriptionOrderCookie = process.env.SUBSCRIPTION_ORDER_COOKIE || process.env.SESSION_COOKIE || '';
+  let subscriptionInvalidAccessToken = process.env.SUBSCRIPTION_INVALID_ACCESS_TOKEN || 'INVALID_TOKEN_FOR_AUTH_TEST';
+  let subscriptionInvalidXAuthToken = process.env.SUBSCRIPTION_INVALID_X_AUTH_TOKEN || 'INVALID_X_AUTH_TOKEN_FOR_TEST';
+  let subscriptionOrderCode = process.env.SUBSCRIPTION_ORDER_CODE || process.env.ORDER_CODE || 1792730478;
+  let confirmCreateSubscriptionOrder = process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER !== undefined
+    ? process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === 'true'
+    : isDev;
+
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
     path.join(__dirname, 'api-environment.json'),
+    path.join(__dirname, '..', '..', 'LandBase_Environment.postman_environment.json'),
     path.join(__dirname, '..', '..', 'LandBase_Chat_AI_Environment.postman_environment.json'),
     path.join(__dirname, '..', '..', 'postman-environment.json'),
   ];
@@ -222,6 +237,22 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'confirmRunChatAI' && item.value !== undefined && process.env.CONFIRM_RUN_CHAT_AI === undefined) {
               confirmRunChatAI = String(item.value).toLowerCase() === 'true';
             }
+            // Subscription Order environment variables
+            if ((item.key === 'sessionCookie' || item.key === 'subscriptionOrderCookie') && item.value && !item.value.includes('PASTE_')) {
+              subscriptionOrderCookie = item.value;
+            }
+            if (item.key === 'invalidAccessToken' && item.value) {
+              subscriptionInvalidAccessToken = item.value;
+            }
+            if (item.key === 'invalidXAuthToken' && item.value) {
+              subscriptionInvalidXAuthToken = item.value;
+            }
+            if (item.key === 'orderCode' && item.value) {
+              subscriptionOrderCode = item.value;
+            }
+            if (item.key === 'confirmCreateSubscriptionOrder' && item.value !== undefined && process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === undefined) {
+              confirmCreateSubscriptionOrder = String(item.value).toLowerCase() === 'true';
+            }
           }
         } else {
           // Plain key-value JSON
@@ -273,6 +304,14 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.chatConversationId) chatConversationId = parsed.chatConversationId;
           if (parsed.chatParentMessageId) chatParentMessageId = parsed.chatParentMessageId;
           if (parsed.confirmRunChatAI !== undefined) confirmRunChatAI = Boolean(parsed.confirmRunChatAI);
+          if (parsed.sessionCookie && !parsed.sessionCookie.includes('PASTE_')) subscriptionOrderCookie = parsed.sessionCookie;
+          if (parsed.subscriptionOrderCookie && !parsed.subscriptionOrderCookie.includes('PASTE_')) subscriptionOrderCookie = parsed.subscriptionOrderCookie;
+          if (parsed.invalidAccessToken) subscriptionInvalidAccessToken = parsed.invalidAccessToken;
+          if (parsed.invalidXAuthToken) subscriptionInvalidXAuthToken = parsed.invalidXAuthToken;
+          if (parsed.orderCode) subscriptionOrderCode = parsed.orderCode;
+          if (parsed.confirmCreateSubscriptionOrder !== undefined && process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === undefined) {
+            confirmCreateSubscriptionOrder = Boolean(parsed.confirmCreateSubscriptionOrder);
+          }
         }
         break;
       } catch {
@@ -328,6 +367,11 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     chatConversationId,
     chatParentMessageId,
     confirmRunChatAI,
+    subscriptionOrderCookie,
+    subscriptionInvalidAccessToken,
+    subscriptionInvalidXAuthToken,
+    subscriptionOrderCode,
+    confirmCreateSubscriptionOrder,
     isConfigured,
   };
 }

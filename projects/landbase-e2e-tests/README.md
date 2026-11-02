@@ -11,7 +11,7 @@ Bộ kiểm thử web bằng Playwright và mobile Android bằng WebdriverIO/Ap
 - `playwright/.auth/`: trạng thái đăng nhập cục bộ, không commit.
 - `scripts/`: lệnh hỗ trợ như khởi động Appium.
 
-- `tests/api/`: kiểm thử API tự động toàn diện (101 test cases) gồm Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback và Trợ lý AI (Chat AI).
+- `tests/api/`: kiểm thử API tự động toàn diện (130 test cases) gồm Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback, Trợ lý AI (Chat AI) và Đơn hàng & Hủy đơn Subscription (/subscription/order & /cancel).
 
 ## Tùy chọn Môi trường Kiểm thử (Environment Selection)
 Bộ test tự động hỗ trợ linh hoạt chạy trên cả 2 môi trường:
@@ -44,13 +44,29 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 - `npm run test:api:all`: Chạy tất cả các API test cases.
 - `npm run test:api:feedback`: Chạy riêng 17 test cases của API Feedback.
 - `npm run test:api:chat`: Chạy 23 test cases của API Chat AI (/api/chat).
+- `npm run test:api:order`: Chạy 38 test cases của API Đơn hàng & Giỏ hàng Gói Pro (/cart, /order & /cancel).
 - `npm run test:chat:ui`: Chạy bộ test tự động thao tác người dùng E2E cho chức năng Chat AI (UI kết hợp API SSE stream).
 - `npm run postman:export`: Đồng bộ và xuất ra các file Postman Collection & Environment mới nhất.
 
+## Kiểm thử Đơn hàng & Thanh toán Gói Pro Subscription (/cart, /order & /cancel)
+- **File test Playwright**: `tests/api/subscription-order.spec.ts` (38 test cases)
+- **File Postman Collection tổng**: `LandBase_API_Tests.postman_collection.json` (Folder `08. Đơn hàng & Thanh toán Subscription` - 39 requests)
+- **File Postman Environment tổng**: `LandBase_Environment.postman_environment.json`
+- **Khắc phục lỗi "Giỏ hàng trống"**: Khi chọn gói Basic, hệ thống DEV không hỗ trợ tạo đơn hàng (trả về lỗi giỏ hàng trống). Bộ test tự động kích hoạt API chọn **Gói Pro** (`POST /api/v1.0/subscription/cart/confirm` payload `{"packageCode": "PRO"}`), đảm bảo giỏ hàng có gói Pro (2.465đ) trước khi gọi API tạo đơn hàng `/order` (trả về `200 OK` kèm link thanh toán PayOS).
+- **Chế độ kiểm thử**: Mặc định chạy tự động toàn bộ 38 test cases trên môi trường DEV (`dev-gateway.laand.vn`). Khóa an toàn chỉ tự động kích hoạt bảo vệ khi trỏ vào Production (`landbase.vn`), hoặc người dùng có thể chủ động tắt chạy bằng biến:
+  ```powershell
+  $env:CONFIRM_CREATE_SUBSCRIPTION_ORDER="false"; npm run test:api:order
+  ```
+- **Lệnh chạy kiểm thử trực tiếp**:
+  ```powershell
+  npm run test:api:order
+  ```
+- **Hỗ trợ chu trình tạo nhiều đơn**: Tích hợp API Hủy đơn hàng (`POST /api/v1.0/subscription/order/cancel`) và tra cứu đơn hàng (`POST /api/v1.0/subscription/order/getAllListOrder`) để hủy đơn đang chờ hiện tại, giải phóng ràng buộc tối đa 1 đơn pending để tài khoản sẵn sàng tạo đơn tiếp theo.
+
 ## Kiểm thử Chat AI API (/api/chat-messages)
 - **File test Playwright**: `tests/api/chat-ai.spec.ts`
-- **File Postman Collection**: `LandBase_Chat_AI_API.postman_collection.json`
-- **File Postman Environment**: `LandBase_Chat_AI_Environment.postman_environment.json`
+- **File Postman Collection tổng**: `LandBase_API_Tests.postman_collection.json` (Folder `07. Trợ lý AI - Chat AI Streaming`)
+- **File Postman Environment tổng**: `LandBase_Environment.postman_environment.json`
 - **Bảo vệ tài nguyên AI**: Mặc định biến `confirmRunChatAI=false` để tránh tiêu hao token AI. Các testcase kiểm tra xác thực và validation input không gọi LLM sẽ chạy bình thường (8/23 tests pass). Để kích hoạt toàn bộ 23 testcases (gồm gọi AI streaming), thiết lập:
   ```powershell
   $env:CONFIRM_RUN_CHAT_AI="true"; npm run test:api:chat
@@ -71,4 +87,4 @@ Tạo file `api-environment.json` hoặc `.env` trong `projects/landbase-e2e-tes
   "confirmRunChatAI": false
 }
 ```
-Hoặc paste trực tiếp file xuất môi trường Postman JSON vào `projects/landbase-e2e-tests/LandBase_Chat_AI_Environment.postman_environment.json`.
+Hoặc paste trực tiếp file xuất môi trường Postman JSON vào `projects/landbase-e2e-tests/LandBase_Environment.postman_environment.json`.

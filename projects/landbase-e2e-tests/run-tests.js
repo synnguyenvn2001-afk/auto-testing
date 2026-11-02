@@ -60,7 +60,7 @@ const mobileSuites = {
 // API suites mapping (Tách riêng nền tảng thứ 3 cho API)
 const apiSuites = {
   '1': {
-    name: '🚀 Tất cả các module API (All API Tests - 101 test cases)',
+    name: '🚀 Tất cả các module API (All API Tests - 139 test cases)',
     pattern: 'tests/api/',
   },
   '2': {
@@ -98,6 +98,10 @@ const apiSuites = {
   '10': {
     name: '🤖 Trợ lý AI - Chat AI Streaming & Scope (/api/chat-messages - 23 test cases)',
     pattern: 'tests/api/chat-ai.spec.ts',
+  },
+  '11': {
+    name: '💳 Đơn hàng & Thanh toán Gói Pro Subscription (/subscription/order, /cart & /cancel - 38 test cases)',
+    pattern: 'tests/api/subscription-order.spec.ts',
   },
 };
 
@@ -258,7 +262,7 @@ async function main() {
       Object.keys(apiSuites).forEach((key) => {
         console.log(`  ${key}. ${apiSuites[key].name}`);
       });
-      const ans = await askQuestion('\n👉 Nhập lựa chọn phần API muốn test (1-10, hoặc gõ nhiều số như 2,3) [Mặc định: 1 - Tất cả]: ');
+      const ans = await askQuestion('\n👉 Nhập lựa chọn phần API muốn test (1-11, hoặc gõ nhiều số như 2,3) [Mặc định: 1 - Tất cả]: ');
       apiChoice = ans.trim() || '1';
     }
 

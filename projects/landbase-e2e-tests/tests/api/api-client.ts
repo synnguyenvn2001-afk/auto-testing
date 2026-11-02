@@ -62,7 +62,18 @@ export class LandBaseApiClient {
     }
 
     if (options?.customHeaders) {
-      Object.assign(headers, options.customHeaders);
+      for (const [k, v] of Object.entries(options.customHeaders)) {
+        if (v === null || v === undefined) {
+          delete headers[k];
+          for (const existingKey of Object.keys(headers)) {
+            if (existingKey.toLowerCase() === k.toLowerCase()) {
+              delete headers[existingKey];
+            }
+          }
+        } else {
+          headers[k] = v;
+        }
+      }
     }
 
     return headers;
@@ -292,7 +303,7 @@ export class LandBaseApiClient {
       await page.goto(this.config.webappUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
     }
 
-    const cookieStr = options?.customHeaders?.Cookie || options?.customHeaders?.cookie || this.config.feedbackCookie;
+    const cookieStr = options?.customHeaders?.Cookie || options?.customHeaders?.cookie || this.config.subscriptionOrderCookie || this.config.feedbackCookie;
     if (cookieStr && cookieStr.includes('=') && !cookieStr.includes('PASTE_')) {
       try {
         const domain = new URL(this.config.webappUrl).hostname;
@@ -319,7 +330,9 @@ export class LandBaseApiClient {
     const fullUrl = this.resolveUrl(options.endpoint);
     const headers = this.buildHeaders(options);
     const method = options.method || 'POST';
-    const bodyStr = options.body !== undefined ? JSON.stringify(options.body) : undefined;
+    const bodyStr = options.body !== undefined
+      ? (typeof options.body === 'string' ? options.body : JSON.stringify(options.body))
+      : undefined;
 
     const evaluationResult = await page.evaluate(
       async ({ url, method, headers, body }) => {
