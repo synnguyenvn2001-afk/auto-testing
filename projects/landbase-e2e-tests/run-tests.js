@@ -229,7 +229,7 @@ async function main() {
     console.log(`🚀 ĐANG KÍCH HOẠT LỆNH TEST MOBILE: npx ${wdioArgs.join(' ')}`);
     console.log('===============================================================\n');
 
-    const child = spawn('npx', wdioArgs, {
+    const child = spawn(`npx ${wdioArgs.join(' ')}`, {
       stdio: 'inherit',
       shell: true,
       cwd: projectRoot,
@@ -319,7 +319,7 @@ async function main() {
     console.log(`👤 Tài khoản test: ${selectedEnv.username}`);
     console.log('===============================================================\n');
 
-    const child = spawn('npx', playwrightArgs, {
+    const child = spawn(`npx ${playwrightArgs.join(' ')}`, {
       stdio: 'inherit',
       shell: true,
       cwd: projectRoot,
@@ -403,7 +403,7 @@ async function main() {
   console.log(`👤 Tài khoản test: ${selectedEnv.username}`);
   console.log('===============================================================\n');
 
-  const child = spawn('npx', playwrightArgs, {
+  const child = spawn(`npx ${playwrightArgs.join(' ')}`, {
     stdio: 'inherit',
     shell: true,
     cwd: projectRoot,
