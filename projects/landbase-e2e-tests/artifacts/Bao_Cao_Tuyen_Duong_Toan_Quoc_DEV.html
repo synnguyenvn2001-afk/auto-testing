@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Báo cáo Kiểm tra Danh mục Đường Toàn Quốc (DEV)</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; padding: 20px; background: #f8fafc; color: #0f172a; }
+    .header { background: #fff; padding: 18px 24px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+    .badge-pass { background: #dcfce7; color: #166534; padding: 8px 14px; border-radius: 8px; font-weight: 700; margin-right: 10px; }
+    .badge-fail { background: #fee2e2; color: #991b1b; padding: 8px 14px; border-radius: 8px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    th, td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
+    th { background: #0f172a; color: #fff; }
+    tr.fail { background: #fef2f2; }
+    .ok { color: #15803d; font-weight: 700; }
+    .err { color: #b91c1c; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h2 style="margin:0 0 6px 0">🇻🇳 Báo cáo Kiểm tra Danh mục Đường Toàn Quốc (Môi trường DEV)</h2>
+      <div>Tổng số kiểm tra: <b>100</b> tuyến đường  </div>
+    </div>
+    <div>
+      <span class="badge-pass">✅ ĐẠT: 94</span>
+      <span class="badge-fail">❌ LỖI/LỆCH: 6</span>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Mã</th>
+        <th>Tên đường gốc</th>
+        <th>Phường/Xã - Quận/Huyện (Nguồn)</th>
+        <th>Tỉnh/TP (Nguồn -> Mới)</th>
+        <th>Tên đường DEV trả về</th>
+        <th>Phường/Xã - Tỉnh/TP (DEV)</th>
+        <th>Tọa độ DEV</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr class="">
+          <td>1</td>
+          <td><b>TQ-00001</b></td>
+          <td>cầu</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>2</td>
+          <td><b>TQ-00002</b></td>
+          <td>Hà Huy Giáp</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Hà Huy Giáp</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0946935, 105.4281566</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>3</td>
+          <td><b>TQ-00003</b></td>
+          <td>Lê Đức Thọ</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Lê Đức Thọ</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.093255, 105.4319148</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>4</td>
+          <td><b>TQ-00004</b></td>
+          <td>Nguyễn Văn Nhung</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Văn Nhung</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0961652, 105.4286957</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>5</td>
+          <td><b>TQ-00005</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0787729, 105.4402155</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>6</td>
+          <td><b>TQ-00006</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Thị trấn Cờ Đỏ</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>7</td>
+          <td><b>TQ-00007</b></td>
+          <td>cầu</td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>8</td>
+          <td><b>TQ-00008</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0787729, 105.4402155</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>9</td>
+          <td><b>TQ-00009</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>10</td>
+          <td><b>TQ-00010</b></td>
+          <td>ĐT. 921D</td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921D</b></td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1081569, 105.4460304</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="fail">
+          <td>11</td>
+          <td><b>TQ-00011</b></td>
+          <td>922</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0765445, 105.5102936</td>
+          <td class="err">LỆCH TÊN ĐƯỜNG</td>
+        </tr>
+        <tr class="">
+          <td>12</td>
+          <td><b>TQ-00012</b></td>
+          <td>cầu</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1192527, 105.5181256</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>13</td>
+          <td><b>TQ-00013</b></td>
+          <td>cầu khu 5</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Khu 5</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.128624, 105.5339894</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="fail">
+          <td>14</td>
+          <td><b>TQ-00014</b></td>
+          <td>cầu khu4</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Khu 5</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.128624, 105.5339894</td>
+          <td class="err">LỆCH TÊN ĐƯỜNG</td>
+        </tr>
+        <tr class="">
+          <td>15</td>
+          <td><b>TQ-00015</b></td>
+          <td>Khu 1</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 1</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1390562, 105.5494033</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>16</td>
+          <td><b>TQ-00016</b></td>
+          <td>khu 2</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 2</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1060495, 105.5504938</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>17</td>
+          <td><b>TQ-00017</b></td>
+          <td>khu 2A</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 2A</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1328909, 105.5402071</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>18</td>
+          <td><b>TQ-00018</b></td>
+          <td>khu 2B</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 2B</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.128601, 105.5340638</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>19</td>
+          <td><b>TQ-00019</b></td>
+          <td>khu 4</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 4</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1346994, 105.5422715</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>20</td>
+          <td><b>TQ-00020</b></td>
+          <td>khu 5</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Khu 5</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1288684, 105.5338152</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>21</td>
+          <td><b>TQ-00021</b></td>
+          <td>khu 5 giáp 6</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>khu 5 giáp 6</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1234108, 105.5258746</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>22</td>
+          <td><b>TQ-00022</b></td>
+          <td>khu2C</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>khu2C</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1232545, 105.5263178</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="fail">
+          <td>23</td>
+          <td><b>TQ-00023</b></td>
+          <td>lang công nhân</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nhà Thờ Tin Lành Phú Cường</b></td>
+          <td><b>Xã Phú Cường</b><br/><small style="color:#64748b">Tỉnh Đồng Tháp</small></td>
+          <td>10.6705268, 105.6112005</td>
+          <td class="err">LỆCH TÊN ĐƯỜNG</td>
+        </tr>
+        <tr class="fail">
+          <td>24</td>
+          <td><b>TQ-00024</b></td>
+          <td>Trần Ngọc Hoằng</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Trường THCS Trần Ngọc Hoằng</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.104193, 105.4995727</td>
+          <td class="err">LỆCH TÊN ĐƯỜNG</td>
+        </tr>
+        <tr class="">
+          <td>25</td>
+          <td><b>TQ-00025</b></td>
+          <td>ĐT. 921D</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921D</b></td>
+          <td><b>Xã Trung Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.150546, 105.5065719</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>26</td>
+          <td><b>TQ-00026</b></td>
+          <td>ĐT. 922B</td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922B</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1260457, 105.5303342</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>27</td>
+          <td><b>TQ-00027</b></td>
+          <td>cầu</td>
+          <td><b>Xã Thới Xuân</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>28</td>
+          <td><b>TQ-00028</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Xã Thới Xuân</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0787729, 105.4402155</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>29</td>
+          <td><b>TQ-00029</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Xã Thới Xuân</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>30</td>
+          <td><b>TQ-00030</b></td>
+          <td>cầu</td>
+          <td><b>Xã Thới Đông</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>31</td>
+          <td><b>TQ-00031</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Xã Thới Đông</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>32</td>
+          <td><b>TQ-00032</b></td>
+          <td>Nguyễn Trọng Quyền</td>
+          <td><b>Xã Trung An</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Trọng Quyền</b></td>
+          <td><b>Phường Trung Nhứt</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.2133638, 105.5186171</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>33</td>
+          <td><b>TQ-00033</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Xã Trung An</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>34</td>
+          <td><b>TQ-00034</b></td>
+          <td>cầu</td>
+          <td><b>Xã Trung Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>35</td>
+          <td><b>TQ-00035</b></td>
+          <td>ĐT. 921</td>
+          <td><b>Xã Trung Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0927185, 105.4261305</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>36</td>
+          <td><b>TQ-00036</b></td>
+          <td>ĐT. 921D</td>
+          <td><b>Xã Trung Hưng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921D</b></td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1081569, 105.4460304</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>37</td>
+          <td><b>TQ-00037</b></td>
+          <td>cầu</td>
+          <td><b>Xã Trung Thạnh</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>38</td>
+          <td><b>TQ-00038</b></td>
+          <td>Nguyễn Trọng Quyền</td>
+          <td><b>Xã Trung Thạnh</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Trọng Quyền</b></td>
+          <td><b>Phường Trung Nhứt</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.2133638, 105.5186171</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>39</td>
+          <td><b>TQ-00039</b></td>
+          <td>ĐT. 921D</td>
+          <td><b>Xã Trung Thạnh</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 921D</b></td>
+          <td><b>Xã Thạnh Phú</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1081569, 105.4460304</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>40</td>
+          <td><b>TQ-00040</b></td>
+          <td>cầu'</td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Cờ Đỏ</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0925856, 105.426784</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>41</td>
+          <td><b>TQ-00041</b></td>
+          <td>ĐT. 922</td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0897821, 105.4548032</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>42</td>
+          <td><b>TQ-00042</b></td>
+          <td>ĐT. 922B</td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922B</b></td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0835197, 105.4832032</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>43</td>
+          <td><b>TQ-00043</b></td>
+          <td>ĐT. 922</td>
+          <td><b>Xã Đông Thắng</b><br/><small style="color:#64748b">Huyện Cờ Đỏ</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Đông Hiệp</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0897821, 105.4548032</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>44</td>
+          <td><b>TQ-00044</b></td>
+          <td>Chiêm Thành Tấn</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Chiêm Thành Tấn</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0008576, 105.6619479</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>45</td>
+          <td><b>TQ-00045</b></td>
+          <td>Cầu Trà Niền 1</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Trà Niền 1</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9970509, 105.6746033</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>46</td>
+          <td><b>TQ-00046</b></td>
+          <td>Lộ Vòng Cung</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Lộ Vòng Cung</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9988428, 105.6634704</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>47</td>
+          <td><b>TQ-00047</b></td>
+          <td>Nguyễn Thái Bình</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Thái Bình</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.000298, 105.6644677</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>48</td>
+          <td><b>TQ-00048</b></td>
+          <td>Nguyễn Văn Cừ</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Văn Cừ</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9997377, 105.669668</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>49</td>
+          <td><b>TQ-00049</b></td>
+          <td>Phan Văn Trị</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Phan Văn Trị</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0004208, 105.6645685</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>50</td>
+          <td><b>TQ-00050</b></td>
+          <td>ĐT. 926</td>
+          <td><b>Thị trấn Phong Điền</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 926</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9959322, 105.6665794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>51</td>
+          <td><b>TQ-00051</b></td>
+          <td>Bùi Hữu Nghĩa</td>
+          <td><b>Xã Giai Xuân</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Bùi Hữu Nghĩa</b></td>
+          <td><b>Phường Long Tuyền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0169415, 105.7044604</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>52</td>
+          <td><b>TQ-00052</b></td>
+          <td>ĐT. 917</td>
+          <td><b>Xã Giai Xuân</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 917</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0470415, 105.6807809</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>53</td>
+          <td><b>TQ-00053</b></td>
+          <td>ĐT. 918</td>
+          <td><b>Xã Giai Xuân</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 918</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0292394, 105.6598095</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>54</td>
+          <td><b>TQ-00054</b></td>
+          <td>Bong Giang</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Bong Giang</b></td>
+          <td><b>Phường Long Tuyền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0121476, 105.7046492</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>55</td>
+          <td><b>TQ-00055</b></td>
+          <td>Bông Vang</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Bông Vang</b></td>
+          <td><b>Phường An Bình</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0119897, 105.7047395</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>56</td>
+          <td><b>TQ-00056</b></td>
+          <td>Cầu Rạch Kè</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Rạch Kè</b></td>
+          <td><b>Phường An Bình</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9877184, 105.7005447</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>57</td>
+          <td><b>TQ-00057</b></td>
+          <td>Lộ Vòng Cung</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Lộ Vòng Cung</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9988428, 105.6634704</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>58</td>
+          <td><b>TQ-00058</b></td>
+          <td>Nguyễn Văn Cừ</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Văn Cừ</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9997377, 105.669668</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>59</td>
+          <td><b>TQ-00059</b></td>
+          <td>No.1</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>No.1</b></td>
+          <td><b>Phường An Bình</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9977814, 105.7150036</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>60</td>
+          <td><b>TQ-00060</b></td>
+          <td>No.2</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>No.2</b></td>
+          <td><b>Phường An Bình</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9973728, 105.7140277</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>61</td>
+          <td><b>TQ-00061</b></td>
+          <td>No.3</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>No.3</b></td>
+          <td><b>Phường An Bình</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9977002, 105.7136323</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>62</td>
+          <td><b>TQ-00062</b></td>
+          <td>Đường số 23</td>
+          <td><b>Xã Mỹ Khánh</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Đường số 23</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9965475, 105.6687391</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="fail">
+          <td>63</td>
+          <td><b>TQ-00063</b></td>
+          <td>\</td>
+          <td><b>Xã Nhơn Nghĩa</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Không tìm thấy</b></td>
+          <td><b>-</b><br/><small style="color:#64748b">-</small></td>
+          <td>N/A</td>
+          <td class="err">THIẾU DỮ LIỆU</td>
+        </tr>
+        <tr class="">
+          <td>64</td>
+          <td><b>TQ-00064</b></td>
+          <td>Cầu Trầu Hôi</td>
+          <td><b>Xã Nhơn Nghĩa</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Trầu Hôi</b></td>
+          <td><b>Xã Nhơn Ái</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.949917, 105.659391</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="fail">
+          <td>65</td>
+          <td><b>TQ-00065</b></td>
+          <td>QL. 61C</td>
+          <td><b>Xã Nhơn Nghĩa</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Chợ Cái Tắc</b></td>
+          <td><b>Xã Đông Phước</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9237411, 105.7231469</td>
+          <td class="err">LỆCH TÊN ĐƯỜNG</td>
+        </tr>
+        <tr class="">
+          <td>66</td>
+          <td><b>TQ-00066</b></td>
+          <td>ĐT. 932</td>
+          <td><b>Xã Nhơn Nghĩa</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 932</b></td>
+          <td><b>Xã Nhơn Ái</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9815664, 105.6878412</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>67</td>
+          <td><b>TQ-00067</b></td>
+          <td>ĐT. 926</td>
+          <td><b>Xã Nhơn Ái</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 926</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9959322, 105.6665794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>68</td>
+          <td><b>TQ-00068</b></td>
+          <td>ĐT. 926</td>
+          <td><b>Xã Trường Long</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 926</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9959322, 105.6665794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>69</td>
+          <td><b>TQ-00069</b></td>
+          <td>Lộ Vòng Cung</td>
+          <td><b>Xã Tân Thới</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Lộ Vòng Cung</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>9.9988428, 105.6634704</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>70</td>
+          <td><b>TQ-00070</b></td>
+          <td>ĐT. 918</td>
+          <td><b>Xã Tân Thới</b><br/><small style="color:#64748b">Huyện Phong Điền</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 918</b></td>
+          <td><b>Xã Phong Điền</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0292394, 105.6598095</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>71</td>
+          <td><b>TQ-00071</b></td>
+          <td>Cầu Thới Lai</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu Thới Lai</b></td>
+          <td><b>Xã Thới Lai</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0658499, 105.5584072</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>72</td>
+          <td><b>TQ-00072</b></td>
+          <td>Hồ Thị Thưởng</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Hồ Thị Thưởng</b></td>
+          <td><b>Xã Thới Lai</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0654186, 105.5589893</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>73</td>
+          <td><b>TQ-00073</b></td>
+          <td>Nguyễn Thị Huỳnh</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Thị Huỳnh</b></td>
+          <td><b>Xã Thới Lai</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.066222, 105.5578999</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>74</td>
+          <td><b>TQ-00074</b></td>
+          <td>Võ Thị Diệp</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Võ Thị Diệp</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0755518, 105.5770611</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>75</td>
+          <td><b>TQ-00075</b></td>
+          <td>ĐT. 922</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0659126, 105.5913758</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>76</td>
+          <td><b>TQ-00076</b></td>
+          <td>ĐT. 922C</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922C</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0879702, 105.5901972</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>77</td>
+          <td><b>TQ-00077</b></td>
+          <td>ĐT. 922E</td>
+          <td><b>Thị trấn Thới Lai</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922E</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0880451, 105.5822404</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>78</td>
+          <td><b>TQ-00078</b></td>
+          <td>Viện lúa</td>
+          <td><b>Xã Thới Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>viện lúa</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1193243, 105.5826237</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>79</td>
+          <td><b>TQ-00079</b></td>
+          <td>ĐT. 922C</td>
+          <td><b>Xã Thới Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922C</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0879702, 105.5901972</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>80</td>
+          <td><b>TQ-00080</b></td>
+          <td>ĐT. 922E</td>
+          <td><b>Xã Thới Tân</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922E</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0880451, 105.5822404</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>81</td>
+          <td><b>TQ-00081</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Xã Trường Xuân</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Trường Xuân</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0008676, 105.5444846</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>82</td>
+          <td><b>TQ-00082</b></td>
+          <td>Viện lúa</td>
+          <td><b>Xã Tân Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>viện lúa</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1193243, 105.5826237</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>83</td>
+          <td><b>TQ-00083</b></td>
+          <td>Võ Thị Diệp</td>
+          <td><b>Xã Tân Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Võ Thị Diệp</b></td>
+          <td><b>Xã Thới Lai</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0669488, 105.561343</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>84</td>
+          <td><b>TQ-00084</b></td>
+          <td>ĐT. 922C</td>
+          <td><b>Xã Tân Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922C</b></td>
+          <td><b>Phường Ô Môn</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1072917, 105.6152752</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>85</td>
+          <td><b>TQ-00085</b></td>
+          <td>ĐT. 922E</td>
+          <td><b>Xã Tân Thạnh</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922E</b></td>
+          <td><b>Xã Đông Thuận</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.018068, 105.471366</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>86</td>
+          <td><b>TQ-00086</b></td>
+          <td>cầu</td>
+          <td><b>Xã Xuân Thắng</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1338168, 105.5738794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>87</td>
+          <td><b>TQ-00087</b></td>
+          <td>Nguyễn Thị Huỳnh</td>
+          <td><b>Xã Xuân Thắng</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Nguyễn Thị Huỳnh</b></td>
+          <td><b>Xã Thới Lai</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.066222, 105.5578999</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>88</td>
+          <td><b>TQ-00088</b></td>
+          <td>ĐT. 922</td>
+          <td><b>Xã Xuân Thắng</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0659126, 105.5913758</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>89</td>
+          <td><b>TQ-00089</b></td>
+          <td>cầu</td>
+          <td><b>Xã Đông Bình</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1338168, 105.5738794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>90</td>
+          <td><b>TQ-00090</b></td>
+          <td>Cầu KH5</td>
+          <td><b>Xã Đông Bình</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Cầu KH5</b></td>
+          <td><b>Xã Đông Thuận</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0646777, 105.448504</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>91</td>
+          <td><b>TQ-00091</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Xã Đông Bình</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Trường Xuân</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0008676, 105.5444846</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>92</td>
+          <td><b>TQ-00092</b></td>
+          <td>ĐT. 922E</td>
+          <td><b>Xã Đông Bình</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922E</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0880451, 105.5822404</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>93</td>
+          <td><b>TQ-00093</b></td>
+          <td>cầu</td>
+          <td><b>Xã Đông Thuận</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Thới Hưng</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1338168, 105.5738794</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>94</td>
+          <td><b>TQ-00094</b></td>
+          <td>ĐT. 919</td>
+          <td><b>Xã Đông Thuận</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 919</b></td>
+          <td><b>Xã Trường Xuân</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0008676, 105.5444846</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>95</td>
+          <td><b>TQ-00095</b></td>
+          <td>ĐT. 922E</td>
+          <td><b>Xã Đông Thuận</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922E</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0880451, 105.5822404</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>96</td>
+          <td><b>TQ-00096</b></td>
+          <td>ĐT. 922</td>
+          <td><b>Xã Định Môn</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0659126, 105.5913758</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>97</td>
+          <td><b>TQ-00097</b></td>
+          <td>ĐT. 922C</td>
+          <td><b>Xã Định Môn</b><br/><small style="color:#64748b">Huyện Thới Lai</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>ĐT. 922C</b></td>
+          <td><b>Xã Trường Thành</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.0879702, 105.5901972</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>98</td>
+          <td><b>TQ-00098</b></td>
+          <td>cầu</td>
+          <td><b>Thị trấn Thạnh An</b><br/><small style="color:#64748b">Huyện Vĩnh Thạnh</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>cầu</b></td>
+          <td><b>Xã Thạnh An</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.134399, 105.3441608</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>99</td>
+          <td><b>TQ-00099</b></td>
+          <td>Phạm Ngọc Thạch</td>
+          <td><b>Thị trấn Thạnh An</b><br/><small style="color:#64748b">Huyện Vĩnh Thạnh</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Phạm Ngọc Thạch</b></td>
+          <td><b>Xã Thạnh An</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.1389657, 105.3070206</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+        <tr class="">
+          <td>100</td>
+          <td><b>TQ-00100</b></td>
+          <td>Quốc lộ 80</td>
+          <td><b>Thị trấn Thạnh An</b><br/><small style="color:#64748b">Huyện Vĩnh Thạnh</small></td>
+          <td><b>Thành phố Cần Thơ</b><br/><small style="color:#64748b">→ Thành phố Cần Thơ</small></td>
+          <td><b>Quốc lộ 80</b></td>
+          <td><b>Xã Vĩnh Trinh</b><br/><small style="color:#64748b">Thành phố Cần Thơ</small></td>
+          <td>10.2994581, 105.4634426</td>
+          <td class="ok">KHỚP ĐÚNG</td>
+        </tr>
+    </tbody>
+  </table>
+</body>
+</html>

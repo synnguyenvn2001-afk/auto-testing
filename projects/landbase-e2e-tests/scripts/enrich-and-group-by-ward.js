@@ -173,8 +173,8 @@ function buildBatchSendRequestItem(batchTitle, batchDescription, batchRoads) {
     '    .normalize("NFD")',
     '    .replace(/[\\u0300-\\u036f]/g, "")',
     '    .replace(/đ/g, "d")',
-    '    .replace(/^(duong|pho|ngo|ngach|hem|cau vuot|cau|dai lo|kdt|khu do thi)\\s+/i, "")',
     '    .replace(/[^a-z0-9\\s]/g, " ")',
+    '    .replace(/\\b(duong|pho)\\b/g, " ")',
     '    .replace(/\\s+/g, " ")',
     '    .trim();',
     '}',
@@ -262,9 +262,9 @@ function buildBatchSendRequestItem(batchTitle, batchDescription, batchRoads) {
     '',
     '    if (Array.isArray(list)) {',
     '      for (const item of list) {',
-    '        const rawAct = item.roadName || item.name || item.address || "";',
+    '        const rawAct = item.roadName || item.name || "";',
     '        const normAct = normalizeRoadName(rawAct);',
-    '        const matched = normAct.includes(normExp) || normExp.includes(normAct);',
+    '        const matched = normAct === normExp;',
     '        const d = calcDistanceMeters(road.lat, road.lon, Number(item.latitude), Number(item.longitude));',
     '        if (matched && (!hasNameMatch || d < minDist)) {',
     '          hasNameMatch = true;',
@@ -377,8 +377,8 @@ function buildSingleRoadTestScript(fixedRoad) {
     '    .normalize("NFD")',
     '    .replace(/[\\u0300-\\u036f]/g, "")',
     '    .replace(/đ/g, "d")',
-    '    .replace(/^(duong|pho|ngo|ngach|hem|cau vuot|cau|dai lo|kdt|khu do thi)\\s+/i, "")',
     '    .replace(/[^a-z0-9\\s]/g, " ")',
+    '    .replace(/\\b(duong|pho)\\b/g, " ")',
     '    .replace(/\\s+/g, " ")',
     '    .trim();',
     '}',
@@ -401,9 +401,9 @@ function buildSingleRoadTestScript(fixedRoad) {
     '  let minDistance = calcDistanceMeters(expectedLat, expectedLon, Number(bestMatch.latitude), Number(bestMatch.longitude));',
     '  let hasNameMatch = false;',
     '  for (const item of results) {',
-    '    const rawActual = item.roadName || item.name || item.address || "";',
+    '    const rawActual = item.roadName || item.name || "";',
     '    const normAct = normalizeRoadName(rawActual);',
-    '    const nameMatched = normAct.includes(normExp) || normExp.includes(normAct);',
+    '    const nameMatched = normAct === normExp;',
     '    const d = calcDistanceMeters(expectedLat, expectedLon, Number(item.latitude), Number(item.longitude));',
     '    if (nameMatched && (!hasNameMatch || d < minDistance)) {',
     '      hasNameMatch = true;',
@@ -592,6 +592,33 @@ function escapeCsv(val) {
   const collProjectPath = path.join(projectDir, 'MT_Dev_GeocodeV2.postman_collection.json');
   fs.writeFileSync(collDownloadsPath, JSON.stringify(geocodeCollection, null, 2), 'utf8');
   fs.writeFileSync(collProjectPath, JSON.stringify(geocodeCollection, null, 2), 'utf8');
+
+  // Tự động đồng bộ vào thư mục Postman Local Mode (D:\test data duong) nếu tồn tại
+  const localPostmanRoot = 'D:\\test data duong';
+  if (fs.existsSync(localPostmanRoot)) {
+    function walkYaml(dir) {
+      let list = [];
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) list.push(...walkYaml(full));
+        else if (entry.name.endsWith('.request.yaml')) list.push(full);
+      }
+      return list;
+    }
+    const yamlFiles = walkYaml(localPostmanRoot);
+    let updatedCount = 0;
+    const oldPattern = '.replace(/^(duong|pho|ngo|ngach|hem|cau vuot|cau|dai lo|kdt|khu do thi)\\s+/i, "")';
+    const newPattern =
+      '.replace(/\\b(duong|pho|tuyen|lo)\\b/g, " ").replace(/^(ngo|ngach|hem|cau vuot|cau|dai lo|kdt|khu do thi)\\s+/i, "")';
+    for (const yf of yamlFiles) {
+      const content = fs.readFileSync(yf, 'utf8');
+      if (content.includes(oldPattern)) {
+        fs.writeFileSync(yf, content.split(oldPattern).join(newPattern), 'utf8');
+        updatedCount++;
+      }
+    }
+    console.log(`🔄 Đã tự động cập nhật trực tiếp ${updatedCount}/${yamlFiles.length} file YAML trong D:\\test data duong`);
+  }
 
   console.log(`🎉 Đã xuất thành công Postman Collection phân loại theo ${sortedWardNames.length} Phường/Xã tại: ${collDownloadsPath}`);
 })();

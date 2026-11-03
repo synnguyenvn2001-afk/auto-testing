@@ -36,8 +36,8 @@ function normalizeRoadName(str) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/đ/g, 'd')
-    .replace(/^(duong|pho|ngo|ngach|hem|cau vuot|cau|dai lo|kdt|khu do thi)\s+/i, '')
     .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\b(duong|pho)\b/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -98,9 +98,9 @@ function normalizeRoadName(str) {
 
         if (Array.isArray(list)) {
           for (const item of list) {
-            const rawAct = item.roadName || item.name || item.address || '';
+            const rawAct = item.roadName || item.name || '';
             const normAct = normalizeRoadName(rawAct);
-            const matched = normAct.includes(normExp) || normExp.includes(normAct);
+            const matched = normAct === normExp;
             const d = calcDistanceMeters(road.lat, road.lon, Number(item.latitude), Number(item.longitude));
             if (matched && (!hasNameMatch || d < minDist)) {
               hasNameMatch = true;
