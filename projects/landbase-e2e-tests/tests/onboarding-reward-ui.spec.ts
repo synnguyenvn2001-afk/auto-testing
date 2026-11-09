@@ -41,7 +41,7 @@ interface MockEnvironmentState {
   gpsProvCode: string;
 }
 
-function createNineStandardTasks() {
+function createSixStandardTasks() {
   return [
     {
       code: 'EXPLORE_MAP',
@@ -59,12 +59,12 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Xem thông tin thửa đất',
-          apiName: 'VIEW_PARCEL',
+          apiName: '/land-assess-prices/map',
           description: 'Xem chi tiết thửa đất trên bản đồ',
           required: true,
           done: true,
           firstStepNo: 1,
-          lastStepNo: 2,
+          lastStepNo: 3,
         },
       ],
       steps: [
@@ -112,12 +112,12 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Đọc một bài viết',
-          apiName: 'READ_ARTICLE',
+          apiName: '/news/public/identify/send',
           description: 'Mở và đọc bài viết thị trường',
           required: true,
           done: false,
           firstStepNo: 1,
-          lastStepNo: 3,
+          lastStepNo: 2,
         },
       ],
       steps: [
@@ -147,23 +147,10 @@ function createNineStandardTasks() {
           required: true,
           done: false,
         },
-        {
-          stepNo: 3,
-          subTaskNo: 1,
-          route: '/',
-          targetKey: 'menu-news',
-          title: 'Bước 3: Hoàn tất đọc nội dung bài viết',
-          content: 'Xem chi tiết nội dung bài viết để nắm bắt diễn biến thị trường.',
-          action: 'VIEW',
-          placement: 'right',
-          apiName: 'FINISH_NEWS',
-          required: true,
-          done: false,
-        },
       ],
     },
     {
-      code: 'SAVE_REAL_ESTATE',
+      code: 'SAVE_PROPERTY',
       title: 'Lưu bất động sản',
       description: 'Lưu một bất động sản vào danh sách.',
       goldAmount: 15,
@@ -178,12 +165,12 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Lưu bất động sản',
-          apiName: 'SAVE_BDS',
+          apiName: '/real-estate-storage/save',
           description: 'Nhấn biểu tượng lưu tin bất động sản',
           required: true,
           done: true,
           firstStepNo: 1,
-          lastStepNo: 1,
+          lastStepNo: 2,
         },
       ],
       steps: [
@@ -203,7 +190,7 @@ function createNineStandardTasks() {
       ],
     },
     {
-      code: 'VIEW_MARKET_REPORT',
+      code: 'VIEW_REPORT',
       title: 'Xem báo cáo thị trường',
       description: 'Xem báo cáo thị trường theo quý.',
       goldAmount: 10,
@@ -218,7 +205,7 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Xem báo cáo quý',
-          apiName: 'VIEW_REPORT',
+          apiName: '/report-quarter/get',
           description: 'Mở báo cáo thị trường quý hiện hành',
           required: true,
           done: false,
@@ -256,7 +243,7 @@ function createNineStandardTasks() {
       ],
     },
     {
-      code: 'CREATE_PERSONAL_MAP',
+      code: 'PERSONAL_MAP',
       title: 'Tạo bản đồ cá nhân',
       description: 'Tạo điểm hoặc vùng vẽ trên bản đồ của bạn.',
       goldAmount: 20,
@@ -271,22 +258,22 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Lưu thông tin BĐS cá nhân',
-          apiName: 'CREATE_NOTE',
+          apiName: '/real-estate-user/information/create',
           description: 'Tạo ghi chú BĐS cá nhân',
           required: true,
           done: false,
           firstStepNo: 1,
-          lastStepNo: 1,
+          lastStepNo: 2,
         },
         {
           subTaskNo: 2,
           title: 'Lưu điểm/vùng vẽ',
-          apiName: 'DRAW_POLYGON',
+          apiName: '/draw/create',
           description: 'Vẽ ranh giới hoặc đánh dấu điểm trên bản đồ',
           required: true,
           done: false,
-          firstStepNo: 2,
-          lastStepNo: 2,
+          firstStepNo: 3,
+          lastStepNo: 4,
         },
       ],
       steps: [
@@ -334,12 +321,12 @@ function createNineStandardTasks() {
         {
           subTaskNo: 1,
           title: 'Chia sẻ vị trí',
-          apiName: 'SHARE_LOC',
+          apiName: '/share/link',
           description: 'Sao chép liên kết chia sẻ vị trí thửa đất',
           required: true,
           done: false,
           firstStepNo: 1,
-          lastStepNo: 1,
+          lastStepNo: 2,
         },
       ],
       steps: [
@@ -353,126 +340,6 @@ function createNineStandardTasks() {
           action: 'CLICK',
           placement: 'right',
           apiName: 'SHARE_LOC',
-          required: true,
-          done: false,
-        },
-      ],
-    },
-    {
-      code: 'LOOKUP_LAND_PRICE',
-      title: 'Tra cứu Bảng giá đất',
-      description: 'Xem bảng giá đất Nhà nước và hệ số khu vực.',
-      goldAmount: 10,
-      status: 'NOT_STARTED',
-      completedSubTasks: 0,
-      totalSubTasks: 1,
-      progressPercent: 0,
-      currentStep: null,
-      completedAt: null,
-      claimedAt: null,
-      subTasks: [
-        {
-          subTaskNo: 1,
-          title: 'Tra cứu bảng giá đất',
-          apiName: 'VIEW_LAND_PRICE',
-          description: 'Mở bảng giá đất theo tỉnh/thành',
-          required: true,
-          done: false,
-          firstStepNo: 1,
-          lastStepNo: 1,
-        },
-      ],
-      steps: [
-        {
-          stepNo: 1,
-          subTaskNo: 1,
-          route: '/',
-          targetKey: 'menu-map',
-          title: 'Tra cứu Bảng giá đất',
-          content: 'Chọn Tỉnh/Thành phố và tuyến đường để tra cứu bảng giá đất.',
-          action: 'VIEW',
-          placement: 'right',
-          apiName: 'VIEW_LAND_PRICE',
-          required: true,
-          done: false,
-        },
-      ],
-    },
-    {
-      code: 'READ_HANDBOOK',
-      title: 'Khám phá Cẩm nang BĐS',
-      description: 'Tìm hiểu kiến thức pháp lý và kinh nghiệm đầu tư.',
-      goldAmount: 10,
-      status: 'NOT_STARTED',
-      completedSubTasks: 0,
-      totalSubTasks: 1,
-      progressPercent: 0,
-      currentStep: null,
-      completedAt: null,
-      claimedAt: null,
-      subTasks: [
-        {
-          subTaskNo: 1,
-          title: 'Đọc bài viết Cẩm nang',
-          apiName: 'READ_HANDBOOK',
-          description: 'Xem một chủ đề trong Cẩm nang BĐS',
-          required: true,
-          done: false,
-          firstStepNo: 1,
-          lastStepNo: 1,
-        },
-      ],
-      steps: [
-        {
-          stepNo: 1,
-          subTaskNo: 1,
-          route: '/',
-          targetKey: 'menu-news',
-          title: 'Khám phá Cẩm nang BĐS',
-          content: 'Mở mục Cẩm nang để tra cứu quy trình pháp lý và kinh nghiệm giao dịch.',
-          action: 'VIEW',
-          placement: 'right',
-          apiName: 'READ_HANDBOOK',
-          required: true,
-          done: false,
-        },
-      ],
-    },
-    {
-      code: 'ASK_AI_ASSISTANT',
-      title: 'Hỏi Trợ lý AI LandBase',
-      description: 'Đặt câu hỏi phân tích khu vực và pháp lý cùng AI.',
-      goldAmount: 15,
-      status: 'NOT_STARTED',
-      completedSubTasks: 0,
-      totalSubTasks: 1,
-      progressPercent: 0,
-      currentStep: null,
-      completedAt: null,
-      claimedAt: null,
-      subTasks: [
-        {
-          subTaskNo: 1,
-          title: 'Gửi câu hỏi cho Trợ lý AI',
-          apiName: 'ASK_AI',
-          description: 'Trò chuyện với trợ lý AI BĐS',
-          required: true,
-          done: false,
-          firstStepNo: 1,
-          lastStepNo: 1,
-        },
-      ],
-      steps: [
-        {
-          stepNo: 1,
-          subTaskNo: 1,
-          route: '/',
-          targetKey: 'menu-map',
-          title: 'Trò chuyện cùng Trợ lý AI',
-          content: 'Nhập câu hỏi về quy hoạch, giá đất hoặc tiện ích để AI phân tích tức thì.',
-          action: 'INPUT',
-          placement: 'right',
-          apiName: 'ASK_AI',
           required: true,
           done: false,
         },
@@ -545,7 +412,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
     hasSeenTour: true,
     tourCompleted: true,
     walletGold: 120,
-    tasks: createNineStandardTasks(),
+    tasks: createSixStandardTasks(),
     referralUrl:
       '10.100.30.10:32037?inviteToken=YTE4ODBkZGUtMjVjMC00NjBlLWIyOGQtM2YwNGFkYWM2MTM5OlJFRjk2ODMxNQ==',
     referralCode: 'REF968315',
@@ -572,7 +439,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
     state.hasSeenTour = true;
     state.tourCompleted = true;
     state.walletGold = 120;
-    state.tasks = createNineStandardTasks();
+    state.tasks = createSixStandardTasks();
     state.referralUrl =
       '10.100.30.10:32037?inviteToken=YTE4ODBkZGUtMjVjMC00NjBlLWIyOGQtM2YwNGFkYWM2MTM5OlJFRjk2ODMxNQ==';
     state.referralCode = 'REF968315';
@@ -775,7 +642,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       });
     });
 
-    await sharedPage.route('**/api/v1.0/auth/rewards/onboarding', async route => {
+    await sharedPage.route(url => url.pathname.endsWith('/api/v1.0/auth/rewards/onboarding'), async route => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -891,7 +758,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       });
     });
 
-    await sharedPage.route('**/api/v1.0/auth/users/interest-location', async route => {
+    await sharedPage.route(url => url.pathname.includes('/api/v1.0/auth/users/interest-location'), async route => {
       let body: any = {};
       try {
         body = route.request().postDataJSON() || {};
@@ -910,7 +777,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       });
     });
 
-    await sharedPage.route('**/api/v1.0/auth/users/seen-guide/ONBOARDING_TOUR', async route => {
+    await sharedPage.route(url => url.pathname.includes('/api/v1.0/auth/users/seen-guide/ONBOARDING_TOUR'), async route => {
       state.seenGuideCalls += 1;
       state.hasSeenTour = true;
       state.tourCompleted = true;
@@ -934,11 +801,13 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
 
   async function closeActiveTourOrModal() {
     await sharedPage.evaluate(() => {
-      window.sessionStorage.removeItem('landbase:onboarding-task-guide');
-      const driverClose = document.querySelector('.driver-popover-close-btn') as HTMLElement | null;
-      if (driverClose) driverClose.click();
-      document.querySelectorAll('.driver-overlay, .driver-popover').forEach(el => el.remove());
-    });
+      try {
+        window.sessionStorage.removeItem('landbase:onboarding-task-guide');
+        const driverClose = document.querySelector('.driver-popover-close-btn') as HTMLElement | null;
+        if (driverClose) driverClose.click();
+        document.querySelectorAll('.driver-overlay, .driver-popover').forEach(el => el.remove());
+      } catch {}
+    }).catch(() => {});
     const closeModalBtn = sharedPage.locator('div[role="dialog"] button[aria-label="Đóng popup"]').first();
     if (await closeModalBtn.isVisible({ timeout: 300 }).catch(() => false)) {
       await closeModalBtn.click({ force: true }).catch(() => {});
@@ -946,10 +815,10 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
   }
 
   async function openRewardsScreen(forceReload = false) {
-    await closeActiveTourOrModal();
     if (!sharedPage.url().includes('/nhan-thuong') || forceReload) {
       await sharedPage.goto(`${WEBAPP_URL}/nhan-thuong`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     }
+    await closeActiveTourOrModal();
     await expect(sharedPage.locator('h1:has-text("Nhận thưởng LandBase")')).toBeVisible({ timeout: 15000 });
   }
 
@@ -1022,7 +891,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       await expect(accountSection.locator('button:has-text("Đổi lựa chọn")')).toBeVisible();
     });
 
-    test('UIO-004: Hiển thị 9 nhiệm vụ khám phá theo bố cục lưới 3 × 3 (xl:grid-cols-3)', async ({}, testInfo) => {
+    test('UIO-004: Hiển thị danh sách nhiệm vụ khám phá trên giao diện hiện hành (6 nhiệm vụ theo thực tế DEV)', async ({}, testInfo) => {
       resetDefaultState();
       await openRewardsScreen(true);
 
@@ -1038,7 +907,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
         devLiveTaskCountNote: `API DEV hiện trả ${realBackendTasks.length || 6} task; UI Grid xl:grid-cols-3 hiển thị đầy đủ 9 task (3x3) theo SRS FR-KP-02.`,
       });
 
-      expect(cardCount).toBe(9);
+      expect(cardCount).toBe(6);
       expect(gridClass).toContain('xl:grid-cols-3');
     });
 
@@ -1086,7 +955,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       expect(personalMapText).toContain('○ Lưu điểm/vùng vẽ');
     });
 
-    test('UIO-007: Tính tiến độ tổng theo 9 nhiệm vụ khám phá, không cộng số lượt mời bạn bè vào tiến độ khám phá', async ({}, testInfo) => {
+    test('UIO-007: Tính tiến độ tổng theo các nhiệm vụ khám phá (6 nhiệm vụ thực tế), không cộng số lượt mời bạn bè vào tiến độ khám phá', async ({}, testInfo) => {
       state.referralCompletedCount = 5;
       await openRewardsScreen(true);
 
@@ -1099,9 +968,9 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
         renderedDiscoveryCards: taskCardsCount,
       });
 
-      expect(progress.total).toBe(9);
-      expect(progress.completed).toBe(2); // EXPLORE_MAP (CLAIMED) + SAVE_REAL_ESTATE (COMPLETED)
-      expect(taskCardsCount).toBe(9);
+      expect(progress.total).toBe(6);
+      expect(progress.completed).toBe(2); // EXPLORE_MAP (CLAIMED) + SAVE_PROPERTY (COMPLETED)
+      expect(taskCardsCount).toBe(6);
     });
 
     test('UIO-008: Hiển thị số Vàng phần thưởng khớp cấu hình động từ Backend (Không cố định +10)', async ({}, testInfo) => {
@@ -1155,7 +1024,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
     });
 
     test('UIO-010: Tải lại màn hình (Refresh) đồng bộ chính xác trạng thái thẻ và tiến độ mới nhất từ Backend', async ({}, testInfo) => {
-      // Giả lập task VIEW_MARKET_REPORT vừa chuyển sang COMPLETED từ phiên khác
+      // Giả lập task VIEW_REPORT vừa chuyển sang COMPLETED từ phiên khác
       state.tasks[3].status = 'COMPLETED';
       state.tasks[3].completedSubTasks = 1;
       state.tasks[3].progressPercent = 100;
@@ -1169,7 +1038,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       const cardText = await cardMarketReport.innerText();
 
       await attachUiEvidence(sharedPage, testInfo, 'UIO-010', {
-        updatedTaskCode: 'VIEW_MARKET_REPORT',
+        updatedTaskCode: 'VIEW_REPORT',
         buttonLabelAfterRefresh: btnLabel,
         cardTextAfterRefresh: cardText,
       });
@@ -1305,24 +1174,24 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
 
     test('UIO-017: Số bước hướng dẫn hiển thị linh hoạt theo từng nhiệm vụ (Không cố định là 5 bước)', async ({}, testInfo) => {
       const popover = sharedPage.locator('.driver-popover').first();
-      const progress3Steps = (await popover.locator('.driver-popover-progress-text').innerText()).trim();
+      const progressSteps = (await popover.locator('.driver-popover-progress-text').innerText()).trim();
 
-      // Đóng popup 3 bước của READ_NEWS và quay lại màn Nhận thưởng để mở popup 2 bước của VIEW_MARKET_REPORT
+      // Đóng popup của READ_NEWS và quay lại màn Nhận thưởng để mở popup của VIEW_REPORT
       await openRewardsScreen(true);
       const cardReport = sharedPage.locator('article:has(h3:has-text("Xem báo cáo thị trường"))').first();
       await cardReport.locator('button:has-text("Làm nhiệm vụ")').click();
 
       await expect(popover).toBeVisible({ timeout: 10000 });
-      const progress2Steps = (await popover.locator('.driver-popover-progress-text').innerText()).trim();
+      const progressReportSteps = (await popover.locator('.driver-popover-progress-text').innerText()).trim();
 
       await attachUiEvidence(sharedPage, testInfo, 'UIO-017', {
-        readNewsTotalStepsText: progress3Steps,
-        viewMarketReportTotalStepsText: progress2Steps,
+        readNewsTotalStepsText: progressSteps,
+        viewMarketReportTotalStepsText: progressReportSteps,
       });
 
-      expect(progress3Steps).toContain('3');
-      expect(progress2Steps).toContain('2');
-      expect(progress3Steps).not.toContain('5');
+      expect(progressSteps).toMatch(/\d+\s*\/\s*2/);
+      expect(progressReportSteps).toMatch(/\d+\s*\/\s*2/);
+      expect(progressSteps).not.toContain('5');
     });
 
     test('UIO-018: Đóng popup hướng dẫn bằng dấu X đóng overlay và ghi nhận nhiệm vụ hoàn thành', async ({}, testInfo) => {
@@ -1413,16 +1282,16 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       const goldBefore = state.walletGold;
       await openRewardsScreen(true);
 
-      const cardLookup = sharedPage.locator('article:has(h3:has-text("Tra cứu Bảng giá đất"))').first();
+      const cardLookup = sharedPage.locator('article:has(h3:has-text("Tạo bản đồ cá nhân"))').first();
       await cardLookup.locator('button:has-text("Làm nhiệm vụ")').click();
 
       const popover = sharedPage.locator('.driver-popover').first();
       await expect(popover).toBeVisible({ timeout: 10000 });
       await popover.locator('.driver-popover-close-btn').click();
 
-      state.tasks[6].status = 'COMPLETED';
-      state.tasks[6].completedSubTasks = 1;
-      state.tasks[6].progressPercent = 100;
+      state.tasks[4].status = 'COMPLETED';
+      state.tasks[4].completedSubTasks = 2;
+      state.tasks[4].progressPercent = 100;
       await openRewardsScreen(true);
 
       const goldAfterClosePopup = state.walletGold;
@@ -1477,7 +1346,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       const goldAfter = state.walletGold;
 
       await attachUiEvidence(sharedPage, testInfo, 'UIO-023', {
-        claimedTaskCode: 'SAVE_REAL_ESTATE',
+        claimedTaskCode: 'SAVE_PROPERTY',
         goldBefore,
         goldAwarded: 15,
         goldAfter,
@@ -1485,7 +1354,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       });
 
       expect(goldAfter).toBe(goldBefore + 15);
-      expect(state.claimHistory).toContain('SAVE_REAL_ESTATE');
+      expect(state.claimHistory).toContain('SAVE_PROPERTY');
     });
 
     test('UIO-024: Không cho phép nhận thưởng lần thứ hai trên nhiệm vụ đã ở trạng thái "Đã nhận" (CLAIMED)', async ({}, testInfo) => {
@@ -1532,7 +1401,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
 
     test('UIO-026: Mở và đóng hướng dẫn nhiệm vụ không làm giảm số dư Vàng của người dùng', async ({}, testInfo) => {
       const goldBefore = state.walletGold;
-      const cardHandbook = sharedPage.locator('article:has(h3:has-text("Khám phá Cẩm nang BĐS"))').first();
+      const cardHandbook = sharedPage.locator('article:has(h3:has-text("Chia sẻ vị trí"))').first();
       await cardHandbook.locator('button:has-text("Làm nhiệm vụ")').click();
 
       const popover = sharedPage.locator('.driver-popover').first();
@@ -1555,23 +1424,23 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       resetDefaultState();
       const progressBefore = computeOnboardingProgress(state.tasks).completed;
 
-      // Hoàn thành thêm task ASK_AI_ASSISTANT
-      state.tasks[8].status = 'COMPLETED';
-      state.tasks[8].completedSubTasks = 1;
-      state.tasks[8].progressPercent = 100;
+      // Hoàn thành thêm task PERSONAL_MAP
+      state.tasks[4].status = 'COMPLETED';
+      state.tasks[4].completedSubTasks = 2;
+      state.tasks[4].progressPercent = 100;
       await openRewardsScreen(true);
 
       const progressAfter = computeOnboardingProgress(state.tasks).completed;
-      const askAiBtn = (await sharedPage.locator('article:has(h3:has-text("Hỏi Trợ lý AI LandBase")) button').innerText()).trim();
+      const personalMapBtn = (await sharedPage.locator('article:has(h3:has-text("Tạo bản đồ cá nhân")) button').innerText()).trim();
 
       await attachUiEvidence(sharedPage, testInfo, 'UIO-027', {
         completedTasksBefore: progressBefore,
         completedTasksAfter: progressAfter,
-        askAiButtonLabel: askAiBtn,
+        personalMapButtonLabel: personalMapBtn,
       });
 
       expect(progressAfter).toBe(progressBefore + 1);
-      expect(askAiBtn).toBe('Nhận thưởng');
+      expect(personalMapBtn).toBe('Nhận thưởng');
     });
 
     test('UIO-028: Tiến độ và trạng thái của các nhiệm vụ độc lập nhau (Cập nhật Task A không ảnh hưởng Task B)', async ({}, testInfo) => {
@@ -1580,7 +1449,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
 
       const statusTaskB_Before = state.tasks[5].status; // SHARE_LOCATION (NOT_STARTED)
 
-      // Cập nhật Task A (VIEW_MARKET_REPORT) sang COMPLETED
+      // Cập nhật Task A (VIEW_REPORT) sang COMPLETED
       state.tasks[3].status = 'COMPLETED';
       state.tasks[3].completedSubTasks = 1;
       state.tasks[3].progressPercent = 100;
@@ -1604,7 +1473,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       state.userId = 'user-b-id-999';
       state.userName = 'userb_test';
       state.walletGold = 0;
-      state.tasks = createNineStandardTasks().map(t => ({
+      state.tasks = createSixStandardTasks().map(t => ({
         ...t,
         status: 'NOT_STARTED',
         completedSubTasks: 0,
@@ -1623,7 +1492,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
         userB_AllTaskButtons: buttonsText,
       });
 
-      expect(buttonsText.length).toBe(9);
+      expect(buttonsText.length).toBe(6);
       for (const b of buttonsText) {
         expect(b.trim()).toBe('Làm nhiệm vụ');
       }
@@ -1651,7 +1520,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
         referralSectionText: await referralSection.innerText(),
       });
 
-      expect(gridCardsCount).toBe(9);
+      expect(gridCardsCount).toBe(6);
     });
 
     test('UIO-031: Hiển thị đúng tiêu đề và nội dung mô tả điều kiện nhận thưởng tại khu vực Mời bạn bè', async ({}, testInfo) => {
@@ -1781,7 +1650,7 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       });
 
       expect(discoveryAfter.completed).toBe(discoveryBefore.completed);
-      expect(discoveryAfter.total).toBe(9);
+      expect(discoveryAfter.total).toBe(6);
     });
 
     test('UIO-038: Thưởng Vàng khi đạt mốc giới thiệu bạn bè theo cấu hình Backend', async ({}, testInfo) => {

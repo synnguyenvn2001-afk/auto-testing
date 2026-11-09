@@ -22425,9 +22425,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -22581,9 +22581,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -22736,9 +22736,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -22822,9 +22822,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23035,9 +23035,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23190,9 +23190,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23278,9 +23278,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23499,9 +23499,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/auth/group/get-currentUserLimit",
+                  "raw": "{{baseUrl}}/api/v1.0/auth/group/get-currentUserLimit",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23577,9 +23577,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -23791,9 +23791,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{gatewayUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+                  "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
                   "host": [
-                    "{{gatewayUrl}}"
+                    "{{baseUrl}}"
                   ],
                   "path": [
                     "api",
@@ -24273,6 +24273,12 @@
           "}",
           "if (!pm.request.headers.has('clientMessageId')) {",
           "    pm.request.headers.add({ key: 'clientMessageId', value: pm.variables.replaceIn('{{$guid}}') });",
+          "}",
+          "if (!pm.request.headers.has('Authorization') && !pm.info.requestName.includes('chưa đăng nhập') && !pm.info.requestName.includes('thiếu thông tin xác thực')) {",
+          "    const token = pm.environment.get('accessToken') || pm.variables.get('accessToken');",
+          "    if (token) {",
+          "        pm.request.headers.add({ key: 'Authorization', value: 'Bearer ' + token });",
+          "    }",
           "}"
         ]
       }
