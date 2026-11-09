@@ -1,8 +1,8 @@
 {
   "baseUrl": "https://dev-gateway.laand.vn",
   "webappUrl": "https://dev-webapp.laand.vn",
-  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJuYW1lXCI6XCJ1c2VydDFcIixcImVtYWlsXCI6XCJ3YW5vZ29kMzYzQGR5c29uYy5jb21cIixcImRpc3BsYXlOYW1lXCI6XCJkxJFkZFwiLFwiZXhwaXJlVGltZVwiOjYwMDAwMCxcInBob25lTnVtYmVyXCI6XCIwOTg3NjU0MzIxXCIsXCJ0eXBlXCI6XCJBQ0NFU1NcIn0iLCJleHAiOjE3OTQyMDg4MDcsImlhdCI6MTc5NDIwODIwN30.XmIPLcXCUAsdB6_XTuEorO-bZvQP2pxlkmFTRw1z1d74A74DGozURkw7bcI5eA2vjigd4Nx9pQXrANRCwrO9Pw",
-  "xAuthToken": "WQLBeqrKWOOS",
-  "xSessionRef": "ovEiRtF06zOo",
-  "updatedAt": "2026-11-09T07:15:53.068Z"
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJuYW1lXCI6XCJ1c2VydDFcIixcImVtYWlsXCI6XCJ3YW5vZ29kMzYzQGR5c29uYy5jb21cIixcImRpc3BsYXlOYW1lXCI6XCJkxJFkZFwiLFwiZXhwaXJlVGltZVwiOjYwMDAwMCxcInBob25lTnVtYmVyXCI6XCIwOTg3NjU0MzIxXCIsXCJ0eXBlXCI6XCJBQ0NFU1NcIn0iLCJleHAiOjE3OTQyMTg3NjMsImlhdCI6MTc5NDIxODE2M30.tXfEBMpbuYWkzaRxurjaxDfiDPam_oqVY6BRGl9PqTZcW2poCAxoJylrTMu9hZXEqG5uZy4ceqADo_7NNrzgjg",
+  "xAuthToken": "",
+  "xSessionRef": "kSh8vp741zA9",
+  "updatedAt": "2026-11-09T10:01:49.479Z"
 }

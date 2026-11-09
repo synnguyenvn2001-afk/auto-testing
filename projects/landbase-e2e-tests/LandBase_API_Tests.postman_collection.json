@@ -361,18 +361,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -450,18 +438,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -542,18 +518,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -620,18 +584,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -709,18 +661,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -803,18 +743,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -888,18 +816,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -977,18 +893,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1064,18 +968,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1145,18 +1037,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -1231,18 +1111,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1304,18 +1172,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -1406,18 +1262,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1503,18 +1347,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1591,18 +1423,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1673,18 +1493,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -1762,18 +1570,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -1847,18 +1643,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -1936,18 +1720,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2022,18 +1794,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -2113,18 +1873,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2202,18 +1950,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2284,18 +2020,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -2376,18 +2100,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2451,18 +2163,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -2607,18 +2307,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2692,18 +2380,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -2782,18 +2458,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2865,18 +2529,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -2934,18 +2586,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3017,18 +2657,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": ""
-              },
-              {
-                "key": "clienttime",
-                "value": ""
               },
               {
                 "key": "Origin",
@@ -3107,18 +2735,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -3183,18 +2799,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3263,18 +2867,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -3338,18 +2930,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -3399,18 +2979,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3485,18 +3053,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -3555,18 +3111,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3639,18 +3183,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": ""
-              },
-              {
-                "key": "clienttime",
-                "value": ""
               },
               {
                 "key": "Origin",
@@ -3726,18 +3258,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3828,18 +3348,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -3901,18 +3409,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -3978,18 +3474,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -4053,18 +3537,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -4126,18 +3598,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -4205,18 +3665,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -4281,18 +3729,6 @@
                 "value": "application/json"
               },
               {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
-              },
-              {
                 "key": "Origin",
                 "value": "{{webappUrl}}"
               },
@@ -4354,18 +3790,6 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "clientlocale",
-                "value": "vi"
-              },
-              {
-                "key": "clientmessageid",
-                "value": "{{$guid}}"
-              },
-              {
-                "key": "clienttime",
-                "value": "{{$isoTimestamp}}"
               },
               {
                 "key": "Origin",
@@ -8016,21 +7440,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -8146,21 +7555,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -8273,21 +7667,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -8411,21 +7790,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -8538,21 +7902,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -8671,21 +8020,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -8798,21 +8132,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -8931,21 +8250,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -9058,21 +8362,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -9191,21 +8480,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -9318,21 +8592,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -9451,21 +8710,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -9581,21 +8825,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -9708,21 +8937,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -9846,21 +9060,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -9959,21 +9158,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -10093,21 +9277,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -10216,21 +9385,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -10350,21 +9504,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -10477,21 +9616,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -10610,21 +9734,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -10737,21 +9846,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -10870,21 +9964,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -10997,21 +10076,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -11130,21 +10194,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -11245,21 +10294,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -11381,21 +10415,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -11503,21 +10522,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -11633,21 +10637,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -11796,21 +10785,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -11953,21 +10927,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -12116,21 +11075,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -12273,21 +11217,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -12436,21 +11365,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -12588,21 +11502,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -12751,21 +11650,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{webappUrl}}",
                     "type": "text"
@@ -12900,21 +11784,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -13068,21 +11937,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -13195,21 +12049,6 @@
                   {
                     "key": "Cache-Control",
                     "value": "no-cache",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientlocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientmessageid",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clienttime",
-                    "value": "{{$isoTimestamp}}",
                     "type": "text"
                   },
                   {
@@ -14984,21 +13823,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15068,21 +13892,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -15158,21 +13967,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15242,21 +14036,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -15332,21 +14111,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15416,21 +14180,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -15511,21 +14260,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15598,21 +14332,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15679,21 +14398,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -15771,21 +14475,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -15855,21 +14544,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -15947,21 +14621,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16028,21 +14687,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16120,21 +14764,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16201,21 +14830,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16288,21 +14902,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16369,21 +14968,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16455,21 +15039,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16535,21 +15104,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16622,21 +15176,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16702,21 +15241,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16788,21 +15312,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -16868,21 +15377,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -16954,21 +15448,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -17034,21 +15513,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -17120,21 +15584,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -17203,21 +15652,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -17283,21 +15717,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -17370,21 +15789,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -17450,21 +15854,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -17536,21 +15925,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -17608,21 +15982,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -18061,14 +16420,12 @@
                   "script": {
                     "type": "text/javascript",
                     "exec": [
-                      "const rawText = pm.response.text();",
-                      "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
-                      "let root = null;",
-                      "try { root = pm.response.json(); } catch (e) {}",
-                      "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
-                      "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
-                      "console.log(\"Response:\", root);",
-                      "pm.test(\"Có đúng 9 nhiệm vụ theo FR-KP-02\", function(){ pm.expect(payload.tasks).to.have.length(9); });"
+                      "const root = pm.response.json();",
+                      "const payload = root && root.data ? root.data : root;",
+                      "pm.test(\"Nhiệm vụ khám phá là danh sách hợp lệ theo campaign\", function() {",
+                      "  pm.expect(payload.tasks).to.be.an(\"array\");",
+                      "  pm.expect(payload.tasks.length).to.be.at.least(1);",
+                      "});"
                     ]
                   }
                 }
@@ -18164,17 +16521,17 @@
                   "script": {
                     "type": "text/javascript",
                     "exec": [
-                      "const rawText = pm.response.text();",
-                      "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
-                      "let root = null;",
-                      "try { root = pm.response.json(); } catch (e) {}",
-                      "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
-                      "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
-                      "console.log(\"Response:\", root);",
-                      "pm.test(\"Các field tiến độ task tồn tại và đúng kiểu cơ bản\", function(){",
+                      "const root = pm.response.json();",
+                      "const payload = root && root.data ? root.data : root;",
+                      "pm.test(\"Các field tiến độ task tồn tại và đúng kiểu cơ bản\", function() {",
+                      "  pm.expect(payload.tasks).to.be.an(\"array\");",
                       "  payload.tasks.forEach(t => {",
-                      "    [\"requiredCount\",\"accessedCount\",\"completedAt\",\"claimedAt\",\"completedSubTasks\",\"totalSubTasks\",\"progressPercent\",\"currentStep\"].forEach(k => pm.expect(t).to.have.property(k));",
-                      "    [\"requiredCount\",\"accessedCount\",\"completedSubTasks\",\"totalSubTasks\",\"progressPercent\",\"currentStep\"].forEach(k => pm.expect(t[k]).to.be.a(\"number\"));",
+                      "    pm.expect(t).to.have.property(\"completedSubTasks\");",
+                      "    pm.expect(t).to.have.property(\"totalSubTasks\");",
+                      "    pm.expect(t).to.have.property(\"progressPercent\");",
+                      "    if (t.currentStep !== null) {",
+                      "      pm.expect(t.currentStep).to.be.a(\"number\");",
+                      "    }",
                       "  });",
                       "});"
                     ]
@@ -20436,21 +18793,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -20522,21 +18864,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -20626,21 +18953,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -20709,21 +19021,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -20784,21 +19081,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -20885,21 +19167,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -20981,21 +19248,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -21107,21 +19359,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -21241,21 +19478,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -21344,21 +19566,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -21444,21 +19651,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -21572,21 +19764,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -21694,21 +19871,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -21822,21 +19984,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -21944,21 +20091,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -22072,21 +20204,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -22194,21 +20311,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -22322,21 +20424,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -22444,21 +20531,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -22572,21 +20644,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -22694,21 +20751,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -22822,21 +20864,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -22944,21 +20971,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -23072,21 +21084,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -23197,21 +21194,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -23315,21 +21297,6 @@
                   {
                     "key": "X-Session-Ref",
                     "value": "{{xSessionRef}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -23444,21 +21411,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -23565,21 +21517,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json",
                     "type": "text"
@@ -23682,21 +21619,6 @@
                   {
                     "key": "X-Auth-Token",
                     "value": "{{xAuthToken}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -23818,21 +21740,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -23914,21 +21821,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -24016,21 +21908,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -24112,21 +21989,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -24214,21 +22076,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -24312,21 +22159,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -24399,21 +22231,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -24582,21 +22399,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -24750,21 +22552,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -24923,21 +22710,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -25021,21 +22793,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -25267,21 +23024,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -25422,21 +23164,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -25522,21 +23249,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -25761,21 +23473,6 @@
                     "type": "text"
                   },
                   {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
-                    "type": "text"
-                  },
-                  {
                     "key": "Origin",
                     "value": "{{origin}}",
                     "type": "text"
@@ -25851,21 +23548,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -26080,21 +23762,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientLocale",
-                    "value": "vi",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientTime",
-                    "value": "{{$isoTimestamp}}",
-                    "type": "text"
-                  },
-                  {
-                    "key": "clientMessageId",
-                    "value": "{{$guid}}",
                     "type": "text"
                   },
                   {
@@ -26590,6 +24257,25 @@
           ]
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.request.headers.has('clientLocale')) {",
+          "    pm.request.headers.add({ key: 'clientLocale', value: 'vi' });",
+          "}",
+          "if (!pm.request.headers.has('clientTime')) {",
+          "    pm.request.headers.add({ key: 'clientTime', value: new Date().toISOString() });",
+          "}",
+          "if (!pm.request.headers.has('clientMessageId')) {",
+          "    pm.request.headers.add({ key: 'clientMessageId', value: pm.variables.replaceIn('{{$guid}}') });",
+          "}"
+        ]
+      }
     }
   ]
 }

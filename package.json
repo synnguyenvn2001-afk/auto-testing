@@ -32,6 +32,8 @@
     "test:api:onboarding": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/onboarding-reward.spec.ts --project=api --workers=1",
     "test:api:area-ai": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/api/area-overview-ai.spec.ts --project=api --workers=1",
     "test:chat:ui": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/chat-ai-e2e.spec.ts --project=chromium --workers=1",
+    "test:onboarding:ui": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/onboarding-reward-ui.spec.ts --project=chromium --workers=1",
+    "test:onboarding:ui:headed": "playwright test --config=projects/landbase-e2e-tests/playwright.config.ts projects/landbase-e2e-tests/tests/onboarding-reward-ui.spec.ts --project=chromium --headed --workers=1",
     "token:get": "node projects/landbase-e2e-tests/scripts/capture-dev-tokens.js",
     "postman:export": "node projects/landbase-e2e-tests/scripts/generate-postman.js",
     "test:geocode": "node projects/landbase-e2e-tests/scripts/run-geocode-check.js --limit=100",

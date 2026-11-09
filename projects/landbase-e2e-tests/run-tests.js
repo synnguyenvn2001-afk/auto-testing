@@ -43,6 +43,7 @@ const webSuites = {
   '8': { name: 'Tài khoản & Công cụ (Profile & Tools)', pattern: 'tests/navigation.spec.ts tests/profile.spec.ts tests/tools.spec.ts' },
   '9': { name: '📬 Hòm thư LandBase (Feedback Mailbox - UI & API Integration)', pattern: 'tests/feedback-mailbox.spec.ts' },
   '10': { name: '🤖 Trợ lý AI Bất Động Sản (Chat AI - Web UI & API Integration)', pattern: 'tests/chat-ai-e2e.spec.ts' },
+  '11': { name: '🎁 Onboarding & Nhận thưởng LandBase (Web UI E2E - 71 test cases: UIO-001 -> UIO-071)', pattern: 'tests/onboarding-reward-ui.spec.ts' },
 };
 
 // Mobile suites mapping
