@@ -1,0 +1,2748 @@
+{
+  "info": {
+    "_postman_id": "7d1f2e3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+    "name": "LandBase - Utilities Detail API (32 Test Cases)",
+    "description": "Bộ kiểm thử tự động toàn diện 32 testcase cho POST /api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail (Danh mục tiện ích, Bán kính, Sắp xếp, Phân trang, Validation, Negative, Security & SLA).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dev-gateway.laand.vn",
+      "type": "string"
+    },
+    {
+      "key": "origin",
+      "value": "https://dev-webapp.laand.vn",
+      "type": "string"
+    },
+    {
+      "key": "referer",
+      "value": "https://dev-webapp.laand.vn/",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Nghiệp vụ Danh mục Tiện ích (6 Cases)",
+      "item": [
+        {
+          "name": "UTILITY-CAT-01: Tra cứu tiện ích \"Khu thương mại, giải trí\" (BDS00057) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"status = 1 và trả về danh sách Khu thương mại, giải trí\", function () {",
+                  "  pm.expect(body.status).to.equal(1);",
+                  "  pm.expect(body.data.content).to.be.an(\"array\").and.not.empty;",
+                  "  pm.expect(body.data.content[0].categoryCode).to.equal(\"BDS00057\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10,\n  \"realEstateId\": null,\n  \"tags\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-CAT-02: Tra cứu tiện ích \"Đường phố\" (BDS00063) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"categoryName là Đường phố\", function () {",
+                  "  pm.expect(body.data.content[0].categoryName).to.equal(\"Đường phố\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00063\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-CAT-03: Tra cứu tiện ích \"Trường học\" (BDS00052) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"categoryName là Trường học\", function () {",
+                  "  pm.expect(body.data.content[0].categoryName).to.equal(\"Trường học\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00052\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-CAT-04: Tra cứu tiện ích \"Cơ sở y tế\" (BDS00054) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"categoryName là Cơ sở y tế\", function () {",
+                  "  pm.expect(body.data.content[0].categoryName).to.equal(\"Cơ sở y tế\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00054\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-CAT-05: Tra cứu tiện ích \"Ngân hàng\" (BDS00060) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"categoryName là Ngân hàng\", function () {",
+                  "  pm.expect(body.data.content[0].categoryName).to.equal(\"Ngân hàng\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00060\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-CAT-06: Tra cứu tiện ích \"Cơ sở lưu trú\" (BDS00058) - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"categoryName là Cơ sở lưu trú\", function () {",
+                  "  pm.expect(body.data.content[0].categoryName).to.equal(\"Cơ sở lưu trú\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00058\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Bộ lọc Bán kính, Sắp xếp & Phân trang (7 Cases)",
+      "item": [
+        {
+          "name": "UTILITY-RAD-01: Lọc tiện ích bán kính 1 km (radius: 1) - Tọa độ <= 1.0 km",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const content = pm.response.json().data.content;",
+                  "pm.test(\"Mọi địa điểm có distance <= 1.0 km\", function () {",
+                  "  content.forEach(item => pm.expect(item.serviceFacilitiesUserDetailVo.distance).to.be.at.most(1.0));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 1,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-RAD-02: Lọc tiện ích bán kính 3 km (radius: 3) - Khớp UI mặc định",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const content = pm.response.json().data.content;",
+                  "pm.test(\"Mọi địa điểm có distance <= 3.0 km\", function () {",
+                  "  content.forEach(item => pm.expect(item.serviceFacilitiesUserDetailVo.distance).to.be.at.most(3.0));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-RAD-03: Mở rộng bán kính lên 5 km (radius: 5) - Tổng số lượng lớn",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"totalElements > 0\", function () { pm.expect(pm.response.json().data.totalElements).to.be.above(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 5,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-DATA-01: Kiểm tra danh sách được sắp xếp từ gần đến xa (distance tăng dần)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const content = pm.response.json().data.content;",
+                  "pm.test(\"Khoảng cách được sắp xếp tăng dần\", function () {",
+                  "  for (let i = 0; i < content.length - 1; i++) {",
+                  "    pm.expect(content[i].serviceFacilitiesUserDetailVo.distance).to.be.at.most(content[i + 1].serviceFacilitiesUserDetailVo.distance);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-DATA-02: Kiểm tra cấu trúc trường chi tiết serviceFacilitiesUserDetailVo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const vo = pm.response.json().data.content[0].serviceFacilitiesUserDetailVo;",
+                  "pm.test(\"serviceFacilitiesUserDetailVo có đủ name, distance, travelTime, latitude, longitude\", function () {",
+                  "  [\"name\", \"distance\", \"travelTime\", \"latitude\", \"longitude\"].forEach(k => pm.expect(vo).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-PAGE-01: Kiểm tra phân trang trang đầu (page: 0, size: 6)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"number = 0, size = 6, first = true\", function () {",
+                  "  pm.expect(data.number).to.equal(0);",
+                  "  pm.expect(data.size).to.equal(6);",
+                  "  pm.expect(data.first).to.equal(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 6\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-PAGE-02: Kiểm tra chuyển sang trang kế tiếp (page: 1, size: 5)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"number = 1\", function () { pm.expect(pm.response.json().data.number).to.equal(1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 1,\n  \"size\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Validation & Cố tình truyền sai (19 Cases)",
+      "item": [
+        {
+          "name": "UTILITY-VAL-01: Kiểm tra khi thiếu trường categoryCode - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Báo lỗi Danh mục không được bỏ trống\", function () { pm.expect(pm.response.json().message).to.include(\"Danh mục không được bỏ trống\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-VAL-02: Kiểm tra khi body rỗng {} - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Báo lỗi Danh mục không được bỏ trống\", function () { pm.expect(pm.response.json().message).to.include(\"Danh mục không được bỏ trống\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-VAL-03: Kiểm tra với categoryCode rỗng (\"\") - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Báo lỗi Danh mục không được bỏ trống\", function () { pm.expect(pm.response.json().message).to.include(\"Danh mục không được bỏ trống\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-VAL-04: Kiểm tra với categoryCode không tồn tại (BDS99999) - Trả về mảng rỗng 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"content là mảng rỗng []\", function () { pm.expect(pm.response.json().data.content).to.be.an(\"array\").that.is.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS99999\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-01: Cố tình truyền categoryCode là null - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": null,\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-02: Cố tình truyền categoryCode chỉ gồm khoảng trắng (\"   \") - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"   \",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-03: Cố tình truyền kích thước trang size: 101 (vượt giới hạn 100) - 400 Bad Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"Message chứa max.size.of.page.is.100\", function () { pm.expect(pm.response.json().message).to.include(\"max.size.of.page.is.100\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 101\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-04: Cố tình truyền latitude là chuỗi chữ cái (\"abc\") - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": \"abc\",\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-05: Cố tình truyền longitude là chuỗi chữ cái (\"xyz\") - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": \"xyz\",\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-06: Cố tình truyền latitude vượt miền tọa độ địa lý (999) - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 999,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-07: Cố tình truyền longitude vượt miền tọa độ địa lý (999) - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 999,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-08: Cố tình truyền bán kính âm (radius: -5) - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": -5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-09: Cố tình truyền bán kính bằng 0 (radius: 0) - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-NEG-10: Cố tình truyền radius là chuỗi chữ cái (\"abc\") - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": \"abc\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-SEC-01: Cố tình tấn công SQL Injection vào categoryCode - Hệ thống an toàn 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK (Không rò rỉ lỗi SQL)\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057' OR '1'='1\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-SEC-02: Cố tình chèn mã độc XSS Script vào categoryCode - Không thực thi 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Trả về mảng rỗng an toàn\", function () { pm.expect(pm.response.json().data.content).to.be.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"<script>alert(\\\"xss\\\")</script>\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-SEC-03: Cố tình gửi Body dạng mảng JSON [{...}] thay vì Object - 406 Not Acceptable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"categoryCode\": \"BDS00057\",\n    \"latitude\": 21.0112385,\n    \"longitude\": 105.822485,\n    \"radius\": 3\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "UTILITY-METH-01: Cố tình gọi phương thức GET vào endpoint POST - Từ chối 401/405",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401 hoặc 405\", function () { pm.expect([401, 405]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "UTILITY-PERF-01: Kiểm tra thời gian phản hồi API Elasticsearch SLA (< 3500ms)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Response time < 3500ms\", function () { pm.expect(pm.response.responseTime).to.be.below(3500); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "elasticsearch",
+                "public",
+                "service-facilities-user",
+                "utilities-detail"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryCode\": \"BDS00057\",\n  \"latitude\": 21.0112385,\n  \"longitude\": 105.822485,\n  \"radius\": 3,\n  \"page\": 0,\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

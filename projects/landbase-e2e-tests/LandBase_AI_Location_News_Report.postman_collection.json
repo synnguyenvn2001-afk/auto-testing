@@ -1,0 +1,3538 @@
+{
+  "info": {
+    "_postman_id": "840809b2-c675-439f-92e9-1c702d6c2a74",
+    "name": "LandBase - AI tổng hợp báo cáo theo vị trí",
+    "description": "POST https://dev-gateway.laand.vn/api/v1.0/real-estate/public/news/report-by-location. Request body baseline: {\"lat\": 20.983173, \"lon\": 105.828624}. Nguồn là cURL người dùng cung cấp. Chưa có response mẫu/API schema; Postman chỉ assert HTTP/body cơ bản ở happy path và ghi nhận response cho validation/auth tests. Mặc định request bị skip qua confirmRunAIReport=false để tránh gọi AI report ngoài ý muốn.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dev-gateway.laand.vn",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Happy path",
+      "description": "Payload hợp lệ và truyền tọa độ mẫu.",
+      "item": [
+        {
+          "name": "REPORT-API-01 - Gửi yêu cầu xem báo cáo AI tổng hợp với tọa độ mẫu hợp lệ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-01\nMục tiêu: Gửi yêu cầu xem báo cáo AI tổng hợp với tọa độ mẫu hợp lệ\nExpected: [DERIVED] Với cặp tọa độ mẫu và các header phiên hợp lệ, API tiếp nhận request và trả response thành công. Ghi nhận HTTP status, Content-Type và toàn bộ response body; schema nội dung báo cáo chưa có mẫu để chốt.\nNguồn: [SOURCE] cURL người dùng cung cấp: POST endpoint report-by-location; body lat=20.983173, lon=105.828624.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"HTTP response thuộc nhóm 2xx\", function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                  "pm.test(\"Response body không rỗng\", function(){ pm.expect(raw).to.not.be.empty; });",
+                  "if (contentType.toLowerCase().includes(\"json\")) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Chưa có response mẫu: ghi nhận schema báo cáo AI thực tế, không assert field chưa được xác nhận.\");",
+                  "console.log(\"Testcase: REPORT-API-01 - Gửi yêu cầu xem báo cáo AI tổng hợp với tọa độ mẫu hợp lệ\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-02 - Kiểm tra gửi tọa độ thập phân đầy đủ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-02\nMục tiêu: Kiểm tra gửi tọa độ thập phân đầy đủ\nExpected: Request gửi đúng hai giá trị số lat/lon và giữ phần thập phân như dữ liệu kiểm thử; ghi nhận response để đối chiếu báo cáo của vị trí đó.\nNguồn: [SOURCE] Giá trị lat/lon trong cURL; [DERIVED] kiểm tra mapping và độ chính xác truyền tham số.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"HTTP response thuộc nhóm 2xx\", function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                  "pm.test(\"Response body không rỗng\", function(){ pm.expect(raw).to.not.be.empty; });",
+                  "if (contentType.toLowerCase().includes(\"json\")) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Chưa có response mẫu: ghi nhận schema báo cáo AI thực tế, không assert field chưa được xác nhận.\");",
+                  "console.log(\"Testcase: REPORT-API-02 - Kiểm tra gửi tọa độ thập phân đầy đủ\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-22 - Kiểm tra chi tiết Schema 13 trường nội dung Báo cáo AI (id, slug, title, content, pdfUrl, provinceCode, wardCode, reportYear, reportQuarter)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const report = pm.response.json().data;",
+                  "pm.test(\"Báo cáo AI có đầy đủ 13 trường dữ liệu chuẩn\", function () {",
+                  "  [\"id\",\"slug\",\"title\",\"description\",\"content\",\"imageUrl\",\"pdfUrl\",\"provinceCode\",\"wardCode\",\"reportYear\",\"reportQuarter\",\"postDate\",\"isLoginRequired\"].forEach(k => pm.expect(report).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-23 - Kiểm tra cấu trúc Response Wrapper chuẩn của Gateway LandBase",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Wrapper có status=1, duration, path, responseTime, clientTime, clientMessageId, data\", function () {",
+                  "  pm.expect(body).to.have.property(\"status\", 1);",
+                  "  [\"duration\",\"path\",\"responseTime\",\"clientTime\",\"clientMessageId\",\"data\"].forEach(k => pm.expect(body).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Validation / Type / Boundary",
+      "description": "Thiếu field, null, empty, sai kiểu, tọa độ biên và field lạ.",
+      "item": [
+        {
+          "name": "REPORT-API-03 - Kiểm tra khi thiếu trường lat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-03\nMục tiêu: Kiểm tra khi thiếu trường lat\nExpected: [NEED-CONFIRMATION] Xác nhận lat có bắt buộc hay không và error response tương ứng. Ghi nhận status/body thực tế; không tự gán mã HTTP.\nNguồn: [DERIVED] Biến thể bỏ trường lat so với payload mẫu.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-03 - Kiểm tra khi thiếu trường lat\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-04 - Kiểm tra khi thiếu trường lon",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-04\nMục tiêu: Kiểm tra khi thiếu trường lon\nExpected: [NEED-CONFIRMATION] Xác nhận lon có bắt buộc hay không và error response tương ứng. Ghi nhận status/body thực tế; không tự gán mã HTTP.\nNguồn: [DERIVED] Biến thể bỏ trường lon so với payload mẫu.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-04 - Kiểm tra khi thiếu trường lon\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-05 - Kiểm tra khi thiếu cả lat và lon",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-05\nMục tiêu: Kiểm tra khi thiếu cả lat và lon\nExpected: [NEED-CONFIRMATION] Xác nhận API xử lý body rỗng như thế nào; chưa có schema required/error để chốt status hoặc message.\nNguồn: [DERIVED] Body JSON rỗng.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-05 - Kiểm tra khi thiếu cả lat và lon\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-06 - Kiểm tra lat bằng null",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": null,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-06\nMục tiêu: Kiểm tra lat bằng null\nExpected: [NEED-CONFIRMATION] Xác nhận lat có cho phép null không; phân biệt JSON null với thiếu trường.\nNguồn: [DERIVED] Type/nullability test; API schema chưa được cung cấp.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-06 - Kiểm tra lat bằng null\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-07 - Kiểm tra lon bằng null",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-07\nMục tiêu: Kiểm tra lon bằng null\nExpected: [NEED-CONFIRMATION] Xác nhận lon có cho phép null không; phân biệt JSON null với thiếu trường.\nNguồn: [DERIVED] Type/nullability test; API schema chưa được cung cấp.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-07 - Kiểm tra lon bằng null\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-08 - Kiểm tra lat là chuỗi rỗng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": \"\",\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-08\nMục tiêu: Kiểm tra lat là chuỗi rỗng\nExpected: [NEED-CONFIRMATION] Ghi nhận cách API xử lý lat là chuỗi rỗng; không tự quy định coercion hoặc mã lỗi.\nNguồn: [DERIVED] Type/empty validation cho trường lat.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-08 - Kiểm tra lat là chuỗi rỗng\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-09 - Kiểm tra lon là chuỗi rỗng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-09\nMục tiêu: Kiểm tra lon là chuỗi rỗng\nExpected: [NEED-CONFIRMATION] Ghi nhận cách API xử lý lon là chuỗi rỗng; không tự quy định coercion hoặc mã lỗi.\nNguồn: [DERIVED] Type/empty validation cho trường lon.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-09 - Kiểm tra lon là chuỗi rỗng\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-10 - Kiểm tra lat sai kiểu dữ liệu",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": \"north\",\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-10\nMục tiêu: Kiểm tra lat sai kiểu dữ liệu\nExpected: [NEED-CONFIRMATION] Xác nhận API yêu cầu lat là number hay có chuyển đổi chuỗi số; chuỗi không biểu diễn số cần được xử lý có kiểm soát.\nNguồn: [DERIVED] Type validation; payload hợp lệ mẫu sử dụng number.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-10 - Kiểm tra lat sai kiểu dữ liệu\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-11 - Kiểm tra lon sai kiểu dữ liệu",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": \"east\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-11\nMục tiêu: Kiểm tra lon sai kiểu dữ liệu\nExpected: [NEED-CONFIRMATION] Xác nhận API yêu cầu lon là number hay có chuyển đổi chuỗi số; chuỗi không biểu diễn số cần được xử lý có kiểm soát.\nNguồn: [DERIVED] Type validation; payload hợp lệ mẫu sử dụng number.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-11 - Kiểm tra lon sai kiểu dữ liệu\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-12 - Kiểm tra lat vượt miền tọa độ địa lý thông dụng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 91,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-12\nMục tiêu: Kiểm tra lat vượt miền tọa độ địa lý thông dụng\nExpected: [NEED-CONFIRMATION] lat=91 nằm ngoài miền latitude địa lý thông dụng. Ghi nhận API từ chối/chuẩn hóa/xử lý ra sao; chưa có API contract quy định status/message.\nNguồn: [DERIVED] Exploratory boundary theo hệ tọa độ latitude/longitude; chưa phải constraint được xác nhận của API.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-12 - Kiểm tra lat vượt miền tọa độ địa lý thông dụng\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-13 - Kiểm tra lon vượt miền tọa độ địa lý thông dụng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 181\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-13\nMục tiêu: Kiểm tra lon vượt miền tọa độ địa lý thông dụng\nExpected: [NEED-CONFIRMATION] lon=181 nằm ngoài miền longitude địa lý thông dụng. Ghi nhận API từ chối/chuẩn hóa/xử lý ra sao; chưa có API contract quy định status/message.\nNguồn: [DERIVED] Exploratory boundary theo hệ tọa độ latitude/longitude; chưa phải constraint được xác nhận của API.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-13 - Kiểm tra lon vượt miền tọa độ địa lý thông dụng\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-14 - Kiểm tra lat và lon bằng 0",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 0,\n  \"lon\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-14\nMục tiêu: Kiểm tra lat và lon bằng 0\nExpected: [NEED-CONFIRMATION] Ghi nhận API xử lý tọa độ 0,0. Đây là giá trị số hợp lệ nhưng chưa có fixture xác nhận có báo cáo ở vị trí này.\nNguồn: [DERIVED] Exploratory test giá trị zero; không khẳng định có dữ liệu báo cáo.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-14 - Kiểm tra lat và lon bằng 0\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-15 - Kiểm tra tọa độ âm",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": -20.983173,\n  \"lon\": -105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-15\nMục tiêu: Kiểm tra tọa độ âm\nExpected: [NEED-CONFIRMATION] Ghi nhận API xử lý tọa độ âm. Tọa độ âm có thể tồn tại về mặt địa lý; chưa có dữ liệu/expected nghiệp vụ cho vị trí này.\nNguồn: [DERIVED] Exploratory geographical coordinate test.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-15 - Kiểm tra tọa độ âm\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-16 - Kiểm tra thêm field ngoài payload mẫu",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624,\n  \"unexpectedField\": \"test-value\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-16\nMục tiêu: Kiểm tra thêm field ngoài payload mẫu\nExpected: [NEED-CONFIRMATION] Xác nhận API bỏ qua hay từ chối field ngoài schema; không tự giả định hành vi.\nNguồn: [DERIVED] Protocol/mass-assignment surface test; schema request chưa được cung cấp.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-16 - Kiểm tra thêm field ngoài payload mẫu\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-17 - Kiểm tra body JSON sai cú pháp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"lat\":20.983173,\"lon\":",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-17\nMục tiêu: Kiểm tra body JSON sai cú pháp\nExpected: Request JSON sai cú pháp phải được xử lý có kiểm soát; status và error schema cụ thể cần xác nhận theo contract.\nNguồn: [DERIVED] Protocol parsing test.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-17 - Kiểm tra body JSON sai cú pháp\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Authentication / Session",
+      "description": "Kiểm tra các header xác thực quan sát được trong cURL.",
+      "item": [
+        {
+          "name": "REPORT-API-18 - Gọi API khi thiếu Authorization và X-Auth-Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-18\nMục tiêu: Gọi API khi thiếu Authorization và X-Auth-Token\nExpected: [NEED-CONFIRMATION] cURL có cả Authorization Bearer và X-Auth-Token. Xác nhận endpoint public/news có bắt buộc các header này hay chúng chỉ phục vụ gateway/session; không giả định 401/403.\nNguồn: [SOURCE] cURL có Authorization, X-Auth-Token và X-Session-Ref; policy xác thực chưa được mô tả.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.warn(\"Kiểm thử auth: xác minh quyền truy cập và không trả dữ liệu trái quyền; policy bắt buộc từng header cần xác nhận.\");",
+                  "console.log(\"Testcase: REPORT-API-18 - Gọi API khi thiếu Authorization và X-Auth-Token\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-19 - Gọi API với Authorization Bearer không hợp lệ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{invalidAccessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-19\nMục tiêu: Gọi API với Authorization Bearer không hợp lệ\nExpected: [NEED-CONFIRMATION] Ghi nhận API/gateway xử lý token không hợp lệ; xác minh không trả dữ liệu ngoài quyền truy cập. Status/error schema cần xác nhận.\nNguồn: [DERIVED] Authentication test theo header Authorization trong cURL.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.warn(\"Kiểm thử auth: xác minh quyền truy cập và không trả dữ liệu trái quyền; policy bắt buộc từng header cần xác nhận.\");",
+                  "console.log(\"Testcase: REPORT-API-19 - Gọi API với Authorization Bearer không hợp lệ\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-20 - Gọi API khi thiếu X-Auth-Token nhưng còn Authorization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-20\nMục tiêu: Gọi API khi thiếu X-Auth-Token nhưng còn Authorization\nExpected: [NEED-CONFIRMATION] Xác nhận X-Auth-Token có bắt buộc khi Authorization còn hợp lệ; ghi nhận response thực tế.\nNguồn: [SOURCE] X-Auth-Token xuất hiện riêng trong cURL; quan hệ bắt buộc với Bearer token chưa rõ.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-20 - Gọi API khi thiếu X-Auth-Token nhưng còn Authorization\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "REPORT-API-21 - Gọi API khi thiếu X-Session-Ref",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "User-Agent",
+                "value": "{{userAgent}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "Testcase ID: REPORT-API-21\nMục tiêu: Gọi API khi thiếu X-Session-Ref\nExpected: [NEED-CONFIRMATION] Xác nhận X-Session-Ref có bắt buộc trong xác thực/session gateway hay không.\nNguồn: [SOURCE] X-Session-Ref xuất hiện trong cURL; error contract chưa có.\nMethod/path/body/header được lấy theo cURL. Không có response mẫu. Token/session được để thành biến môi trường, không nhúng credential thật."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"confirmRunAIReport\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped. Set confirmRunAIReport=true only on an authorized DEV test environment; this endpoint may generate an AI report and consume resources.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const raw = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "console.log(\"HTTP status:\", pm.response.code);",
+                  "console.log(\"Content-Type:\", contentType);",
+                  "console.log(\"Response preview:\", raw.slice(0, 4000));",
+                  "pm.test(\"Response không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "if (contentType.toLowerCase().includes(\"json\") && raw.length > 0) {",
+                  "  pm.test(\"Nếu response khai báo JSON thì body parse được\", function(){ pm.expect(function(){ return pm.response.json(); }).not.to.throw(); });",
+                  "}",
+                  "console.warn(\"Expected status/error schema chưa có trong API contract; cần ghi nhận response thực tế, không hard-code mã lỗi.\");",
+                  "console.log(\"Testcase: REPORT-API-21 - Gọi API khi thiếu X-Session-Ref\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Cố tình truyền sai nâng cao, Bảo mật & Hiệu năng (SLA)",
+      "description": "Kiểm tra các trường hợp cố tình truyền sai kiểu dữ liệu nâng cao (Boolean, Array, Object, Root Array, Whitespace), SQLi/XSS, Sai HTTP Method và SLA.",
+      "item": [
+        {
+          "name": "REPORT-API-24 - Cố tình truyền kiểu boolean cho lat và lon (lat: true, lon: false)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 hoặc 406\", function () { pm.expect([400, 406]).to.include(pm.response.code); });",
+                  "pm.test(\"status = 0\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": true,\n  \"lon\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-25 - Cố tình truyền kiểu Array và Object cho lat và lon",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });",
+                  "pm.test(\"status = 0\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": [\n    20.983173\n  ],\n  \"lon\": {\n    \"value\": 105.828624\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-26 - Cố tình truyền JSON Root là Array [] thay vì Object {}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable\", function () { pm.response.to.have.status(406); });",
+                  "pm.test(\"status = 0\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"lat\": 20.983173,\n    \"lon\": 105.828624\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-27 - Cố tình truyền chuỗi khoảng trắng (\"   \") cho lat và lon",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400 Bad Request\", function () { pm.expect([400, 406]).to.include(pm.response.code); });",
+                  "pm.test(\"status = 0\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": \"   \",\n  \"lon\": \"   \"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-28 - Kiểm tra an toàn SQL Injection & XSS trong tham số lat/lon",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 406 Not Acceptable (Chặn an toàn)\", function () { pm.response.to.have.status(406); });",
+                  "pm.test(\"Không rò rỉ lỗi SQL\", function () { pm.expect(pm.response.text().toLowerCase()).to.not.include(\"syntax error\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": \"20.983173' OR '1'='1\",\n  \"lon\": \"<script>alert(\\\"xss\\\")</script>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "REPORT-API-29 - Gọi sai phương thức HTTP (DELETE thay vì POST)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Từ chối phương thức DELETE (4xx)\", function () { pm.expect(pm.response.code).to.be.within(400, 499); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "REPORT-API-30 - Kiểm tra SLA thời gian phản hồi API Báo cáo AI (< 3500ms)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Response time < 3500ms\", function () { pm.expect(pm.response.responseTime).to.be.below(3500); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/real-estate/public/news/report-by-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "real-estate",
+                "public",
+                "news",
+                "report-by-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 20.983173,\n  \"lon\": 105.828624\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

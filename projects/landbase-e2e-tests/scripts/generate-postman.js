@@ -1820,6 +1820,126 @@ async function exportAll() {
     }
   }
 
+  // Luôn nạp phiên bản Locality Report mới nhất (27 test cases)
+  const localityCollPath = path.join(__dirname, '..', 'LandBase_Locality_Report.postman_collection.json');
+  if (fs.existsSync(localityCollPath)) {
+    const locColl = JSON.parse(fs.readFileSync(localityCollPath, 'utf8'));
+    const locIdx = collection.item.findIndex(it => it.name && (it.name.includes('Báo cáo tổng quan khu vực') || it.name.includes('locality-report')));
+    const localityFolder = {
+      name: '09. Báo cáo tổng quan khu vực (/api/locality-report)',
+      description: 'Kiểm thử toàn diện 27 testcase cho API báo cáo tổng quan khu vực theo tọa độ địa lý (Contract, Schema, Boundary, Validation, Security, Method, SLA)',
+      item: locColl.item,
+    };
+    if (locIdx >= 0) {
+      collection.item[locIdx] = localityFolder;
+    } else {
+      collection.item.push(localityFolder);
+    }
+  }
+
+  if (!environment.values.some(v => v.key === 'latitude')) {
+    environment.values.push({ key: 'latitude', value: '21.019301', type: 'default', enabled: true });
+  }
+  if (!environment.values.some(v => v.key === 'longitude')) {
+    environment.values.push({ key: 'longitude', value: '105.826367', type: 'default', enabled: true });
+  }
+
+  // Luôn nạp phiên bản Tiện ích & Dịch vụ quanh khu vực mới nhất (32 test cases)
+  const utilitiesCollPath = path.join(__dirname, '..', 'LandBase_Utilities_Detail.postman_collection.json');
+  if (fs.existsSync(utilitiesCollPath)) {
+    const utilColl = JSON.parse(fs.readFileSync(utilitiesCollPath, 'utf8'));
+    const utilIdx = collection.item.findIndex(it => it.name && (it.name.includes('Tiện ích') || it.name.includes('utilities-detail')));
+    const utilitiesFolder = {
+      name: '10. Tiện ích và dịch vụ quanh khu vực (/api/v1.0/elasticsearch/public/service-facilities-user/utilities-detail)',
+      description: 'Kiểm thử toàn diện 32 testcase cho API Tiện ích và dịch vụ quanh khu vực (Danh mục tiện ích, Bán kính, Sắp xếp, Phân trang, Validation, Cố tình truyền sai, Bảo mật SQLi/XSS & SLA)',
+      item: utilColl.item,
+    };
+    if (utilIdx >= 0) {
+      collection.item[utilIdx] = utilitiesFolder;
+    } else {
+      collection.item.push(utilitiesFolder);
+    }
+  }
+
+  // Luôn nạp phiên bản Onboarding & Nhận thưởng mới nhất (48 test cases)
+  const onboardingCollPath = path.join(__dirname, '..', 'LandBase_Onboarding_Reward.postman_collection.json');
+  if (fs.existsSync(onboardingCollPath)) {
+    const onbColl = JSON.parse(fs.readFileSync(onboardingCollPath, 'utf8'));
+    const onbIdx = collection.item.findIndex(it => it.name && (it.name.includes('Onboarding') || it.name.includes('Nhận thưởng')));
+    const onboardingFolder = {
+      name: '11. Onboarding & Nhận thưởng (/api/v1.0/auth/rewards/onboarding & /users/*)',
+      description: 'Kiểm thử toàn diện 48 testcase cho API Onboarding & Nhận thưởng tân thủ (Public Onboarding, Authenticated Onboarding, Claim Reward, Progress, Interest Location, Seen Guide Tour, Negative/Security/SLA)',
+      item: onbColl.item,
+    };
+    if (onbIdx >= 0) {
+      collection.item[onbIdx] = onboardingFolder;
+    } else {
+      collection.item.push(onboardingFolder);
+    }
+  }
+
+  const onboardingEnvVars = [
+    { key: 'allowStateChangeRequests', value: 'true', type: 'default', enabled: true },
+    { key: 'taskCode', value: 'EXPLORE_MAP', type: 'default', enabled: true },
+    { key: 'invalidTaskCode', value: 'INVALID_TASK_CODE_FOR_TEST', type: 'default', enabled: true },
+    { key: 'notCompletedTaskCode', value: 'READ_NEWS', type: 'default', enabled: true },
+    { key: 'currentStep', value: '2', type: 'default', enabled: true },
+    { key: 'provinceCode', value: '01', type: 'default', enabled: true },
+    { key: 'invalidProvinceCode', value: 'INVALID_PROVINCE_CODE', type: 'default', enabled: true },
+    { key: 'anotherProvinceCode', value: '29', type: 'default', enabled: true },
+  ];
+  for (const ov of onboardingEnvVars) {
+    if (!environment.values.some(v => v.key === ov.key)) {
+      environment.values.push(ov);
+    }
+  }
+
+  // Luôn nạp phiên bản AI tổng hợp báo cáo theo vị trí mới nhất (30 test cases)
+  const aiLocationReportCollPath = path.join(__dirname, '..', 'LandBase_AI_Location_News_Report.postman_collection.json');
+  if (fs.existsSync(aiLocationReportCollPath)) {
+    const aiLocColl = JSON.parse(fs.readFileSync(aiLocationReportCollPath, 'utf8'));
+    const aiLocIdx = collection.item.findIndex(it => it.name && (it.name.includes('report-by-location') || it.name.includes('AI tổng hợp báo cáo')));
+    const aiLocFolder = {
+      name: '12. AI tổng hợp báo cáo theo vị trí (/api/v1.0/real-estate/public/news/report-by-location)',
+      description: 'Kiểm thử toàn diện 30 testcase cho API AI tổng hợp báo cáo theo vị trí tại Xem chi tiết BĐS (Happy Path, Schema 13 trường, Validation/Boundary, Auth/Session, Cố tình truyền sai nâng cao, Bảo mật & SLA)',
+      item: aiLocColl.item,
+    };
+    if (aiLocIdx >= 0) {
+      collection.item[aiLocIdx] = aiLocFolder;
+    } else {
+      collection.item.push(aiLocFolder);
+    }
+  }
+
+  const aiLocEnvVars = [
+    { key: 'lat', value: '20.983173', type: 'default', enabled: true },
+    { key: 'lon', value: '105.828624', type: 'default', enabled: true },
+    { key: 'confirmRunAIReport', value: 'true', type: 'default', enabled: true },
+    { key: 'userAgent', value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36', type: 'default', enabled: true },
+  ];
+  for (const alv of aiLocEnvVars) {
+    if (!environment.values.some(v => v.key === alv.key)) {
+      environment.values.push(alv);
+    }
+  }
+
+  // Luôn nạp phiên bản Tổng quan khu vực: Phân tích khu vực bằng AI & Mở khóa Vàng (Mục E & F - 27 test cases)
+  const areaAiCollPath = path.join(__dirname, '..', 'LandBase_Area_Overview_AI.postman_collection.json');
+  if (fs.existsSync(areaAiCollPath)) {
+    const areaAiColl = JSON.parse(fs.readFileSync(areaAiCollPath, 'utf8'));
+    const areaAiIdx = collection.item.findIndex(it => it.name && (it.name.includes('Mục E & F') || it.name.includes('Phân tích khu vực bằng AI')));
+    const areaAiFolder = {
+      name: '13. Tổng quan khu vực: Phân tích khu vực bằng AI & Mở khóa Vàng (Mục E & F - /api/locality-report & /unlock)',
+      description: 'Kiểm thử toàn diện 27 testcase cho chức năng Xem Tổng quan khu vực - Phân tích khu vực bằng AI & Mở khóa Vàng (Mục E: AI-E-001..009, Mục F: AI-F-001..012, Mục G: AI-F-NEG-01..06)',
+      item: areaAiColl.item,
+    };
+    if (areaAiIdx >= 0) {
+      collection.item[areaAiIdx] = areaAiFolder;
+    } else {
+      collection.item.push(areaAiFolder);
+    }
+  }
+
   const outputCollectionPath = path.join(__dirname, '..', 'LandBase_API_Tests.postman_collection.json');
   const outputEnvironmentPath = path.join(__dirname, '..', 'LandBase_Environment.postman_environment.json');
 

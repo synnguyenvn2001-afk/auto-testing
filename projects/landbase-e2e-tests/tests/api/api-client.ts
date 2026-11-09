@@ -87,8 +87,21 @@ export class LandBaseApiClient {
       return endpoint;
     }
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    if (cleanEndpoint.startsWith('/api/feedback') || cleanEndpoint.startsWith('/api/auth') || cleanEndpoint.startsWith('/api/chat') || cleanEndpoint.startsWith('/api/ai')) {
+    if (
+      cleanEndpoint.startsWith('/api/feedback') ||
+      cleanEndpoint.startsWith('/api/auth') ||
+      cleanEndpoint.startsWith('/api/chat') ||
+      cleanEndpoint.startsWith('/api/ai') ||
+      cleanEndpoint.startsWith('/api/locality-report')
+    ) {
       return `${this.config.webappUrl}${cleanEndpoint}`;
+    }
+    if (
+      cleanEndpoint.startsWith('/public/rewards/onboarding') ||
+      cleanEndpoint.startsWith('/rewards/onboarding') ||
+      cleanEndpoint.startsWith('/users/')
+    ) {
+      return `${this.config.gatewayUrl}/api/v1.0/auth${cleanEndpoint}`;
     }
     return `${this.config.gatewayUrl}${cleanEndpoint}`;
   }
@@ -236,6 +249,11 @@ export class LandBaseApiClient {
   public async ensureAuthenticated(page: Page): Promise<boolean> {
     if (page.url() !== this.config.webappUrl && !page.url().startsWith(this.config.webappUrl)) {
       await page.goto(this.config.webappUrl, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+    }
+
+    // 0. Nếu trong bộ nhớ/config đã có accessToken còn hạn thì tái sử dụng ngay (nếu bị 401 thì executeInPage sẽ tự relogin)
+    if (this.config.accessToken && this.isTokenValid(this.config.accessToken)) {
+      return true;
     }
 
     // 1. Kiểm tra xem phiên hiện tại trên trình duyệt đã có Token còn hạn hay chưa

@@ -60,7 +60,7 @@ const mobileSuites = {
 // API suites mapping (Tách riêng nền tảng thứ 3 cho API)
 const apiSuites = {
   '1': {
-    name: '🚀 Tất cả các module API (All API Tests - 139 test cases)',
+    name: '🚀 Tất cả các module API (All API Tests - 301 test cases)',
     pattern: 'tests/api/',
   },
   '2': {
@@ -102,6 +102,26 @@ const apiSuites = {
   '11': {
     name: '💳 Đơn hàng & Thanh toán Gói Pro Subscription (/subscription/order, /cart & /cancel - 38 test cases)',
     pattern: 'tests/api/subscription-order.spec.ts',
+  },
+  '12': {
+    name: '📊 Báo cáo tổng quan khu vực (/api/locality-report - 27 test cases)',
+    pattern: 'tests/api/locality-report.spec.ts',
+  },
+  '13': {
+    name: '📰 AI tổng hợp báo cáo theo vị trí - Xem chi tiết BĐS (/news/report-by-location - 30 test cases)',
+    pattern: 'tests/api/news-report-by-location.spec.ts',
+  },
+  '14': {
+    name: '🏙️ Tiện ích và dịch vụ quanh khu vực (/utilities-detail - 32 test cases)',
+    pattern: 'tests/api/utilities-detail.spec.ts',
+  },
+  '15': {
+    name: '🎁 Onboarding & Nhận thưởng tân thủ (/rewards/onboarding, /users/* - 46 test cases)',
+    pattern: 'tests/api/onboarding-reward.spec.ts',
+  },
+  '16': {
+    name: '🧠 Tổng quan khu vực: Phân tích khu vực bằng AI & Mở khóa Vàng (Mục E & F - 27 test cases)',
+    pattern: 'tests/api/area-overview-ai.spec.ts',
   },
 };
 

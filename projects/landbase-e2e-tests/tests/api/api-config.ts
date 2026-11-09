@@ -46,6 +46,19 @@ export interface ApiEnvironmentConfig {
   subscriptionInvalidXAuthToken?: string;
   subscriptionOrderCode?: number | string;
   confirmCreateSubscriptionOrder?: boolean;
+  localityLatitude?: string;
+  localityLongitude?: string;
+  onboardingAllowStateChange?: boolean;
+  onboardingTaskCode?: string;
+  onboardingInvalidTaskCode?: string;
+  onboardingNotCompletedTaskCode?: string;
+  onboardingCurrentStep?: number;
+  onboardingProvinceCode?: string;
+  onboardingInvalidProvinceCode?: string;
+  onboardingAnotherProvinceCode?: string;
+  aiReportLat?: number;
+  aiReportLon?: number;
+  confirmRunAIReport?: boolean;
   isConfigured: boolean;
 }
 
@@ -111,10 +124,35 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     ? process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === 'true'
     : isDev;
 
+  let localityLatitude = process.env.LOCALITY_LATITUDE || process.env.latitude || '21.019301';
+  let localityLongitude = process.env.LOCALITY_LONGITUDE || process.env.longitude || '105.826367';
+
+  // Onboarding / Reward config values
+  let onboardingAllowStateChange = process.env.ALLOW_STATE_CHANGE_REQUESTS !== undefined
+    ? process.env.ALLOW_STATE_CHANGE_REQUESTS === 'true'
+    : isDev;
+  let onboardingTaskCode = process.env.ONBOARDING_TASK_CODE || process.env.taskCode || 'EXPLORE_MAP';
+  let onboardingInvalidTaskCode = process.env.ONBOARDING_INVALID_TASK_CODE || process.env.invalidTaskCode || 'INVALID_TASK_CODE_FOR_TEST';
+  let onboardingNotCompletedTaskCode = process.env.ONBOARDING_NOT_COMPLETED_TASK_CODE || process.env.notCompletedTaskCode || 'READ_NEWS';
+  let onboardingCurrentStep = process.env.ONBOARDING_CURRENT_STEP !== undefined ? Number(process.env.ONBOARDING_CURRENT_STEP) : 2;
+  let onboardingProvinceCode = process.env.ONBOARDING_PROVINCE_CODE || process.env.provinceCode || '01';
+  let onboardingInvalidProvinceCode = process.env.ONBOARDING_INVALID_PROVINCE_CODE || process.env.invalidProvinceCode || 'INVALID_PROVINCE_CODE';
+  let onboardingAnotherProvinceCode = process.env.ONBOARDING_ANOTHER_PROVINCE_CODE || process.env.anotherProvinceCode || '29';
+
+  // AI Location News Report config values
+  let aiReportLat = process.env.AI_REPORT_LAT !== undefined ? Number(process.env.AI_REPORT_LAT) : 20.983173;
+  let aiReportLon = process.env.AI_REPORT_LON !== undefined ? Number(process.env.AI_REPORT_LON) : 105.828624;
+  let confirmRunAIReport = process.env.CONFIRM_RUN_AI_REPORT !== undefined
+    ? process.env.CONFIRM_RUN_AI_REPORT === 'true'
+    : isDev;
+
   const candidateConfigPaths = [
     DEFAULT_CONFIG_FILE,
     path.join(__dirname, 'api-environment.json'),
     path.join(__dirname, '..', '..', 'LandBase_Environment.postman_environment.json'),
+    path.join(__dirname, '..', '..', 'LandBase_Locality_Report_Environment.postman_environment.json'),
+    path.join(__dirname, '..', '..', 'LandBase_Onboarding_Reward_Environment.postman_environment.json'),
+    path.join(__dirname, '..', '..', 'LandBase_AI_Location_News_Report_Environment.postman_environment.json'),
     path.join(__dirname, '..', '..', 'LandBase_Chat_AI_Environment.postman_environment.json'),
     path.join(__dirname, '..', '..', 'postman-environment.json'),
   ];
@@ -253,6 +291,12 @@ export function loadApiConfig(): ApiEnvironmentConfig {
             if (item.key === 'confirmCreateSubscriptionOrder' && item.value !== undefined && process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === undefined) {
               confirmCreateSubscriptionOrder = String(item.value).toLowerCase() === 'true';
             }
+            if (item.key === 'latitude' && item.value) {
+              localityLatitude = item.value;
+            }
+            if (item.key === 'longitude' && item.value) {
+              localityLongitude = item.value;
+            }
           }
         } else {
           // Plain key-value JSON
@@ -312,6 +356,8 @@ export function loadApiConfig(): ApiEnvironmentConfig {
           if (parsed.confirmCreateSubscriptionOrder !== undefined && process.env.CONFIRM_CREATE_SUBSCRIPTION_ORDER === undefined) {
             confirmCreateSubscriptionOrder = Boolean(parsed.confirmCreateSubscriptionOrder);
           }
+          if (parsed.latitude) localityLatitude = String(parsed.latitude);
+          if (parsed.longitude) localityLongitude = String(parsed.longitude);
         }
         break;
       } catch {
@@ -372,6 +418,19 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     subscriptionInvalidXAuthToken,
     subscriptionOrderCode,
     confirmCreateSubscriptionOrder,
+    localityLatitude,
+    localityLongitude,
+    onboardingAllowStateChange,
+    onboardingTaskCode,
+    onboardingInvalidTaskCode,
+    onboardingNotCompletedTaskCode,
+    onboardingCurrentStep,
+    onboardingProvinceCode,
+    onboardingInvalidProvinceCode,
+    onboardingAnotherProvinceCode,
+    aiReportLat,
+    aiReportLon,
+    confirmRunAIReport,
     isConfigured,
   };
 }

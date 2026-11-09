@@ -1,0 +1,3290 @@
+{
+  "info": {
+    "_postman_id": "e7c7652d-3c13-4dd4-9359-214b02ef1957",
+    "name": "LandBase - Onboarding / Nhận thưởng API",
+    "description": "Các API được tổng hợp từ 4 ảnh endpoint và SRS_Nhan_thuong_Landbase.docx v1.1. Host mặc định dev-gateway.laand.vn là giả định theo cURL LandBase các chức năng khác; cần xác nhận. Authorization Bearer là header mặc định cho API đăng nhập; cURL xác thực chính thức chưa được cung cấp. Các POST làm thay đổi trạng thái bị skip mặc định bằng allowStateChangeRequests=false. Không có response lỗi mẫu nên không hard-code 400/401/404. GET /users/step và POST /balance/search chỉ được ghi nhận là API phụ thuộc/ngoài endpoint trực tiếp; chưa tạo request do không thuộc core flow hoặc thiếu schema.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://dev-gateway.laand.vn",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Public onboarding",
+      "description": "GET /public/rewards/onboarding — Xem danh sách nhiệm vụ onboarding cho khách chưa đăng nhập",
+      "item": [
+        {
+          "name": "PUB-ONB-01 - Lấy danh sách nhiệm vụ onboarding khi chưa đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/public/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "public",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: PUB-ONB-01\nMô tả: Lấy danh sách nhiệm vụ onboarding khi chưa đăng nhập\nDữ liệu: GET /public/rewards/onboarding; không body; không Authorization\nExpected: Response thành công theo contract public; có campaign, tasks, progress, wallet và tourCompleted như cấu trúc API đăng nhập.\nNguồn: [SOURCE] Ảnh API 1: GET /public/rewards/onboarding, khách chưa đăng nhập; response cùng cấu trúc API số 2.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"HTTP response 2xx\", function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                  "pm.test(\"Public onboarding trả payload object\", function(){ pm.expect(payload).to.be.an(\"object\"); });",
+                  "pm.test(\"Có campaign, tasks, progress, wallet, tourCompleted\", function(){",
+                  "  [\"campaign\",\"tasks\",\"progress\",\"wallet\",\"tourCompleted\"].forEach(k => pm.expect(payload).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUB-ONB-02 - Kiểm tra wallet của khách chưa đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/public/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "public",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: PUB-ONB-02\nMô tả: Kiểm tra wallet của khách chưa đăng nhập\nDữ liệu: GET /public/rewards/onboarding; guest\nExpected: wallet = null.\nNguồn: [SOURCE] Ảnh API 1 ghi rõ wallet = null.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"wallet của guest là null\", function(){ pm.expect(payload.wallet).to.eql(null); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUB-ONB-03 - Kiểm tra tourCompleted của khách chưa đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/public/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "public",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: PUB-ONB-03\nMô tả: Kiểm tra tourCompleted của khách chưa đăng nhập\nDữ liệu: GET /public/rewards/onboarding; guest\nExpected: tourCompleted = false.\nNguồn: [SOURCE] Ảnh API 1 ghi rõ tourCompleted = false.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"tourCompleted của guest là false\", function(){ pm.expect(payload.tourCompleted).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUB-ONB-04 - Kiểm tra trạng thái tất cả nhiệm vụ của khách chưa đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/public/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "public",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: PUB-ONB-04\nMô tả: Kiểm tra trạng thái tất cả nhiệm vụ của khách chưa đăng nhập\nDữ liệu: GET /public/rewards/onboarding; guest\nExpected: Mọi task trả về đều có status = NOT_STARTED.\nNguồn: [SOURCE] Ảnh API 1 ghi rõ mọi task có status = NOT_STARTED.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Tất cả task guest ở trạng thái NOT_STARTED\", function(){",
+                  "  pm.expect(payload.tasks).to.be.an(\"array\");",
+                  "  payload.tasks.forEach(t => pm.expect(t.status).to.eql(\"NOT_STARTED\"));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUB-ONB-05 - Kiểm tra cấu trúc response public không có dữ liệu cá nhân của ví",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/public/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "public",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: PUB-ONB-05\nMô tả: Kiểm tra cấu trúc response public không có dữ liệu cá nhân của ví\nDữ liệu: GET /public/rewards/onboarding; guest\nExpected: Các trường cấu trúc onboarding có mặt; wallet null theo response public; không có số dư Vàng cá nhân trong response guest.\nNguồn: [SOURCE] Ảnh API 1 và cấu trúc response API 2; [DERIVED] kiểm tra public không trả ví cá nhân.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Guest không có wallet balance\", function(){",
+                  "  pm.expect(payload).to.have.property(\"wallet\", null);",
+                  "  pm.expect(payload.tasks).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Onboarding đăng nhập",
+      "description": "GET /rewards/onboarding — Lấy trạng thái campaign, nhiệm vụ, tiến độ, ví và tour của người dùng đã đăng nhập",
+      "item": [
+        {
+          "name": "ONB-API-01 - Lấy thông tin onboarding của người dùng đã đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-01\nMô tả: Lấy thông tin onboarding của người dùng đã đăng nhập\nDữ liệu: GET /rewards/onboarding; không body; Authorization Bearer hợp lệ\nExpected: Response thành công và trả dữ liệu campaign, tasks, progress, wallet, tourCompleted của user hiện tại.\nNguồn: [SOURCE] Ảnh API 2: GET /rewards/onboarding (đã đăng nhập); [SRS] phạm vi mọi tài khoản LandBase.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"HTTP response 2xx\", function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                  "pm.test(\"Authenticated onboarding payload tồn tại\", function(){ pm.expect(payload).to.be.an(\"object\"); pm.expect(payload.tasks).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-02 - Kiểm tra cấu trúc campaign",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-02\nMô tả: Kiểm tra cấu trúc campaign\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: campaign là object; có các trường code, name, description, status, startAt, endAt theo response mẫu.\nNguồn: [SOURCE] Ảnh API 2: cấu trúc campaign.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"campaign có đủ các trường theo response mẫu\", function(){",
+                  "  pm.expect(payload.campaign).to.be.an(\"object\");",
+                  "  [\"code\",\"name\",\"description\",\"status\",\"startAt\",\"endAt\"].forEach(k => pm.expect(payload.campaign).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-03 - Kiểm tra số lượng nhiệm vụ khám phá",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-03\nMô tả: Kiểm tra số lượng nhiệm vụ khám phá\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: Có 9 nhiệm vụ khám phá theo lưới 3 × 3.\nNguồn: [SPEC] SRS FR-KP-02: hiển thị 9 nhiệm vụ theo lưới 3 × 3. Tên/thứ tự/nội dung chi tiết chưa cố định.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Có đúng 9 nhiệm vụ theo FR-KP-02\", function(){ pm.expect(payload.tasks).to.have.length(9); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-04 - Kiểm tra enum status của từng nhiệm vụ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-04\nMô tả: Kiểm tra enum status của từng nhiệm vụ\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: status của mỗi task thuộc một trong các giá trị NOT_STARTED, IN_PROGRESS, COMPLETED, CLAIMED.\nNguồn: [SOURCE] Ảnh API 2 liệt kê enum status.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Task status thuộc enum được cung cấp\", function(){",
+                  "  const allowed = [\"NOT_STARTED\",\"IN_PROGRESS\",\"COMPLETED\",\"CLAIMED\"];",
+                  "  payload.tasks.forEach(t => pm.expect(allowed).to.include(t.status));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-05 - Kiểm tra cấu trúc trường tiến độ của từng nhiệm vụ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-05\nMô tả: Kiểm tra cấu trúc trường tiến độ của từng nhiệm vụ\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: Các trường tiến độ xuất hiện theo cấu trúc mẫu; count/percent là số; completedAt và claimedAt có thể null hoặc thời gian.\nNguồn: [SOURCE] Ảnh API 2: task progress fields.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Các field tiến độ task tồn tại và đúng kiểu cơ bản\", function(){",
+                  "  payload.tasks.forEach(t => {",
+                  "    [\"requiredCount\",\"accessedCount\",\"completedAt\",\"claimedAt\",\"completedSubTasks\",\"totalSubTasks\",\"progressPercent\",\"currentStep\"].forEach(k => pm.expect(t).to.have.property(k));",
+                  "    [\"requiredCount\",\"accessedCount\",\"completedSubTasks\",\"totalSubTasks\",\"progressPercent\",\"currentStep\"].forEach(k => pm.expect(t[k]).to.be.a(\"number\"));",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-06 - Kiểm tra cấu trúc subTasks và steps",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-06\nMô tả: Kiểm tra cấu trúc subTasks và steps\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: subTasks và steps là mảng; subTask có subTaskNo/title/apiName/description/required/done/firstStepNo/lastStepNo; step có stepNo/subTaskNo/route/targetKey/title/content/action/placement/apiName/required/done.\nNguồn: [SOURCE] Ảnh API 2: cấu trúc lồng subTasks/steps.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"subTasks và steps có dạng mảng và các key cấu trúc\", function(){",
+                  "  payload.tasks.forEach(t => {",
+                  "    pm.expect(t.subTasks).to.be.an(\"array\"); pm.expect(t.steps).to.be.an(\"array\");",
+                  "    t.subTasks.forEach(s => [\"subTaskNo\",\"title\",\"apiName\",\"description\",\"required\",\"done\",\"firstStepNo\",\"lastStepNo\"].forEach(k => pm.expect(s).to.have.property(k)));",
+                  "    t.steps.forEach(s => [\"stepNo\",\"subTaskNo\",\"route\",\"targetKey\",\"title\",\"content\",\"action\",\"placement\",\"apiName\",\"required\",\"done\"].forEach(k => pm.expect(s).to.have.property(k)));",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-07 - Kiểm tra enum action và placement của các step",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-07\nMô tả: Kiểm tra enum action và placement của các step\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: action thuộc CLICK, INPUT, VIEW, NAVIGATE; placement thuộc top, bottom, left, right theo response mẫu.\nNguồn: [SOURCE] Ảnh API 2 liệt kê các giá trị action và placement.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"action và placement thuộc các giá trị mô tả\", function(){",
+                  "  const actions = [\"CLICK\",\"INPUT\",\"VIEW\",\"NAVIGATE\"]; const placements = [\"top\",\"bottom\",\"left\",\"right\"];",
+                  "  payload.tasks.forEach(t => t.steps.forEach(s => { pm.expect(actions).to.include(s.action); pm.expect(placements).to.include(s.placement); }));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-08 - Kiểm tra tổng tiến độ và ví Vàng",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-08\nMô tả: Kiểm tra tổng tiến độ và ví Vàng\nDữ liệu: GET /rewards/onboarding; token hợp lệ\nExpected: progress là object có các trường số total/completed/inProgress/claimed/claimedGold; wallet là object và gold là số.\nNguồn: [SOURCE] Ảnh API 2: progress và wallet.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"progress và wallet có các trường số\", function(){",
+                  "  [\"total\",\"completed\",\"inProgress\",\"claimed\",\"claimedGold\"].forEach(k => pm.expect(payload.progress[k]).to.be.a(\"number\"));",
+                  "  pm.expect(payload.wallet.gold).to.be.a(\"number\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-09 - Gọi API onboarding đăng nhập khi thiếu thông tin xác thực",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: ONB-API-09\nMô tả: Gọi API onboarding đăng nhập khi thiếu thông tin xác thực\nDữ liệu: GET /rewards/onboarding; bỏ Authorization\nExpected: [SPEC] Chức năng onboarding cá nhân yêu cầu người dùng đã đăng nhập. Mã HTTP/error schema và cách API từ chối cần xác nhận; không được trả dữ liệu ví/nhiệm vụ cá nhân cho request không xác thực.\nNguồn: [SPEC] SRS điều kiện đầu vào người dùng đã đăng nhập tại mục III.1.1.2; [NEED-CONFIRMATION] API error contract.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không trả payload onboarding cá nhân cho request thiếu auth\", function(){",
+                  "  const hasPersonal = payload && typeof payload === \"object\" && payload.wallet && payload.tasks && payload.progress;",
+                  "  pm.expect(Boolean(hasPersonal)).to.eql(false);",
+                  "});",
+                  "console.warn(\"Không assert 401/403 vì chưa có error contract.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "ONB-API-10 - Kiểm tra các trường thông tin cơ bản của từng nhiệm vụ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Kiểm tra các field title, description, goldAmount, sortOrder, status được minh họa trong response API 2. Giá trị goldAmount do Backend cấu hình, không cố định."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json(); const d = r.data !== undefined ? r.data : r;",
+                  "pm.test(\"Các task có trường thông tin cơ bản đúng kiểu\", function(){",
+                  "  d.tasks.forEach(t => {",
+                  "    pm.expect(t.title).to.be.a(\"string\");",
+                  "    pm.expect(t.description).to.be.a(\"string\");",
+                  "    pm.expect(t.goldAmount).to.be.a(\"number\");",
+                  "    pm.expect(t.sortOrder).to.be.a(\"number\");",
+                  "    pm.expect(t.status).to.be.a(\"string\");",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Claim nhiệm vụ",
+      "description": "POST /rewards/onboarding/tasks/{{taskCode}}/claim — Nhận thưởng cho taskCode sau khi nhiệm vụ đủ điều kiện",
+      "item": [
+        {
+          "name": "HELPER - Lấy wallet trước claim",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Chạy trước CLAIM-API-01 để lưu wallet.gold hiện tại; dùng tài khoản DEV test."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json(); const d = r.data !== undefined ? r.data : r;",
+                  "pm.test(\"Đọc được wallet.gold trước claim\", function(){ pm.expect(d.wallet.gold).to.be.a(\"number\"); });",
+                  "pm.environment.set(\"walletGoldBeforeClaim\", String(d.wallet.gold));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-01 - Nhận thưởng một nhiệm vụ đủ điều kiện",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-01\nMô tả: Nhận thưởng một nhiệm vụ đủ điều kiện\nDữ liệu: POST /rewards/onboarding/tasks/{{taskCode}}/claim; không body; task đã COMPLETED, chưa CLAIMED\nExpected: Response taskCode khớp task đã gửi; status = CLAIMED; goldAwarded và balanceAfter là số; transactionId có trường trong response. goldAwarded theo cấu hình Backend, không cố định số Vàng.\nNguồn: [SOURCE] Ảnh API 3: endpoint, response fields; [SPEC] SRS FR-KP-04: phải bấm Nhận thưởng, mỗi nhiệm vụ nhận một lần, mức Vàng do Backend cấu hình.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Claim trả status CLAIMED và số Vàng\", function(){",
+                  "  pm.expect(payload.status).to.eql(\"CLAIMED\");",
+                  "  pm.expect(payload.taskCode).to.eql(pm.environment.get(\"taskCode\"));",
+                  "  pm.expect(payload.goldAwarded).to.be.a(\"number\");",
+                  "  pm.expect(payload.balanceAfter).to.be.a(\"number\");",
+                  "  pm.expect(payload).to.have.property(\"transactionId\");",
+                  "});",
+                  "pm.environment.set(\"lastClaimSnapshot\", JSON.stringify({taskCode:payload.taskCode,status:payload.status,goldAwarded:payload.goldAwarded,balanceAfter:payload.balanceAfter,transactionId:payload.transactionId}));",
+                  "const before = Number(pm.environment.get(\"walletGoldBeforeClaim\"));",
+                  "pm.test(\"balanceAfter khớp số dư trước cộng Vàng được thưởng\", function(){",
+                  "  pm.expect(before).to.not.be.NaN;",
+                  "  pm.expect(payload.balanceAfter).to.eql(before + payload.goldAwarded);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-02 - Gọi lại claim với nhiệm vụ đã CLAIMED",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-02\nMô tả: Gọi lại claim với nhiệm vụ đã CLAIMED\nDữ liệu: POST cùng taskCode đã CLAIMED; không body\nExpected: API trả lại kết quả đã claim trước đó; không cộng Vàng lần hai. transactionId có thể null khi trường hợp không giới hạn theo ghi chú API; không tự yêu cầu transactionId luôn khác null.\nNguồn: [SOURCE] Ảnh API 3 ghi rõ gọi lại task CLAIMED trả kết quả cũ, không cộng Vàng hai lần; transactionId=null khi không giới hạn.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json(); const d = r.data !== undefined ? r.data : r;",
+                  "const first = JSON.parse(pm.environment.get(\"lastClaimSnapshot\") || \"null\");",
+                  "pm.test(\"Có snapshot của lần claim đầu để kiểm tra gọi lặp\", function(){ pm.expect(first, \"Cần chạy helper trước và CLAIM-API-01 trước\").to.not.equal(null); });",
+                  "if (first) {",
+                  "  pm.test(\"Claim lặp trả kết quả cũ và không tăng số Vàng\", function(){",
+                  "    pm.expect(d.status).to.eql(\"CLAIMED\");",
+                  "    pm.expect(d.taskCode).to.eql(first.taskCode);",
+                  "    pm.expect(d.goldAwarded).to.eql(first.goldAwarded);",
+                  "    pm.expect(d.balanceAfter).to.eql(first.balanceAfter);",
+                  "    pm.expect(d.transactionId).to.eql(first.transactionId);",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-03 - Kiểm tra các trường response khi claim thành công",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-03\nMô tả: Kiểm tra các trường response khi claim thành công\nDữ liệu: taskCode hợp lệ đã đủ điều kiện nhận thưởng\nExpected: Có đủ các trường taskCode/status/goldAwarded/balanceAfter/transactionId; status=CLAIMED; goldAwarded và balanceAfter là số; transactionId là string hoặc null theo điều kiện backend.\nNguồn: [SOURCE] Ảnh API 3: response example.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Claim response contract fields\", function(){",
+                  "  [\"taskCode\",\"status\",\"goldAwarded\",\"balanceAfter\",\"transactionId\"].forEach(k => pm.expect(payload).to.have.property(k));",
+                  "  pm.expect(payload.status).to.eql(\"CLAIMED\");",
+                  "  pm.expect(payload.goldAwarded).to.be.a(\"number\"); pm.expect(payload.balanceAfter).to.be.a(\"number\");",
+                  "  pm.expect(payload.transactionId === null || typeof payload.transactionId === \"string\").to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HELPER - Kiểm tra wallet sau claim",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Chạy sau CLAIM-API-01 và CLAIM-API-02 để đối chiếu wallet.gold với balanceAfter trả về từ claim."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json(); const d = r.data !== undefined ? r.data : r;",
+                  "const snapshotText = pm.environment.get(\"lastClaimSnapshot\");",
+                  "if (snapshotText) {",
+                  "  const snapshot = JSON.parse(snapshotText);",
+                  "  pm.test(\"Wallet gold sau claim khớp balanceAfter\", function(){ pm.expect(d.wallet.gold).to.eql(snapshot.balanceAfter); });",
+                  "} else {",
+                  "  console.warn(\"Không có claim snapshot. Hãy bật allowStateChangeRequests=true và chạy chuỗi claim trên tài khoản DEV test để kiểm tra wallet.\");",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-04 - Claim với taskCode không tồn tại",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{invalidTaskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{invalidTaskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-04\nMô tả: Claim với taskCode không tồn tại\nDữ liệu: taskCode={{invalidTaskCode}}; không body\nExpected: [NEED-CONFIRMATION] API cần từ chối hoặc xử lý mã nhiệm vụ không tồn tại theo error contract; chưa có status/message lỗi mẫu. Không được cộng Vàng.\nNguồn: [DERIVED] Path parameter taskCode; [NEED-CONFIRMATION] error response.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-05 - Claim nhiệm vụ chưa hoàn thành",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{notCompletedTaskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{notCompletedTaskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-05\nMô tả: Claim nhiệm vụ chưa hoàn thành\nDữ liệu: taskCode={{notCompletedTaskCode}}; status NOT_STARTED hoặc IN_PROGRESS\nExpected: Theo luồng SRS, chỉ sau khi hoàn thành mới cho phép nhận thưởng; task chưa hoàn thành không được cộng Vàng. HTTP status/message cụ thể cần xác nhận.\nNguồn: [SPEC] SRS flow KP04-KP05 và FR-KP-04; [NEED-CONFIRMATION] response lỗi API.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CLAIM-API-06 - Claim khi không có Authorization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "claim"
+              ]
+            },
+            "description": "Testcase: CLAIM-API-06\nMô tả: Claim khi không có Authorization\nDữ liệu: POST claim không Authorization\nExpected: [NEED-CONFIRMATION] Người dùng phải đăng nhập để nhận thưởng; xác nhận mã lỗi thực tế. Không được cộng Vàng khi không xác thực.\nNguồn: [SPEC] SRS điều kiện đầu vào đăng nhập; ảnh API 3 là endpoint nhận thưởng; error contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nPublic endpoint: không gửi Authorization."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lưu progress",
+      "description": "POST /rewards/onboarding/tasks/{{taskCode}}/progress — Lưu bước hướng dẫn đang thực hiện theo stepNo",
+      "item": [
+        {
+          "name": "PROGRESS-API-01 - Lưu bước hướng dẫn đang làm với currentStep hợp lệ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": {{currentStep}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-01\nMô tả: Lưu bước hướng dẫn đang làm với currentStep hợp lệ\nDữ liệu: POST /rewards/onboarding/tasks/{{taskCode}}/progress; body {currentStep: 2}; stepNo=2 tồn tại trong steps\nExpected: API chấp nhận currentStep=2 khi 2 là stepNo thuộc steps của task; response trả về một task có cấu trúc như phần tử tasks của GET /rewards/onboarding.\nNguồn: [SOURCE] Ảnh API 4: body currentStep=2; ghi chú currentStep là stepNo lấy từ steps; response là một task.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Progress response là task object\", function(){ pm.expect(payload).to.be.an(\"object\"); pm.expect(payload).to.have.property(\"currentStep\", 2); });",
+                  "pm.test(\"Progress response có subTasks và steps\", function(){ pm.expect(payload.subTasks).to.be.an(\"array\"); pm.expect(payload.steps).to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PROGRESS-API-02 - Kiểm tra cấu trúc task trả về sau khi lưu progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-02\nMô tả: Kiểm tra cấu trúc task trả về sau khi lưu progress\nDữ liệu: taskCode hợp lệ; currentStep là stepNo có trong steps\nExpected: Response là một task, cùng cấu trúc với một phần tử trong data.tasks của GET /rewards/onboarding.\nNguồn: [SOURCE] Ảnh API 4: response là một task cùng cấu trúc API số 2.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Response task có cấu trúc tương đương task trong API onboarding\", function(){",
+                  "  [\"status\",\"requiredCount\",\"accessedCount\",\"completedSubTasks\",\"totalSubTasks\",\"progressPercent\",\"currentStep\",\"subTasks\",\"steps\"].forEach(k => pm.expect(payload).to.have.property(k));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PROGRESS-API-03 - Kiểm tra currentStep tương ứng stepNo trong danh sách steps",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": {{currentStep}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-03\nMô tả: Kiểm tra currentStep tương ứng stepNo trong danh sách steps\nDữ liệu: currentStep=2; steps có phần tử stepNo=2\nExpected: currentStep được xử lý theo stepNo của steps, không dùng chỉ số vị trí mảng nếu khác stepNo.\nNguồn: [SOURCE] Ảnh API 4 nêu rõ currentStep là stepNo lấy từ steps.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"currentStep khớp stepNo được gửi\", function(){ pm.expect(payload.currentStep).to.eql(Number(pm.environment.get(\"currentStep\"))); });",
+                  "console.warn(\"Tiền điều kiện: currentStep phải là stepNo đang tồn tại trong steps của taskCode.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PROGRESS-API-04 - Lưu progress khi thiếu currentStep",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-04\nMô tả: Lưu progress khi thiếu currentStep\nDữ liệu: Body {}\nExpected: [NEED-CONFIRMATION] Chưa có quy tắc required/default cho currentStep và error response; không tự gán mã HTTP.\nNguồn: [DERIVED] Biến thể body từ request mẫu; API contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PROGRESS-API-05 - Lưu progress với currentStep không tồn tại trong steps",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": 999999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{taskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{taskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-05\nMô tả: Lưu progress với currentStep không tồn tại trong steps\nDữ liệu: Body {currentStep: 999999}; stepNo này không có trong task\nExpected: [NEED-CONFIRMATION] Cần xác nhận API từ chối stepNo ngoài danh sách hay có hành vi khác; không được tự kết luận status/message.\nNguồn: [DERIVED] currentStep phải là stepNo lấy từ steps; error contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PROGRESS-API-06 - Lưu progress với taskCode không tồn tại",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": {{currentStep}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{invalidTaskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{invalidTaskCode}}",
+                "progress"
+              ]
+            },
+            "description": "Testcase: PROGRESS-API-06\nMô tả: Lưu progress với taskCode không tồn tại\nDữ liệu: taskCode={{invalidTaskCode}}; body {currentStep:2}\nExpected: [NEED-CONFIRMATION] Hành vi lỗi khi taskCode không tồn tại và mã HTTP cần xác nhận theo contract.\nNguồn: [DERIVED] Path parameter taskCode; chưa có response lỗi mẫu.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vị trí quan tâm",
+      "description": "POST /users/interest-location — Lưu role và provinceCode cho popup xác nhận vị trí",
+      "item": [
+        {
+          "name": "LOCATION-API-01 - Lưu vị trí quan tâm với role BUYER (Người mua)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-01\nMô tả: Lưu vị trí quan tâm với role BUYER (Người mua)\nDữ liệu: POST /users/interest-location; body {\"role\":\"BUYER\",\"provinceCode\":\"{{provinceCode}}\"}\nExpected: API tiếp nhận role thuộc enum được hỗ trợ và provinceCode hợp lệ; response.data là chuỗi thông báo thành công.\nNguồn: [SOURCE] Ảnh API 5: role bắt buộc, enum BUYER/RENTER/INVESTOR/BROKER; provinceCode bắt buộc, tối đa 50 ký tự, lấy field code từ API tỉnh/thành; response.data là chuỗi thành công.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"API lưu role/vị trí trả data dạng chuỗi thành công\", function(){",
+                  "  pm.expect(root).to.have.property(\"data\");",
+                  "  pm.expect(root.data).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-02 - Lưu vị trí quan tâm với role RENTER (Người thuê)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"RENTER\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-02\nMô tả: Lưu vị trí quan tâm với role RENTER (Người thuê)\nDữ liệu: POST /users/interest-location; body {\"role\":\"RENTER\",\"provinceCode\":\"{{provinceCode}}\"}\nExpected: API tiếp nhận role thuộc enum được hỗ trợ và provinceCode hợp lệ; response.data là chuỗi thông báo thành công.\nNguồn: [SOURCE] Ảnh API 5: role bắt buộc, enum BUYER/RENTER/INVESTOR/BROKER; provinceCode bắt buộc, tối đa 50 ký tự, lấy field code từ API tỉnh/thành; response.data là chuỗi thành công.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"API lưu role/vị trí trả data dạng chuỗi thành công\", function(){",
+                  "  pm.expect(root).to.have.property(\"data\");",
+                  "  pm.expect(root.data).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-03 - Lưu vị trí quan tâm với role INVESTOR (Nhà đầu tư)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"INVESTOR\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-03\nMô tả: Lưu vị trí quan tâm với role INVESTOR (Nhà đầu tư)\nDữ liệu: POST /users/interest-location; body {\"role\":\"INVESTOR\",\"provinceCode\":\"{{provinceCode}}\"}\nExpected: API tiếp nhận role thuộc enum được hỗ trợ và provinceCode hợp lệ; response.data là chuỗi thông báo thành công.\nNguồn: [SOURCE] Ảnh API 5: role bắt buộc, enum BUYER/RENTER/INVESTOR/BROKER; provinceCode bắt buộc, tối đa 50 ký tự, lấy field code từ API tỉnh/thành; response.data là chuỗi thành công.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"API lưu role/vị trí trả data dạng chuỗi thành công\", function(){",
+                  "  pm.expect(root).to.have.property(\"data\");",
+                  "  pm.expect(root.data).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-04 - Lưu vị trí quan tâm với role BROKER (Môi giới)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BROKER\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-04\nMô tả: Lưu vị trí quan tâm với role BROKER (Môi giới)\nDữ liệu: POST /users/interest-location; body {\"role\":\"BROKER\",\"provinceCode\":\"{{provinceCode}}\"}\nExpected: API tiếp nhận role thuộc enum được hỗ trợ và provinceCode hợp lệ; response.data là chuỗi thông báo thành công.\nNguồn: [SOURCE] Ảnh API 5: role bắt buộc, enum BUYER/RENTER/INVESTOR/BROKER; provinceCode bắt buộc, tối đa 50 ký tự, lấy field code từ API tỉnh/thành; response.data là chuỗi thành công.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"API lưu role/vị trí trả data dạng chuỗi thành công\", function(){",
+                  "  pm.expect(root).to.have.property(\"data\");",
+                  "  pm.expect(root.data).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-05 - Lưu vị trí quan tâm khi thiếu role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-05\nMô tả: Lưu vị trí quan tâm khi thiếu role\nDữ liệu: Body {\"provinceCode\":\"{{provinceCode}}\"}\nExpected: [NEED-CONFIRMATION] role là bắt buộc theo tài liệu API; kiểm tra API từ chối dữ liệu thiếu role. Status và error schema cụ thể chưa được cung cấp.\nNguồn: [SOURCE] Ảnh API 5 ghi role bắt buộc; error contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-06 - Lưu vị trí quan tâm với role không thuộc enum",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"ADMIN\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-06\nMô tả: Lưu vị trí quan tâm với role không thuộc enum\nDữ liệu: Body {\"role\":\"ADMIN\",\"provinceCode\":\"{{provinceCode}}\"}\nExpected: [NEED-CONFIRMATION] role chỉ nhận BUYER, RENTER, INVESTOR, BROKER; API cần xử lý giá trị ngoài enum theo validation contract.\nNguồn: [SOURCE] Ảnh API 5 liệt kê enum role; error contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-07 - Lưu vị trí quan tâm khi thiếu provinceCode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-07\nMô tả: Lưu vị trí quan tâm khi thiếu provinceCode\nDữ liệu: Body {\"role\":\"BUYER\"}\nExpected: [NEED-CONFIRMATION] provinceCode là bắt buộc; API cần xử lý dữ liệu thiếu theo contract. Không tự gán mã lỗi.\nNguồn: [SOURCE] Ảnh API 5 ghi provinceCode bắt buộc.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-08 - Kiểm tra provinceCode vượt độ dài tối đa 50 ký tự",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-08\nMô tả: Kiểm tra provinceCode vượt độ dài tối đa 50 ký tự\nDữ liệu: Body {\"role\":\"BUYER\",\"provinceCode\":\"<51 ký tự>\"}\nExpected: [SOURCE] provinceCode có giới hạn tối đa 50 ký tự; dữ liệu dài 51 ký tự phải không được chấp nhận như một mã tỉnh hợp lệ. Error status/message cần đối chiếu thực tế.\nNguồn: [SOURCE] Ảnh API 5 nêu provinceCode tối đa 50 ký tự.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-09 - Kiểm tra provinceCode không tồn tại trong danh mục tỉnh/thành",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"{{invalidProvinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-09\nMô tả: Kiểm tra provinceCode không tồn tại trong danh mục tỉnh/thành\nDữ liệu: Body {\"role\":\"BUYER\",\"provinceCode\":\"{{invalidProvinceCode}}\"}\nExpected: [NEED-CONFIRMATION] provinceCode phải lấy từ field code của API danh mục tỉnh/thành; xác nhận cách API xử lý mã không tồn tại.\nNguồn: [SOURCE] Ảnh API 5 hướng dẫn nguồn code từ /public/list-province?version=2; error contract chưa có.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Validation/negative case: cần chốt error status/schema theo response thực tế; không hard-code 400/401/404.\");"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LOCATION-API-10 - Thử thay đổi vị trí sau khi đã xác nhận",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"{{anotherProvinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "Testcase: LOCATION-API-10\nMô tả: Thử thay đổi vị trí sau khi đã xác nhận\nDữ liệu: Đã xác nhận provinceCode={{provinceCode}}; lần tiếp theo gửi provinceCode={{anotherProvinceCode}}\nExpected: [SPEC] SRS FR-VT-02 quy định vị trí đã lưu không được thay đổi về sau. Cần xác minh API có chặn lần cập nhật thứ hai hay hệ thống chặn ở luồng UI; response cụ thể chưa được đặc tả.\nNguồn: [SPEC] SRS FR-VT-02; [NEED-CONFIRMATION] chưa rõ API-level enforcement.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không có lỗi máy chủ 5xx\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Cần kiểm tra persisted provinceCode sau lần gọi thứ hai; SRS yêu cầu vị trí đã lưu không đổi nhưng chưa rõ API-level enforcement.\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Đánh dấu tour",
+      "description": "POST /users/seen-guide/ONBOARDING_TOUR — Ghi nhận user đã xem tour ONBOARDING_TOUR",
+      "item": [
+        {
+          "name": "TOUR-API-01 - Đánh dấu user đã xem tour onboarding",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/seen-guide/ONBOARDING_TOUR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "seen-guide",
+                "ONBOARDING_TOUR"
+              ]
+            },
+            "description": "Testcase: TOUR-API-01\nMô tả: Đánh dấu user đã xem tour onboarding\nDữ liệu: POST /users/seen-guide/ONBOARDING_TOUR; không body; Authorization hợp lệ\nExpected: Response trả data=true.\nNguồn: [SOURCE] Ảnh API 6: POST /users/seen-guide/ONBOARDING_TOUR, không body; response data=true.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"API seen-guide trả data=true\", function(){ pm.expect(root).to.have.property(\"data\", true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "TOUR-API-02 - Xác minh tourCompleted chuyển thành true sau khi đánh dấu",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": "Testcase: TOUR-API-02\nMô tả: Xác minh tourCompleted chuyển thành true sau khi đánh dấu\nDữ liệu: User đã gọi POST /users/seen-guide/ONBOARDING_TOUR thành công\nExpected: tourCompleted chuyển thành true.\nNguồn: [SOURCE] Ảnh API 6 nêu rõ sau khi gọi, tourCompleted ở API GET /rewards/onboarding chuyển thành true; [SPEC] SRS FR-HD-02/04.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"tourCompleted đã chuyển thành true\", function(){ pm.expect(payload.tourCompleted).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "TOUR-API-03 - Gọi lại API đánh dấu đã xem tour",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/seen-guide/ONBOARDING_TOUR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "seen-guide",
+                "ONBOARDING_TOUR"
+              ]
+            },
+            "description": "Testcase: TOUR-API-03\nMô tả: Gọi lại API đánh dấu đã xem tour\nDữ liệu: User đã có tourCompleted=true; POST seen-guide lần nữa\nExpected: Trạng thái đã xem vẫn là true và hướng dẫn không tự hiển thị lại ở lần truy cập sau. Phản hồi cụ thể khi gọi lặp cần đối chiếu thực tế.\nNguồn: [SPEC] SRS FR-HD-02/04: ghi nhận một lần theo user, không tự hiển thị lại; [NEED-CONFIRMATION] response của request lặp.\n[ASSUMPTION] Base URL dùng dev-gateway.laand.vn theo các API LandBase trước đó; xác nhận host thực tế của các controller onboarding.\nProtected API: cần accessToken hợp lệ; header Authorization Bearer là cấu hình mặc định cần đối chiếu cURL thực tế."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (String(pm.environment.get(\"allowStateChangeRequests\") || \"false\").toLowerCase() !== \"true\") {",
+                  "  console.warn(\"Request skipped: set allowStateChangeRequests=true only with an authorized DEV test user and test task/province data. This request changes reward/progress/profile/tour state.\");",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rawText = pm.response.text();",
+                  "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+                  "let root = null;",
+                  "try { root = pm.response.json(); } catch (e) {}",
+                  "const payload = root && Object.prototype.hasOwnProperty.call(root, \"data\") ? root.data : root;",
+                  "console.log(\"HTTP:\", pm.response.code, \"Content-Type:\", contentType);",
+                  "console.log(\"Response:\", root);",
+                  "pm.test(\"Không có lỗi máy chủ 5xx khi gọi lặp\", function(){ pm.expect(pm.response.code).to.be.below(500); });",
+                  "console.warn(\"Chạy tiếp GET /rewards/onboarding để xác nhận tourCompleted vẫn true.\");"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Negative, Security & SLA (Cố tình truyền sai & Bảo mật)",
+      "description": "6 test cases bổ sung kiểm tra Token giả mạo, tham số âm, thiếu Authorization, SQLi/XSS và SLA (< 3500ms)",
+      "item": [
+        {
+          "name": "ONB-NEG-01 - Gọi API onboarding đăng nhập với JWT Token giả mạo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "pm.test(\"Từ chối token giả mạo (401/403/406)\", function () { pm.expect([401, 403, 406]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzUxMiJ9.INVALID_PAYLOAD.INVALID_SIGNATURE",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ONB-NEG-02 - Lưu progress với currentStep là số âm (-1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "pm.test(\"status = 0 (Từ chối bước âm)\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding/tasks/{{notCompletedTaskCode}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding",
+                "tasks",
+                "{{notCompletedTaskCode}}",
+                "progress"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentStep\": -1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "ONB-NEG-03 - Lưu vị trí quan tâm khi không có Authorization header",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "pm.test(\"Từ chối khi thiếu Authorization (status = 0)\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"{{provinceCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "ONB-NEG-04 - Đánh dấu xem tour khi không có Authorization header",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "pm.test(\"Từ chối khi thiếu Authorization (status = 0)\", function () { pm.expect(pm.response.json().status).to.equal(0); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/seen-guide/ONBOARDING_TOUR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "seen-guide",
+                "ONBOARDING_TOUR"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ONB-SEC-01 - Kiểm tra an toàn SQL Injection / XSS trong provinceCode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Không phát sinh lỗi máy chủ 5xx\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "pm.test(\"status = 0 và không rò rỉ lỗi SQL\", function () {",
+                  "  pm.expect(pm.response.json().status).to.equal(0);",
+                  "  pm.expect(pm.response.text().toLowerCase()).to.not.include(\"syntax error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/users/interest-location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "users",
+                "interest-location"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUYER\",\n  \"provinceCode\": \"01' OR '1'='1'; <script>alert(1)</script>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "ONB-PERF-01 - Kiểm tra SLA thời gian phản hồi của API Onboarding (< 3500ms)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 OK\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Response time < 3500ms\", function () { pm.expect(pm.response.responseTime).to.be.below(3500); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json, text/plain, */*",
+                "type": "text"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "vi,fr-FR;q=0.9,fr;q=0.8,en-US;q=0.7,en;q=0.6",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "clientLocale",
+                "value": "vi",
+                "type": "text"
+              },
+              {
+                "key": "clientTime",
+                "value": "{{$isoTimestamp}}",
+                "type": "text"
+              },
+              {
+                "key": "clientMessageId",
+                "value": "{{$guid}}",
+                "type": "text"
+              },
+              {
+                "key": "Origin",
+                "value": "{{origin}}",
+                "type": "text"
+              },
+              {
+                "key": "Referer",
+                "value": "{{referer}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Auth-Token",
+                "value": "{{xAuthToken}}",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-Ref",
+                "value": "{{xSessionRef}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1.0/auth/rewards/onboarding",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1.0",
+                "auth",
+                "rewards",
+                "onboarding"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
