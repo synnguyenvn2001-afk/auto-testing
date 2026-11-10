@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour } from './helpers';
 
 test.describe('Authentication & Validation Tests (Testcase Auth Tài khoản)', () => {
-  test.describe.configure({ mode: 'serial' });
+  test.describe.configure({ mode: 'default' });
 
   test.beforeEach(async ({ context, page }) => {
     await context.clearCookies();

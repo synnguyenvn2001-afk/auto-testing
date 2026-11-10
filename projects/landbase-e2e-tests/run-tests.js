@@ -210,6 +210,53 @@ async function main() {
   }
 
   // =========================================================================
+  // CHỌN TÀI KHOẢN KIỂM THỬ (TEST ACCOUNT CHO DEV)
+  // =========================================================================
+  const devAccounts = [
+    { username: 'usert1', password: 'Enao@123', label: 'Tài khoản chính (usert1)' },
+    { username: 'usert2', password: 'Enao@123', label: 'Tài khoản phụ 2 (usert2)' },
+    { username: 'usert3', password: 'Enao@123', label: 'Tài khoản phụ 3 (usert3)' },
+    { username: 'usert4', password: 'Enao@123', label: 'Tài khoản phụ 4 (usert4)' },
+    { username: 'usert5', password: 'Enao@123', label: 'Tài khoản phụ 5 (usert5)' },
+  ];
+
+  let cliUser = getArgVal('--user') || getArgVal('--username') || getArgVal('--account');
+  if (cliUser) {
+    const matched = devAccounts.find((a) => a.username.toLowerCase() === cliUser.toLowerCase());
+    if (matched) {
+      selectedEnv.username = matched.username;
+      selectedEnv.password = matched.password;
+    } else {
+      selectedEnv.username = cliUser;
+      selectedEnv.password = getArgVal('--pass') || getArgVal('--password') || 'Enao@123';
+    }
+    console.log(`👤 Tài khoản từ tham số dòng lệnh: ${selectedEnv.username}\n`);
+  } else if (selectedEnv.key === 'dev') {
+    console.log('--- CHỌN TÀI KHOẢN TEST DEV (ACCOUNT) ---');
+    devAccounts.forEach((acc, idx) => {
+      console.log(`  ${idx + 1}. 👤 ${acc.username} - ${acc.label}`);
+    });
+    console.log(`  ${devAccounts.length + 1}. ✏️ Nhập tài khoản tùy chỉnh khác (Custom)`);
+    const accAns = await askQuestion(`\n👉 Nhập lựa chọn Tài khoản (1-${devAccounts.length + 1}) [Mặc định: 1 - usert1]: `);
+    const trimmed = accAns.trim();
+    if (trimmed === String(devAccounts.length + 1)) {
+      const customUser = await askQuestion('👉 Nhập Username: ');
+      const customPass = await askQuestion('👉 Nhập Password [Mặc định: Enao@123]: ');
+      selectedEnv.username = customUser.trim() || 'usert1';
+      selectedEnv.password = customPass.trim() || 'Enao@123';
+    } else if (trimmed && devAccounts[parseInt(trimmed) - 1]) {
+      const chosen = devAccounts[parseInt(trimmed) - 1];
+      selectedEnv.username = chosen.username;
+      selectedEnv.password = chosen.password;
+    } else if (trimmed && devAccounts.find((a) => a.username.toLowerCase() === trimmed.toLowerCase())) {
+      const chosen = devAccounts.find((a) => a.username.toLowerCase() === trimmed.toLowerCase());
+      selectedEnv.username = chosen.username;
+      selectedEnv.password = chosen.password;
+    }
+    console.log(`\n✅ Đã chọn tài khoản test: ${selectedEnv.username}\n`);
+  }
+
+  // =========================================================================
   // BƯỚC 2: CHỌN NỀN TẢNG KIỂM THỬ (Web vs Mobile vs API)
   // =========================================================================
   let platformChoice = getArgVal('--platform');

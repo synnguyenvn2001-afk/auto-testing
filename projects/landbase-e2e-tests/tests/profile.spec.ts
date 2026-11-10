@@ -8,7 +8,7 @@ test.describe('Quản lý Tài khoản (Profile & Password Change Tests)', () =>
   let apiChecker: ReturnType<typeof setupStrictApiCheck>;
 
   // Đảm bảo các test case chạy tuần tự: Case đầu tiên Đăng nhập & Lưu Token, các case sau dùng Token để vào trực tiếp
-  test.describe.configure({ mode: 'serial' });
+  test.describe.configure({ mode: 'default' });
 
   test.beforeEach(async ({ page }) => {
     test.setTimeout(60000);

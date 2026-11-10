@@ -9,9 +9,22 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const ENV_DEV = path.join(ROOT_DIR, 'LandBase_Environment.postman_environment.json');
 const ENV_API = path.join(ROOT_DIR, 'api-environment.json');
 
+const args = process.argv.slice(2);
+let targetUser = process.env.DEV_USERNAME || process.env.TEST_USERNAME || 'usert1';
+let targetPass = process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123';
+
+for (let i = 0; i < args.length; i++) {
+  const a = args[i];
+  if (a.startsWith('--user=')) targetUser = a.split('=')[1];
+  else if (a === '--user' && args[i + 1]) targetUser = args[++i];
+  else if (a.startsWith('--pass=')) targetPass = a.split('=')[1];
+  else if (a === '--pass' && args[i + 1]) targetPass = args[++i];
+  else if (!a.startsWith('--')) targetUser = a; // e.g. node scripts/refresh-token.js usert2
+}
+
 const WEBAPP_URL = process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
-const USERNAME = process.env.DEV_USERNAME || 'usert1';
-const PASSWORD = process.env.DEV_PASSWORD || 'Enao@123';
+const USERNAME = targetUser;
+const PASSWORD = targetPass;
 
 async function refresh() {
   console.log(`[Token Refresh] 🔑 Đang đăng nhập tài khoản ${USERNAME} tại ${WEBAPP_URL}...`);
@@ -67,6 +80,14 @@ async function refresh() {
         for (const item of data.values) {
           if (item.key === 'accessToken') {
             item.value = token;
+            item.enabled = true;
+          }
+          if (item.key === 'username') {
+            item.value = USERNAME;
+            item.enabled = true;
+          }
+          if (item.key === 'userId' && sessionData?.user?.id) {
+            item.value = sessionData.user.id;
             item.enabled = true;
           }
         }

@@ -16,7 +16,34 @@ Bộ kiểm thử web bằng Playwright và mobile Android bằng WebdriverIO/Ap
 ## Tùy chọn Môi trường Kiểm thử (Environment Selection)
 Bộ test tự động hỗ trợ linh hoạt chạy trên cả 2 môi trường:
 - 🚀 **Production (Môi trường Thật)**: `https://landbase.vn` (Tài khoản test: `user` / `Enao@1234`)
-- 🛠️ **Development (Môi trường DEV)**: `https://dev-webapp.laand.vn` (Tài khoản test: `usert1` / `Enao@123`)
+- 🛠️ **Development (Môi trường DEV)**: `https://dev-webapp.laand.vn` (Tài khoản mặc định: `usert1` / `Enao@123`, hỗ trợ sẵn `usert1` -> `usert5`)
+
+### Đảo / Chuyển đổi Tài khoản Kiểm thử (Switch Test Accounts)
+Hệ thống hỗ trợ 5 tài khoản test được cấu hình sẵn trên DEV (`usert1` đến `usert5`, mật khẩu `Enao@123`):
+1. **Khi chạy kiểm thử tự động (Playwright Web UI & API)**:
+   - Khi chạy `npm run test` chọn DEV, hệ thống sẽ mở menu chọn tài khoản:
+     ```text
+     --- CHỌN TÀI KHOẢN TEST DEV (ACCOUNT) ---
+       1. 👤 usert1 - Tài khoản chính (usert1)
+       2. 👤 usert2 - Tài khoản phụ 2 (usert2)
+       3. 👤 usert3 - Tài khoản phụ 3 (usert3)
+       4. 👤 usert4 - Tài khoản phụ 4 (usert4)
+       5. 👤 usert5 - Tài khoản phụ 5 (usert5)
+       6. ✏️ Nhập tài khoản tùy chỉnh khác (Custom)
+     ```
+   - Hoặc chỉ định trực tiếp qua cờ CLI:
+     ```bash
+     node run-tests.js --env=dev --user=usert2
+     node run-tests.js --env=dev --user=usert3
+     ```
+2. **Khi chạy Postman**:
+   - Để đổi tài khoản cho Postman và cấp mới token, chạy lệnh:
+     ```bash
+     node scripts/refresh-token.js usert2
+     node scripts/refresh-token.js usert3
+     ```
+   - Script sẽ đăng nhập tài khoản tương ứng, tự động ghi đè `accessToken`, `username` và `userId` mới vào file [LandBase_Environment.postman_environment.json](LandBase_Environment.postman_environment.json).
+   - Re-import file này vào Postman là tài khoản được chuyển đổi ngay lập tức.
 
 Khi khởi chạy `npm run test`, hệ thống sẽ tự động hiển thị menu tương tác để bạn chọn môi trường:
 ```
