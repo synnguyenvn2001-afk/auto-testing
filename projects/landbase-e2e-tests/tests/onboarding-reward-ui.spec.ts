@@ -911,6 +911,23 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       expect(gridClass).toContain('xl:grid-cols-3');
     });
 
+    test('UIO-004-BUG [DEFECT_SRS_FR-KP-02]: Kiểm tra sự đầy đủ 9 nhiệm vụ khám phá tính năng theo tài liệu đặc tả SRS (Lưới 3×3)', async ({}, testInfo) => {
+      test.fail(true, 'DEFECT: Giao diện và Backend DEV hiện tại chỉ có 6 nhiệm vụ, thiếu 3 nhiệm vụ so với đặc tả SRS FR-KP-02 (lưới 3x3).');
+      await openRewardsScreen();
+      const taskGrid = sharedPage.locator('section:has(h2:has-text("Nhiệm vụ khám phá tính năng")) div.grid').first();
+      const taskCards = taskGrid.locator('article');
+      const cardCount = await taskCards.count();
+
+      await attachUiEvidence(sharedPage, testInfo, 'UIO-004-BUG', {
+        status: 'DEFECT_TRACKING',
+        expectedCountBySRS: 9,
+        actualCountOnDEV: cardCount,
+        defectDescription: 'Giao diện DEV hiện tại mới hiển thị 6 thẻ nhiệm vụ, chưa đủ 9 thẻ (3x3) theo SRS FR-KP-02.',
+      });
+
+      expect(cardCount, 'DEFECT: Số lượng nhiệm vụ khám phá trên giao diện chưa đủ 9 theo đặc tả SRS FR-KP-02').toBe(9);
+    });
+
     test('UIO-005: Hiển thị nội dung cơ bản trên từng thẻ nhiệm vụ (Tên, mô tả và nhãn thưởng Vàng)', async ({}, testInfo) => {
       await openRewardsScreen();
       const taskCards = sharedPage.locator('section:has(h2:has-text("Nhiệm vụ khám phá tính năng")) article');
@@ -971,6 +988,12 @@ test.describe('LandBase Web UI E2E - Onboarding & Nhận thưởng LandBase (71 
       expect(progress.total).toBe(6);
       expect(progress.completed).toBe(2); // EXPLORE_MAP (CLAIMED) + SAVE_PROPERTY (COMPLETED)
       expect(taskCardsCount).toBe(6);
+    });
+
+    test('UIO-007-BUG [DEFECT_SRS_FR-KP-02]: Thanh tiến độ tổng phải tính trên 9 nhiệm vụ theo đặc tả SRS', async ({}, testInfo) => {
+      test.fail(true, 'DEFECT: Tổng số nhiệm vụ tính trên thanh tiến độ hiện tại là 6, chưa đủ 9 theo đặc tả SRS.');
+      const progress = computeOnboardingProgress(state.tasks);
+      expect(progress.total, 'DEFECT: Tổng nhiệm vụ phải là 9 theo đặc tả SRS FR-KP-02').toBe(9);
     });
 
     test('UIO-008: Hiển thị số Vàng phần thưởng khớp cấu hình động từ Backend (Không cố định +10)', async ({}, testInfo) => {

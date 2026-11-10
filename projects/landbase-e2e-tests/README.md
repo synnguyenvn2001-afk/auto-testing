@@ -78,8 +78,8 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 
 ## Kiểm thử Báo cáo tổng quan khu vực API (/api/locality-report)
 - **File test Playwright**: `tests/api/locality-report.spec.ts` (27 test cases)
-- **File Postman Collection**: `LandBase_Locality_Report.postman_collection.json` và đã tích hợp vào `LandBase_API_Tests.postman_collection.json` (Folder `09. Báo cáo tổng quan khu vực (/api/locality-report)`)
-- **File Postman Environment**: `LandBase_Locality_Report_Environment.postman_environment.json` và `LandBase_Environment.postman_environment.json`
+- **File Postman Collection**: `LandBase_API_Tests.postman_collection.json` (Folder `09. Báo cáo tổng quan khu vực (/api/locality-report)`)
+- **File Postman Environment**: `LandBase_Environment.postman_environment.json`
 - **Đặc điểm API**: Endpoint Public thuộc WebApp Next.js (`https://dev-webapp.laand.vn/api/locality-report`), không bắt buộc header xác thực, phục vụ truy vấn báo cáo theo tọa độ (`latitude`, `longitude`).
 - **Các nhóm testcase chính**:
   1. **Happy Path & Response Contract**: 200 OK với tọa độ mẫu (`latitude=21.019301`, `longitude=105.826367`), tọa độ thập phân cao, query phụ, tọa độ thực tế TP.HCM & Đà Nẵng.
@@ -94,8 +94,8 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 
 ## Kiểm thử AI tổng hợp báo cáo theo vị trí - Xem chi tiết BĐS (/api/v1.0/real-estate/public/news/report-by-location)
 - **File test Playwright**: `tests/api/news-report-by-location.spec.ts` (30 test cases)
-- **File Postman Collection**: `LandBase_AI_Location_News_Report.postman_collection.json` và đã tích hợp vào `LandBase_API_Tests.postman_collection.json` (Folder `11. AI tổng hợp báo cáo theo vị trí`)
-- **File Postman Environment**: `LandBase_AI_Location_News_Report_Environment.postman_environment.json` và `LandBase_Environment.postman_environment.json`
+- **File Postman Collection**: `LandBase_API_Tests.postman_collection.json` (Folder `12. AI tổng hợp báo cáo theo vị trí`)
+- **File Postman Environment**: `LandBase_Environment.postman_environment.json`
 - **Đặc điểm API**: Endpoint Gateway Backend (`POST https://dev-gateway.laand.vn/api/v1.0/real-estate/public/news/report-by-location`), payload JSON chuẩn nhận `{"lat": 20.983173, "lon": 105.828624}`.
 - **Các nhóm testcase chính**:
   1. **Happy Path & Schema Báo cáo AI (`REPORT-API-01..02`, `22..23`)**: Kiểm tra phản hồi 200 OK với tọa độ thực tế Hà Nội (`20.983173, 105.828624`), kiểm tra đủ 13 trường của đối tượng báo cáo (`id`, `slug`, `title`, `description`, `content` Markdown, `imageUrl`, `pdfUrl`, `provinceCode`, `wardCode`, `reportYear`, `reportQuarter`, `postDate`, `isLoginRequired`) và Gateway Wrapper.
@@ -134,8 +134,8 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 
 ## Kiểm thử Onboarding & Nhận thưởng tân thủ (/api/v1.0/auth/rewards/onboarding & /users/*)
 - **File test Playwright**: `tests/api/onboarding-reward.spec.ts` (46 test cases)
-- **File Postman Collection**: `LandBase_Onboarding_Reward.postman_collection.json` và đã tích hợp vào `LandBase_API_Tests.postman_collection.json` (Folder `10. Onboarding & Nhận thưởng`)
-- **File Postman Environment**: `LandBase_Onboarding_Reward_Environment.postman_environment.json` và `LandBase_Environment.postman_environment.json`
+- **File Postman Collection**: `LandBase_API_Tests.postman_collection.json` (Folder `11. Onboarding & Nhận thưởng`)
+- **File Postman Environment**: `LandBase_Environment.postman_environment.json`
 - **Các nhóm endpoint & testcase chính**:
   1. **Public Onboarding (`GET /api/v1.0/auth/public/rewards/onboarding` - `PUB-ONB-01..05`)**: Kiểm tra danh sách nhiệm vụ khi chưa đăng nhập (`wallet = null`, `tourCompleted = false`, tất cả nhiệm vụ có `status = "NOT_STARTED"`).
   2. **Onboarding Đăng nhập (`GET /api/v1.0/auth/rewards/onboarding` - `ONB-API-01..10`)**: Kiểm tra cấu trúc `campaign`, số lượng nhiệm vụ khám phá khớp `progress.total`, enum `status` (`NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, `CLAIMED`), tiến độ nhiệm vụ, cấu trúc lồng `subTasks` và `steps`, enum `action`/`placement`, tổng tiến độ `progress`, ví Vàng `wallet.gold` và bảo vệ khi thiếu xác thực.

@@ -3,7 +3,7 @@ import { skipOnboardingTour } from './helpers';
 
 test.describe('Navigation Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     await page.goto(baseUrl);
     await page.waitForLoadState('domcontentloaded');
     await skipOnboardingTour(page);

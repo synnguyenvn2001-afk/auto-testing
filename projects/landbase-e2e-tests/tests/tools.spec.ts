@@ -5,7 +5,7 @@ import { DEBUG_SCREENSHOTS_DIR } from './paths';
 
 test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
   test.beforeEach(async ({ page }) => {
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     const response = await page.goto(baseUrl).catch(() => null);
     await checkAndSkipIf504(page, response);
     await skipOnboardingTour(page);
@@ -422,7 +422,7 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
     if (hasCard) {
       await landPriceCard.click({ force: true });
     } else {
-      const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+      const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
       await page.goto(`${baseUrl}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     }
 
@@ -471,7 +471,7 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
   test('TC14 - should navigate through pagination controls on land price table', async ({ page }) => {
     test.setTimeout(60000);
 
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     await page.goto(`${baseUrl}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2000);
     await skipOnboardingTour(page);
@@ -494,7 +494,7 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
   test('TC15 - should display empty state when searching for nonexistent street (Non-Happy Case)', async ({ page }) => {
     test.setTimeout(60000);
 
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     await page.goto(`${baseUrl}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2000);
     await skipOnboardingTour(page);
@@ -514,7 +514,7 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
   test('TC16 - should restore full list when search query is cleared (Non-Happy / Reset Flow)', async ({ page }) => {
     test.setTimeout(60000);
 
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     await page.goto(`${baseUrl}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2000);
     await skipOnboardingTour(page);
@@ -538,7 +538,7 @@ test.describe('Financial, Geomancy and Land Price Tools Tests', () => {
   test('TC17 - should handle SQL injection and special characters in street search safely (Non-Happy / Security Case)', async ({ page }) => {
     test.setTimeout(60000);
 
-    const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+    const baseUrl = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
     await page.goto(`${baseUrl}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2000);
     await skipOnboardingTour(page);

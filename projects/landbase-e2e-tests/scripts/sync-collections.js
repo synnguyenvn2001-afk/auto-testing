@@ -981,15 +981,15 @@ function updateOnboardingCollection() {
 
   fs.writeFileSync(onbPath, JSON.stringify(onbColl, null, 2), 'utf8');
 
-  // Update standalone onboarding environment baseUrl as well
-  const onbEnvPath = path.join(ROOT, 'LandBase_Onboarding_Reward_Environment.postman_environment.json');
-  if (fs.existsSync(onbEnvPath)) {
-    const onbEnv = JSON.parse(fs.readFileSync(onbEnvPath, 'utf8'));
-    const baseVar = onbEnv.values.find(v => v.key === 'baseUrl');
+  // Update main unified environment file
+  const mainEnvPath = path.join(ROOT, 'LandBase_Environment.postman_environment.json');
+  if (fs.existsSync(mainEnvPath)) {
+    const mainEnv = JSON.parse(fs.readFileSync(mainEnvPath, 'utf8'));
+    const baseVar = mainEnv.values.find(v => v.key === 'baseUrl');
     if (baseVar) baseVar.value = 'https://dev-gateway.laand.vn';
-    const allowVar = onbEnv.values.find(v => v.key === 'allowStateChangeRequests');
+    const allowVar = mainEnv.values.find(v => v.key === 'allowStateChangeRequests');
     if (allowVar) allowVar.value = 'true';
-    fs.writeFileSync(onbEnvPath, JSON.stringify(onbEnv, null, 2), 'utf8');
+    fs.writeFileSync(mainEnvPath, JSON.stringify(mainEnv, null, 2), 'utf8');
   }
 }
 
@@ -1132,12 +1132,12 @@ function updateAiLocationReportCollection() {
 
   fs.writeFileSync(aiPath, JSON.stringify(aiColl, null, 2), 'utf8');
 
-  const aiEnvPath = path.join(ROOT, 'LandBase_AI_Location_News_Report_Environment.postman_environment.json');
-  if (fs.existsSync(aiEnvPath)) {
-    const aiEnv = JSON.parse(fs.readFileSync(aiEnvPath, 'utf8'));
-    const confirmVar = aiEnv.values.find(v => v.key === 'confirmRunAIReport');
+  const mainEnvPath = path.join(ROOT, 'LandBase_Environment.postman_environment.json');
+  if (fs.existsSync(mainEnvPath)) {
+    const mainEnv = JSON.parse(fs.readFileSync(mainEnvPath, 'utf8'));
+    const confirmVar = mainEnv.values.find(v => v.key === 'confirmRunAIReport');
     if (confirmVar) confirmVar.value = 'true';
-    fs.writeFileSync(aiEnvPath, JSON.stringify(aiEnv, null, 2), 'utf8');
+    fs.writeFileSync(mainEnvPath, JSON.stringify(mainEnv, null, 2), 'utf8');
   }
 }
 

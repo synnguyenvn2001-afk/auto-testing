@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { skipOnboardingTour, loginIfNeeded } from './helpers';
 
 test.describe('Security Test Suite (Testcase Bảo mật & Giới hạn chức năng)', () => {
-  const BASE_URL = process.env.BASE_URL || 'https://landbase.vn';
+  const BASE_URL = process.env.BASE_URL || process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
 
   test.beforeEach(async ({ page }) => {
     await page.goto(BASE_URL);

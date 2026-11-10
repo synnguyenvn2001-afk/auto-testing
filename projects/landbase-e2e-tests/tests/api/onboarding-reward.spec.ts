@@ -330,6 +330,33 @@ test.describe('LandBase API - Onboarding & Nhận thưởng (/api/v1.0/auth/rewa
       expect([6, 9]).toContain(payload.tasks.length);
     });
 
+    test('ONB-API-03-BUG [DEFECT_SRS_FR-KP-02]: Kiểm tra sự đầy đủ 9 nhiệm vụ khám phá theo đặc tả SRS FR-KP-02', async ({ page }, testInfo) => {
+      test.fail(true, 'DEFECT: API Backend DEV hiện chỉ trả 6 nhiệm vụ, thiếu 3 nhiệm vụ so với đặc tả SRS FR-KP-02.');
+      const startTime = Date.now();
+      const res = await client.executeInPage(page, {
+        endpoint: AUTH_ONBOARDING_ENDPOINT,
+        method: 'GET',
+      });
+      const durationMs = Date.now() - startTime;
+      const payload = extractPayload(res.data);
+      const actualCount = Array.isArray(payload?.tasks) ? payload.tasks.length : 0;
+
+      await recordApiEvidence(page, testInfo, {
+        testId: 'ONB-API-03-BUG',
+        testName: '[DEFECT_SRS_FR-KP-02] Số lượng nhiệm vụ khám phá phải đủ 9 theo SRS',
+        endpoint: client.resolveUrl(AUTH_ONBOARDING_ENDPOINT),
+        method: 'GET',
+        expectedStatus: '9 tasks',
+        actualStatus: `${actualCount} tasks`,
+        requestBody: null,
+        responseHeaders: res.headers,
+        responseBody: { actualCount, taskCodes: payload?.tasks?.map((t: any) => t.code) },
+        durationMs,
+      });
+
+      expect(actualCount, 'DEFECT: Backend phải trả về đúng 9 nhiệm vụ theo SRS FR-KP-02').toBe(9);
+    });
+
     test('ONB-API-04: Kiểm tra enum status của từng nhiệm vụ (NOT_STARTED, IN_PROGRESS, COMPLETED, CLAIMED)', async ({ page }, testInfo) => {
       const startTime = Date.now();
       const res = await client.executeInPage(page, {
@@ -579,6 +606,17 @@ test.describe('LandBase API - Onboarding & Nhận thưởng (/api/v1.0/auth/rewa
       expect(hasPersonal, 'ONB-API-09: Không được trả dữ liệu cá nhân khi thiếu xác thực').toBe(false);
     });
 
+    test('ONB-API-09-BUG [DEFECT_SECURITY_401]: Onboarding thiếu xác thực phải trả về mã 401 Unauthorized (không dùng 406 kèm code 500)', async ({ page }, testInfo) => {
+      test.fail(true, 'DEFECT: Backend DEV hiện trả về HTTP 406 kèm code 500 thay vì chuẩn an ninh HTTP 401 Unauthorized.');
+      const res = await client.executeInPage(page, {
+        endpoint: AUTH_ONBOARDING_ENDPOINT,
+        method: 'GET',
+        overrideTokens: { accessToken: '', xAuthToken: '', xSessionRef: '' },
+        customHeaders: { Authorization: undefined as any },
+      });
+      expect([401, 403], 'DEFECT: Request thiếu Authorization bắt buộc phải trả về mã 401 hoặc 403').toContain(res.status);
+    });
+
     test('ONB-API-10: Kiểm tra các trường thông tin cơ bản của từng nhiệm vụ (title, description, goldAmount, sortOrder, status)', async ({ page }, testInfo) => {
       const startTime = Date.now();
       const res = await client.executeInPage(page, {
@@ -724,6 +762,19 @@ test.describe('LandBase API - Onboarding & Nhận thưởng (/api/v1.0/auth/rewa
       expect(secondPayload.transactionId).toBe(firstSnapshot.transactionId);
     });
 
+    test('CLAIM-API-02-BUG [DEFECT_BACKEND_DUPLICATE_CLAIM]: Chặn gọi claim lần hai cho nhiệm vụ đã CLAIMED (Không được tiếp tục cấp Vàng)', async ({ page }, testInfo) => {
+      verifyStateChangeGuard(testInfo);
+      test.fail(true, 'DEFECT: Backend DEV hiện tại vẫn trả về status: 1 và goldAwarded: 10 khi claim lần hai thay vì chặn hoặc trả goldAwarded = 0.');
+      const claimEndpoint = `/api/v1.0/auth/rewards/onboarding/tasks/${defaultTaskCode}/claim`;
+      const res = await client.executeInPage(page, {
+        endpoint: claimEndpoint,
+        method: 'POST',
+      });
+      const payload = extractPayload(res.data);
+      // Kỳ vọng chuẩn SRS: Khi đã CLAIMED, lần gọi tiếp theo không được trả goldAwarded > 0
+      expect(payload?.goldAwarded ?? 0, 'DEFECT: Backend không được tiếp tục cấp Vàng (goldAwarded phải bằng 0 hoặc báo lỗi)').toBe(0);
+    });
+
     test('CLAIM-API-03: Kiểm tra các trường response contract khi claim thành công & đối chiếu ví sau claim', async ({ page }, testInfo) => {
       verifyStateChangeGuard(testInfo);
 
@@ -833,6 +884,16 @@ test.describe('LandBase API - Onboarding & Nhận thưởng (/api/v1.0/auth/rewa
       expect(res.data?.message).toContain('chưa hoàn thành');
     });
 
+    test('CLAIM-API-05-BUG [DEFECT_REST_STATUS]: Claim nhiệm vụ chưa hoàn thành phải trả về mã lỗi 400 Bad Request (không dùng 406)', async ({ page }, testInfo) => {
+      test.fail(true, 'DEFECT: Backend DEV hiện trả về HTTP 406 Not Acceptable thay vì chuẩn RESTful HTTP 400 Bad Request.');
+      const claimEndpoint = `/api/v1.0/auth/rewards/onboarding/tasks/${defaultNotCompletedTaskCode}/claim`;
+      const res = await client.executeInPage(page, {
+        endpoint: claimEndpoint,
+        method: 'POST',
+      });
+      expect([400, 422], 'DEFECT: Mã HTTP trả về phải là 400 Bad Request hoặc 422 Unprocessable Entity').toContain(res.status);
+    });
+
     test('CLAIM-API-06: Claim khi không có Authorization', async ({ page }, testInfo) => {
       const claimEndpoint = `/api/v1.0/auth/rewards/onboarding/tasks/${defaultTaskCode}/claim`;
       const startTime = Date.now();
@@ -859,6 +920,18 @@ test.describe('LandBase API - Onboarding & Nhận thưởng (/api/v1.0/auth/rewa
 
       assertNoServerCrash(res, 'CLAIM-API-06');
       expect(res.data?.status).toBe(0);
+    });
+
+    test('CLAIM-API-06-BUG [DEFECT_SECURITY_401]: Claim khi không có Authorization phải trả về 401 Unauthorized (không dùng 406)', async ({ page }, testInfo) => {
+      test.fail(true, 'DEFECT: Backend DEV hiện trả về HTTP 406 Not Acceptable thay vì chuẩn an ninh HTTP 401 Unauthorized.');
+      const claimEndpoint = `/api/v1.0/auth/rewards/onboarding/tasks/${defaultTaskCode}/claim`;
+      const res = await client.executeInPage(page, {
+        endpoint: claimEndpoint,
+        method: 'POST',
+        overrideTokens: { accessToken: '', xAuthToken: '', xSessionRef: '' },
+        customHeaders: { Authorization: undefined as any },
+      });
+      expect([401, 403], 'DEFECT: Request thiếu Authorization bắt buộc phải trả về mã 401 hoặc 403').toContain(res.status);
     });
   });
 

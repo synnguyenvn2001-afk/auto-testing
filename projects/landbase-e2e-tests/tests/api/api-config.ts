@@ -150,11 +150,6 @@ export function loadApiConfig(): ApiEnvironmentConfig {
     DEFAULT_CONFIG_FILE,
     path.join(__dirname, 'api-environment.json'),
     path.join(__dirname, '..', '..', 'LandBase_Environment.postman_environment.json'),
-    path.join(__dirname, '..', '..', 'LandBase_Locality_Report_Environment.postman_environment.json'),
-    path.join(__dirname, '..', '..', 'LandBase_Onboarding_Reward_Environment.postman_environment.json'),
-    path.join(__dirname, '..', '..', 'LandBase_AI_Location_News_Report_Environment.postman_environment.json'),
-    path.join(__dirname, '..', '..', 'LandBase_Chat_AI_Environment.postman_environment.json'),
-    path.join(__dirname, '..', '..', 'postman-environment.json'),
   ];
 
   for (const configPath of candidateConfigPaths) {

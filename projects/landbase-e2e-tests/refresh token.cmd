@@ -1,0 +1,1 @@
+node scripts/refresh-token.js

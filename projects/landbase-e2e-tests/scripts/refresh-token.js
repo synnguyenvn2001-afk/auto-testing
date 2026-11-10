@@ -7,7 +7,6 @@ const path = require('path');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const ENV_DEV = path.join(ROOT_DIR, 'LandBase_Environment.postman_environment.json');
-const ENV_ONB = path.join(ROOT_DIR, 'LandBase_Onboarding_Reward_Environment.postman_environment.json');
 const ENV_API = path.join(ROOT_DIR, 'api-environment.json');
 
 const WEBAPP_URL = process.env.WEBAPP_URL || 'https://dev-webapp.laand.vn';
@@ -80,7 +79,6 @@ async function refresh() {
   }
 
   updateEnvFile(ENV_DEV);
-  updateEnvFile(ENV_ONB);
 
   // Update api-environment.json
   if (fs.existsSync(ENV_API)) {
