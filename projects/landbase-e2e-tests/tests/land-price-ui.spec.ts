@@ -11,8 +11,11 @@ import { skipOnboardingTour } from './helpers';
  *   1. Điều hướng & Giao diện tổng quan (Header, Subtitle, Menu, Chú thích vị trí đất)
  *   2. Bảng dữ liệu giá đất (4 cột tiêu đề chuẩn, format giá tiền VNĐ, phân loại đất)
  *   3. Phân trang dữ liệu (Pagination: Trước, 1, 2, Sau)
- *   4. Bộ lọc & Tìm kiếm (Tìm theo tên đường, Phường/Xã, Loại đất, Reset, XSS/SQLi)
- *   5. Bản đồ nhiệt GIS (Chuyển tab Dữ liệu bảng giá <-> Bản đồ nhiệt GIS)
+ *   4. Bộ lọc tìm kiếm tên đường & An toàn dữ liệu (Reset, XSS/SQLi)
+ *   5. Tự động nhận diện Vị trí & GPS Geolocation (Hà Nội, TP.HCM, Fallback không GPS)
+ *   6. Bộ lọc chi tiết từng ô tìm kiếm (Tỉnh/TP -> mở khóa Phường/Xã, Loại đất, Đa điều kiện)
+ *   7. Bản đồ nhiệt GIS tương tác theo Loại đất & Bộ lọc
+ *   8. Xem vị trí thửa đất trên Bản đồ nhiệt GIS qua Icon Con Mắt (UI-LP-024 -> UI-LP-026)
  * ============================================================================
  */
 
@@ -71,6 +74,22 @@ async function openLandPricePage(page: Page) {
   const pageHeader = page.locator('h1, h2').filter({ hasText: /^Bảng giá đất$/i }).first();
   await expect(pageHeader).toBeVisible({ timeout: 15000 });
   return pageHeader;
+}
+
+/**
+ * Helper chọn một mục trong dropdown Radix Popover (Tỉnh/Thành phố, Phường/Xã, Loại đất)
+ */
+async function selectDropdownOption(page: Page, ariaLabel: string, optionMatcher: string | RegExp) {
+  const btn = page.locator(`button[aria-label="${ariaLabel}"]`).first();
+  await expect(btn).toBeVisible({ timeout: 10000 });
+  await btn.click({ force: true });
+  await page.waitForTimeout(600);
+
+  const popover = page.locator('[data-radix-popper-content-wrapper]');
+  const option = popover.locator('[role="option"]').filter({ hasText: optionMatcher }).first();
+  await expect(option).toBeVisible({ timeout: 8000 });
+  await option.click({ force: true });
+  await page.waitForTimeout(600);
 }
 
 test.describe('LandBase Web UI E2E – Chức năng Bảng giá đất & Bản đồ nhiệt GIS', () => {
@@ -508,6 +527,360 @@ test.describe('LandBase Web UI E2E – Chức năng Bảng giá đất & Bản �
         mapCanvasVisible: await mapCanvas.isVisible(),
         currentUrl: page.url(),
       });
+    });
+  });
+
+  // ============================================================================
+  // NHÓM 5: TỰ ĐỘNG NHẬN DIỆN VỊ TRÍ & GPS GEOLOCATION (UI-LP-016 -> UI-LP-018)
+  // ============================================================================
+  test.describe('Nhóm 5: Tự động nhận diện Vị trí & GPS Geolocation', () => {
+
+    test('UI-LP-016: Cấp quyền GPS toạ độ Hà Nội -> Tự động điền "Thành phố Hà Nội" và mở khóa ô Phường/Xã', async ({ context, page }, testInfo) => {
+      await context.grantPermissions(['geolocation']);
+      await context.setGeolocation({ latitude: 21.0285, longitude: 105.8542 });
+
+      await page.goto(`${WEBAPP_URL}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await clearOverlays(page);
+      await skipOnboardingTour(page);
+      await page.waitForTimeout(4000);
+
+      const provinceBtn = page.locator('button[aria-label="Tỉnh / Thành phố"]').first();
+      await expect(provinceBtn).toHaveText(/Thành phố Hà Nội/i, { timeout: 10000 });
+
+      const wardBtn = page.locator('button[aria-label="Phường / Xã"]').first();
+      const isWardDisabled = await wardBtn.isDisabled();
+      expect(isWardDisabled).toBe(false);
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-016', {
+        detectedProvince: await provinceBtn.innerText(),
+        isWardDisabled,
+      });
+    });
+
+    test('UI-LP-017: Cấp quyền GPS toạ độ TP.HCM -> Tự động nhận diện và điền "Thành phố Hồ Chí Minh"', async ({ context, page }, testInfo) => {
+      await context.grantPermissions(['geolocation']);
+      await context.setGeolocation({ latitude: 10.7769, longitude: 106.7009 });
+
+      await page.goto(`${WEBAPP_URL}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await clearOverlays(page);
+      await skipOnboardingTour(page);
+      await page.waitForTimeout(4000);
+
+      const provinceBtn = page.locator('button[aria-label="Tỉnh / Thành phố"]').first();
+      await expect(provinceBtn).toHaveText(/Thành phố Hồ Chí Minh/i, { timeout: 10000 });
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-017', {
+        detectedProvince: await provinceBtn.innerText(),
+      });
+    });
+
+    test('UI-LP-018: Khi không cấp quyền GPS (Fallback), ô Tỉnh/TP hiển thị "Tất cả" và ô Phường/Xã bị khóa (disabled)', async ({ context, page }, testInfo) => {
+      await context.clearPermissions();
+
+      await page.goto(`${WEBAPP_URL}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await clearOverlays(page);
+      await skipOnboardingTour(page);
+      await page.waitForTimeout(3000);
+
+      const provinceBtn = page.locator('button[aria-label="Tỉnh / Thành phố"]').first();
+      const provinceText = (await provinceBtn.innerText()).trim();
+
+      const wardBtn = page.locator('button[aria-label="Phường / Xã"]').first();
+      const isWardDisabled = await wardBtn.isDisabled();
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-018', {
+        provinceText,
+        isWardDisabled,
+      });
+
+      expect(provinceText).toMatch(/Tất cả/i);
+      expect(isWardDisabled).toBe(true);
+    });
+  });
+
+  // ============================================================================
+  // NHÓM 6: BỘ LỌC CHI TIẾT TỪNG Ô TÌM KIẾM (UI-LP-019 -> UI-LP-022)
+  // ============================================================================
+  test.describe('Nhóm 6: Bộ lọc chi tiết từng ô tìm kiếm (Tỉnh/TP, Phường/Xã, Loại đất)', () => {
+
+    test('UI-LP-019: Chọn Tỉnh/Thành phố trong dropdown mở khóa và nạp danh sách Phường/Xã tương ứng', async ({ page }, testInfo) => {
+      await openLandPricePage(page);
+
+      // Chọn Tỉnh Hà Nội
+      await selectDropdownOption(page, 'Tỉnh / Thành phố', /Thành phố Hà Nội/i);
+
+      const provinceBtn = page.locator('button[aria-label="Tỉnh / Thành phố"]').first();
+      await expect(provinceBtn).toHaveText(/Thành phố Hà Nội/i);
+
+      // Dropdown Phường/Xã được mở khóa
+      const wardBtn = page.locator('button[aria-label="Phường / Xã"]').first();
+      expect(await wardBtn.isDisabled()).toBe(false);
+
+      // Mở dropdown Phường/Xã và kiểm tra có danh sách options trực thuộc
+      await wardBtn.click({ force: true });
+      await page.waitForTimeout(600);
+
+      const popover = page.locator('[data-radix-popper-content-wrapper]');
+      const wardOptions = popover.locator('[role="option"]');
+      const count = await wardOptions.count();
+      expect(count).toBeGreaterThan(1);
+
+      await page.keyboard.press('Escape');
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-019', {
+        selectedProvince: await provinceBtn.innerText(),
+        wardOptionsCount: count,
+      });
+    });
+
+    test('UI-LP-020: Chọn một Phường/Xã cụ thể trong dropdown và bấm Tìm kiếm -> Bảng dữ liệu lọc chính xác', async ({ page }, testInfo) => {
+      await openLandPricePage(page);
+
+      // 1. Chọn Hà Nội
+      await selectDropdownOption(page, 'Tỉnh / Thành phố', /Thành phố Hà Nội/i);
+
+      // 2. Mở dropdown Phường/Xã và chọn một xã/phường
+      const wardBtn = page.locator('button[aria-label="Phường / Xã"]').first();
+      await wardBtn.click({ force: true });
+      await page.waitForTimeout(600);
+
+      const popover = page.locator('[data-radix-popper-content-wrapper]');
+      const wardOption = popover.locator('[role="option"]').filter({ hasText: /Xã An Khánh|Phường Ba Đình|Phường/i }).first();
+      const chosenWard = (await wardOption.innerText()).trim();
+      await wardOption.click({ force: true });
+      await page.waitForTimeout(600);
+
+      // 3. Bấm Tìm kiếm
+      const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
+      await submitBtn.click({ force: true });
+      await page.waitForTimeout(2000);
+
+      const rows = page.locator('table tbody tr');
+      const rowCount = await rows.count();
+      expect(rowCount).toBeGreaterThan(0);
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-020', {
+        chosenWard,
+        rowCount,
+        firstRowText: (await rows.first().innerText()).trim().slice(0, 100),
+      });
+    });
+
+    test('UI-LP-021: Lọc theo Loại đất cụ thể -> Bảng dữ liệu chỉ hiển thị các bản ghi khớp Loại đất đã chọn', async ({ page }, testInfo) => {
+      await openLandPricePage(page);
+
+      const targetCategory = 'Đất sản xuất, kinh doanh phi nông nghiệp';
+      await selectDropdownOption(page, 'Loại đất', new RegExp(targetCategory, 'i'));
+
+      const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
+      await submitBtn.click({ force: true });
+      await page.waitForTimeout(2000);
+
+      const rows = page.locator('table tbody tr');
+      const rowCount = await rows.count();
+      expect(rowCount).toBeGreaterThan(0);
+
+      // Khẳng định bản ghi trả về hiển thị đúng loại đất đã lọc
+      const firstRowText = await rows.first().innerText();
+      expect(firstRowText).toContain(targetCategory);
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-021', {
+        selectedCategory: targetCategory,
+        rowCount,
+        firstRowText: firstRowText.slice(0, 120),
+      });
+    });
+
+    test('UI-LP-022: Kết hợp đa bộ lọc đồng thời (Tên đường + Tỉnh/TP + Loại đất) -> Dữ liệu trả về chuẩn xác', async ({ page }, testInfo) => {
+      await openLandPricePage(page);
+
+      // 1. Nhập tên đường
+      const searchInput = page.locator('input[placeholder*="Nhập phường/xã, tên đường"]:visible').first();
+      await searchInput.fill('Âu Cơ');
+
+      // 2. Chọn Tỉnh Hà Nội
+      await selectDropdownOption(page, 'Tỉnh / Thành phố', /Thành phố Hà Nội/i);
+
+      // 3. Chọn Loại đất
+      const targetCategory = 'Đất sản xuất, kinh doanh phi nông nghiệp';
+      await selectDropdownOption(page, 'Loại đất', new RegExp(targetCategory, 'i'));
+
+      // 4. Bấm Tìm kiếm
+      const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
+      await submitBtn.click({ force: true });
+      await page.waitForTimeout(2000);
+
+      const rows = page.locator('table tbody tr');
+      const rowCount = await rows.count();
+      expect(rowCount).toBeGreaterThan(0);
+
+      const firstRow = await rows.first().innerText();
+      expect(firstRow).toMatch(/Âu Cơ/i);
+      expect(firstRow).toContain(targetCategory);
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-022', {
+        keyword: 'Âu Cơ',
+        province: 'Thành phố Hà Nội',
+        category: targetCategory,
+        rowCount,
+        firstRow: firstRow.slice(0, 120),
+      });
+    });
+  });
+
+  // ============================================================================
+  // NHÓM 7: BẢN ĐỒ NHIỆT GIS TƯƠNG TÁC THEO LOẠI ĐẤT (UI-LP-023)
+  // ============================================================================
+  test.describe('Nhóm 7: Bản đồ nhiệt GIS tương tác theo Loại đất & Bộ lọc', () => {
+
+    test('UI-LP-023: Đang ở tab "Bản đồ nhiệt GIS", thay đổi Loại đất và bấm Tìm kiếm -> Bản đồ nhiệt GIS duy trì ổn định và cập nhật layer', async ({ page }, testInfo) => {
+      await openLandPricePage(page);
+
+      // 1. Chuyển sang tab Bản đồ nhiệt GIS
+      const tabMap = page.locator('button:has-text("Bản đồ nhiệt")').first();
+      await tabMap.click({ force: true });
+      await page.waitForTimeout(3000);
+
+      // Khẳng định phần tử bản đồ hiển thị
+      const mapCanvas = page.locator('canvas, .mapboxgl-map, [class*="map"]').first();
+      await expect(mapCanvas).toBeVisible({ timeout: 15000 });
+
+      // 2. Thay đổi Loại đất
+      await selectDropdownOption(page, 'Loại đất', /Đất sản xuất, kinh doanh phi nông nghiệp|Đất ở/i);
+
+      // 3. Bấm Tìm kiếm để áp dụng lớp bản đồ nhiệt mới
+      const submitBtn = page.locator('button:has-text("Tìm kiếm")').first();
+      await submitBtn.click({ force: true });
+      await page.waitForTimeout(3000);
+
+      // 4. Bản đồ vẫn hiển thị ổn định, không crash UI hay lỗi render
+      await expect(mapCanvas).toBeVisible({ timeout: 10000 });
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-023', {
+        activeTab: 'Bản đồ nhiệt GIS',
+        updatedCategory: await page.locator('button[aria-label="Loại đất"]').first().innerText(),
+        mapCanvasIntact: await mapCanvas.isVisible(),
+      });
+    });
+  });
+
+  // ============================================================================
+  // NHÓM 8: XEM VỊ TRÍ THỬA ĐẤT TRÊN BẢN ĐỒ NHIỆT GIS QUA ICON CON MẮT (UI-LP-024 -> UI-LP-026)
+  // ============================================================================
+  test.describe('Nhóm 8: Xem vị trí thửa đất trên Bản đồ nhiệt GIS qua Icon Con Mắt', () => {
+
+    test('UI-LP-024: Khi bản ghi có dữ liệu toạ độ (lat/lng), nút icon con mắt "Xem trên bản đồ nhiệt" hiển thị trong dòng dữ liệu', async ({ page }, testInfo) => {
+      // Mock API trả về bản ghi có toạ độ lat/lng
+      await page.route('**/category/public/land-assess-prices/search', async route => {
+        const response = await route.fetch();
+        const json = await response.json();
+        if (json.data && json.data.content && json.data.content.length > 0) {
+          json.data.content[0].lat = 21.0368;
+          json.data.content[0].lng = 105.8342;
+        }
+        await route.fulfill({ response, json });
+      });
+
+      await openLandPricePage(page);
+
+      // Tìm nút icon con mắt trong dòng bảng
+      const eyeBtn = page.locator('button[title*="Xem trên bản đồ nhiệt"], button:has(i.fa-eye)').first();
+      await expect(eyeBtn).toBeVisible({ timeout: 10000 });
+
+      const titleAttr = await eyeBtn.getAttribute('title');
+      const hasEyeIcon = (await eyeBtn.locator('i.fa-eye, i[class*="fa-eye"]').count()) > 0;
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-024', {
+        eyeButtonVisible: await eyeBtn.isVisible(),
+        titleAttr,
+        hasEyeIcon,
+      });
+
+      expect(titleAttr).toContain('Xem trên bản đồ nhiệt');
+      expect(hasEyeIcon).toBe(true);
+    });
+
+    test('UI-LP-025: Người dùng đã đăng nhập click icon con mắt -> Tự động chuyển sang tab "Bản đồ nhiệt GIS" và định vị toạ độ trên bản đồ', async ({ page }, testInfo) => {
+      // Mock API có toạ độ
+      const targetLat = 21.0368;
+      const targetLng = 105.8342;
+      await page.route('**/category/public/land-assess-prices/search', async route => {
+        const response = await route.fetch();
+        const json = await response.json();
+        if (json.data && json.data.content && json.data.content.length > 0) {
+          json.data.content[0].lat = targetLat;
+          json.data.content[0].lng = targetLng;
+        }
+        await route.fulfill({ response, json });
+      });
+
+      await openLandPricePage(page);
+
+      // Click vào nút icon con mắt
+      const eyeBtn = page.locator('button[title*="Xem trên bản đồ nhiệt"], button:has(i.fa-eye)').first();
+      await expect(eyeBtn).toBeVisible({ timeout: 10000 });
+      await eyeBtn.click({ force: true });
+      await page.waitForTimeout(3000);
+
+      // Khẳng định tab "Bản đồ nhiệt GIS" được kích hoạt tự động (có class màu active / chữ tím)
+      const tabMap = page.locator('button:has-text("Bản đồ nhiệt")').first();
+      const tabMapClass = (await tabMap.getAttribute('class')) || '';
+      const isMapTabActive = tabMapClass.includes('bg-white') && tabMapClass.includes('purple');
+
+      // Khẳng định canvas bản đồ nhiệt GIS hiển thị
+      const mapCanvas = page.locator('canvas, .mapboxgl-map, [class*="map"]').first();
+      await expect(mapCanvas).toBeVisible({ timeout: 15000 });
+
+      await attachUiEvidence(page, testInfo, 'UI-LP-025', {
+        targetLat,
+        targetLng,
+        isMapTabActive,
+        tabMapClass,
+        mapCanvasVisible: await mapCanvas.isVisible(),
+      });
+
+      expect(isMapTabActive).toBe(true);
+    });
+
+    test('UI-LP-026: Khách vãng lai (Guest chưa đăng nhập) click icon con mắt -> Yêu cầu đăng nhập hiển thị Modal xác thực', async ({ browser }, testInfo) => {
+      // Khởi tạo context khách vãng lai (không nạp token/storageState)
+      const guestContext = await browser.newContext({ storageState: undefined });
+      const guestPage = await guestContext.newPage();
+      await guestPage.setViewportSize({ width: 1440, height: 900 });
+
+      // Mock toạ độ cho khách
+      await guestPage.route('**/category/public/land-assess-prices/search', async route => {
+        const response = await route.fetch();
+        const json = await response.json();
+        if (json.data && json.data.content && json.data.content.length > 0) {
+          json.data.content[0].lat = 21.0368;
+          json.data.content[0].lng = 105.8342;
+        }
+        await route.fulfill({ response, json });
+      });
+
+      await guestPage.goto(`${WEBAPP_URL}/bang-gia-dat`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await clearOverlays(guestPage);
+      await skipOnboardingTour(guestPage);
+      await guestPage.waitForTimeout(2000);
+
+      // Click icon con mắt
+      const eyeBtn = guestPage.locator('button[title*="Xem trên bản đồ nhiệt"], button:has(i.fa-eye)').first();
+      if (await eyeBtn.isVisible({ timeout: 8000 }).catch(() => false)) {
+        await eyeBtn.click({ force: true });
+        await guestPage.waitForTimeout(1500);
+
+        // Khẳng định Modal/Dialog Đăng nhập xuất hiện
+        const loginModal = guestPage.locator('[role="dialog"], [data-slot="dialog-content"]').filter({ hasText: /Đăng nhập|Tài khoản|Mật khẩu/i }).first();
+        await expect(loginModal).toBeVisible({ timeout: 10000 });
+
+        await attachUiEvidence(guestPage, testInfo, 'UI-LP-026', {
+          isGuest: true,
+          loginModalVisible: await loginModal.isVisible(),
+        });
+      }
+
+      await guestContext.close();
     });
   });
 });

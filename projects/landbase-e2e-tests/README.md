@@ -78,19 +78,32 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 - `npm run test:api:onboarding`: Chạy 46 test cases của API Onboarding & Nhận thưởng tân thủ (/api/v1.0/auth/rewards/onboarding & /users/*).
 - `npm run test:chat:ui`: Chạy bộ test tự động thao tác người dùng E2E cho chức năng Chat AI (UI kết hợp API SSE stream).
 - `node run-tests.js --platform=1 --suite=12`: Chạy bộ test tự động Web UI E2E chức năng Phân tích khu vực bằng AI & Xem báo cáo AI (14 test cases).
-- `node run-tests.js --platform=1 --suite=13`: Chạy bộ test tự động Web UI E2E chức năng Bảng giá đất & Bản đồ nhiệt GIS (15 test cases).
+- `node run-tests.js --platform=1 --suite=13`: Chạy bộ test tự động Web UI E2E chức năng Bảng giá đất & Bản đồ nhiệt GIS (26 test cases: UI-LP-001 -> UI-LP-026).
 - `npm run postman:export`: Đồng bộ và xuất ra các file Postman Collection & Environment mới nhất.
 
 ## Kiểm thử Web UI E2E – Bảng giá đất & Bản đồ nhiệt GIS (/bang-gia-dat)
-- **File test Playwright**: [tests/land-price-ui.spec.ts](tests/land-price-ui.spec.ts) (15 test cases: `UI-LP-001` -> `UI-LP-015`)
+- **File test Playwright**: [tests/land-price-ui.spec.ts](tests/land-price-ui.spec.ts) (26 test cases: `UI-LP-001` -> `UI-LP-026`)
 - **Giao diện & Chức năng bao phủ**:
-  1. **Điều hướng Menu**: Truy cập từ thanh Menu chính bên trái ("Bảng giá") dẫn đúng vào URL `/bang-gia-dat`.
-  2. **Tiêu đề & Chú thích vị trí đất**: Hiển thị đúng tiêu đề "Bảng giá đất", mô tả tra cứu, và 3 mục chú thích phân loại vị trí (Vị trí 1: Mặt tiền đường; Vị trí 2 & 3: Ngõ/hẻm ô tô 3m-5m; Vị trí 4 & 5: Ngõ sâu < 2m).
-  3. **Bộ lọc & Tìm kiếm**: Ô nhập từ khóa (phường/xã, tên đường), 3 dropdown (Tỉnh/Thành phố, Phường/Xã, Loại đất) và nút "Tìm kiếm".
-  4. **Bảng dữ liệu giá đất**: Đầy đủ 4 cột tiêu đề chuẩn (`PHƯỜNG/XÃ`, `ĐƯỜNG & ĐOẠN ĐƯỜNG`, `VỊ TRÍ & ĐƠN GIÁ (VNĐ/M²)`, `LOẠI ĐẤT`), định dạng mũi tên `→` chỉ đoạn đường, định dạng tiền tệ VNĐ chuẩn (`26.825.000 đ`).
-  5. **Phân trang dữ liệu**: Nút "Trước", các trang số, nút "Sau", kiểm tra vô hiệu hóa nút "Trước" ở trang 1 và chuyển trang mượt mà.
-  6. **Tìm kiếm & An toàn dữ liệu**: Tìm kiếm đường cụ thể, empty state khi tìm từ khóa không có, reset bộ lọc khôi phục dữ liệu gốc, kiểm tra an toàn SQLi / XSS.
-  7. **Chuyển Tab Bản đồ nhiệt GIS**: Nút "Dữ liệu bảng giá" và "Bản đồ nhiệt GIS" (kèm badge đỏ GIS), kiểm tra chuyển đổi trạng thái và tải bản đồ nhiệt GIS.
+  1. **Điều hướng Menu & Trang chủ**: Điều hướng chuẩn xác từ Trang chủ -> Khối Tiện ích mở rộng -> Tab Tài chính -> Bấm thẻ "Bảng giá đất" mở URL `/bang-gia-dat`.
+  2. **Tiêu đề & Chú thích vị trí đất**: Hiển thị đúng tiêu đề "Bảng giá đất", mô tả tra cứu, và 3 mục chú thích phân loại vị trí (Vị trí 1: Mặt tiền; Vị trí 2 & 3: Ngõ 3m-5m; Vị trí 4 & 5: Ngõ sâu).
+  3. **Bảng dữ liệu giá đất**: Đầy đủ 4 cột tiêu đề chuẩn (`PHƯỜNG/XÃ`, `ĐƯỜNG & ĐOẠN ĐƯỜNG`, `VỊ TRÍ & ĐƠN GIÁ (VNĐ/M²)`, `LOẠI ĐẤT`), định dạng mũi tên `→` chỉ đoạn đường, định dạng tiền tệ VNĐ chuẩn (`26.825.000 đ`).
+  4. **Phân trang dữ liệu**: Nút "Trước", các trang số, nút "Sau", kiểm tra vô hiệu hóa nút "Trước" ở trang 1 và chuyển trang qua lại mượt mà.
+  5. **Tìm kiếm tên đường & An toàn dữ liệu**: Tìm kiếm đường cụ thể ("Âu Cơ"), empty state khi không có, reset ô tìm kiếm, an toàn trước XSS / SQL Injection.
+  6. **Tự động nhận diện Vị trí & GPS Geolocation**:
+     - `UI-LP-016`: Cấp quyền GPS Hà Nội -> Tự động điền "Thành phố Hà Nội" và mở khóa dropdown Phường/Xã.
+     - `UI-LP-017`: Cấp quyền GPS TP.HCM -> Tự động điền "Thành phố Hồ Chí Minh".
+     - `UI-LP-018`: Fallback khi không có GPS -> Tỉnh/TP hiển thị "Tất cả", ô Phường/Xã bị khóa (`disabled`).
+  7. **Bộ lọc chi tiết từng ô tìm kiếm (Dropdowns)**:
+     - `UI-LP-019`: Chọn Tỉnh/TP trong dropdown -> Mở khóa và nạp danh sách Phường/Xã tương ứng theo Tỉnh.
+     - `UI-LP-020`: Chọn một Phường/Xã cụ thể -> Bấm Tìm kiếm -> Bảng dữ liệu lọc chính xác theo địa bàn Phường/Xã đã chọn.
+     - `UI-LP-021`: Lọc theo Loại đất cụ thể -> Bảng dữ liệu chỉ hiển thị các bản ghi khớp Loại đất đã chọn.
+     - `UI-LP-022`: Kết hợp đa bộ lọc đồng thời (Tên đường + Tỉnh/TP + Loại đất) -> Dữ liệu trả về đúng điểm giao thoa.
+  8. **Bản đồ nhiệt GIS tương tác theo Loại đất**:
+     - `UI-LP-023`: Khi đang ở tab Bản đồ nhiệt GIS, thay đổi Loại đất và bấm Tìm kiếm -> Bản đồ nhiệt GIS cập nhật tương tác ổn định trên canvas.
+  9. **Xem vị trí thửa đất trên Bản đồ nhiệt GIS qua Icon Con Mắt**:
+     - `UI-LP-024`: Khi bản ghi có dữ liệu toạ độ (`lat` & `lng`), nút icon con mắt (`fa-solid fa-eye`, title `"Xem trên bản đồ nhiệt"`) hiển thị trên dòng dữ liệu.
+     - `UI-LP-025`: Người dùng đã đăng nhập click icon con mắt -> Tự động chuyển từ tab "Dữ liệu bảng giá" sang tab "Bản đồ nhiệt GIS" và định vị toạ độ trên bản đồ.
+     - `UI-LP-026`: Khách vãng lai (Guest chưa đăng nhập) click icon con mắt -> Yêu cầu đăng nhập hiển thị Modal xác thực.
 - **Lệnh chạy kiểm thử trực tiếp**:
   ```powershell
   # Chạy giao diện tương tác và chọn module 13

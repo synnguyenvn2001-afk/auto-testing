@@ -54,7 +54,7 @@ const webSuites = {
   '10': { name: '🤖 Trợ lý AI Bất Động Sản (Chat AI - Web UI & API Integration)', pattern: 'tests/chat-ai-e2e.spec.ts' },
   '11': { name: '🎁 Onboarding & Nhận thưởng LandBase (Web UI E2E - 71 test cases: UIO-001 -> UIO-071)', pattern: 'tests/onboarding-reward-ui.spec.ts' },
   '12': { name: '🧠 Phân tích khu vực bằng AI & Báo cáo địa phương (Web UI E2E - 14 test cases: UI-AI-001 -> UI-AI-014)', pattern: 'tests/area-overview-ai-ui.spec.ts' },
-  '13': { name: '🗺️ Bảng giá đất & Bản đồ nhiệt GIS (Web UI E2E - 15 test cases: UI-LP-001 -> UI-LP-015)', pattern: 'tests/land-price-ui.spec.ts' },
+  '13': { name: '🗺️ Bảng giá đất & Bản đồ nhiệt GIS (Web UI E2E - 26 test cases: UI-LP-001 -> UI-LP-026)', pattern: 'tests/land-price-ui.spec.ts' },
 };
 
 // Mobile suites mapping
