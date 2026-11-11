@@ -77,7 +77,59 @@ Các lệnh chính được khai báo trong `package.json` ở gốc repository:
 - `npm run test:api:utility`: Chạy 32 test cases của API Tiện ích & Dịch vụ quanh khu vực (/utilities-detail).
 - `npm run test:api:onboarding`: Chạy 46 test cases của API Onboarding & Nhận thưởng tân thủ (/api/v1.0/auth/rewards/onboarding & /users/*).
 - `npm run test:chat:ui`: Chạy bộ test tự động thao tác người dùng E2E cho chức năng Chat AI (UI kết hợp API SSE stream).
+- `node run-tests.js --platform=1 --suite=12`: Chạy bộ test tự động Web UI E2E chức năng Phân tích khu vực bằng AI & Xem báo cáo AI (14 test cases).
+- `node run-tests.js --platform=1 --suite=13`: Chạy bộ test tự động Web UI E2E chức năng Bảng giá đất & Bản đồ nhiệt GIS (15 test cases).
 - `npm run postman:export`: Đồng bộ và xuất ra các file Postman Collection & Environment mới nhất.
+
+## Kiểm thử Web UI E2E – Bảng giá đất & Bản đồ nhiệt GIS (/bang-gia-dat)
+- **File test Playwright**: [tests/land-price-ui.spec.ts](tests/land-price-ui.spec.ts) (15 test cases: `UI-LP-001` -> `UI-LP-015`)
+- **Giao diện & Chức năng bao phủ**:
+  1. **Điều hướng Menu**: Truy cập từ thanh Menu chính bên trái ("Bảng giá") dẫn đúng vào URL `/bang-gia-dat`.
+  2. **Tiêu đề & Chú thích vị trí đất**: Hiển thị đúng tiêu đề "Bảng giá đất", mô tả tra cứu, và 3 mục chú thích phân loại vị trí (Vị trí 1: Mặt tiền đường; Vị trí 2 & 3: Ngõ/hẻm ô tô 3m-5m; Vị trí 4 & 5: Ngõ sâu < 2m).
+  3. **Bộ lọc & Tìm kiếm**: Ô nhập từ khóa (phường/xã, tên đường), 3 dropdown (Tỉnh/Thành phố, Phường/Xã, Loại đất) và nút "Tìm kiếm".
+  4. **Bảng dữ liệu giá đất**: Đầy đủ 4 cột tiêu đề chuẩn (`PHƯỜNG/XÃ`, `ĐƯỜNG & ĐOẠN ĐƯỜNG`, `VỊ TRÍ & ĐƠN GIÁ (VNĐ/M²)`, `LOẠI ĐẤT`), định dạng mũi tên `→` chỉ đoạn đường, định dạng tiền tệ VNĐ chuẩn (`26.825.000 đ`).
+  5. **Phân trang dữ liệu**: Nút "Trước", các trang số, nút "Sau", kiểm tra vô hiệu hóa nút "Trước" ở trang 1 và chuyển trang mượt mà.
+  6. **Tìm kiếm & An toàn dữ liệu**: Tìm kiếm đường cụ thể, empty state khi tìm từ khóa không có, reset bộ lọc khôi phục dữ liệu gốc, kiểm tra an toàn SQLi / XSS.
+  7. **Chuyển Tab Bản đồ nhiệt GIS**: Nút "Dữ liệu bảng giá" và "Bản đồ nhiệt GIS" (kèm badge đỏ GIS), kiểm tra chuyển đổi trạng thái và tải bản đồ nhiệt GIS.
+- **Lệnh chạy kiểm thử trực tiếp**:
+  ```powershell
+  # Chạy giao diện tương tác và chọn module 13
+  node run-tests.js
+
+  # Hoặc kích hoạt trực tiếp bộ test
+  npx playwright test tests/land-price-ui.spec.ts --project=chromium
+  ```
+
+## Kiểm thử Web UI E2E – Phân tích khu vực bằng AI & Xem báo cáo AI từ popup (Mục E & F)
+- **File test Playwright**: [tests/area-overview-ai-ui.spec.ts](tests/area-overview-ai-ui.spec.ts) (14 test cases: `UI-AI-001` -> `UI-AI-014`)
+- **Đối tượng kiểm thử**:
+  1. **Khối "PHÂN TÍCH KHU VỰC BẰNG AI" (LocalityOverviewCard)** trên popup "Tổng quan khu vực" / "Chi tiết bất động sản" (`/ban-do` & `/tin-rao-vat`).
+  2. **Màn hình "BÁO CÁO ĐỊA PHƯƠNG"** (`/bao-cao-dia-phuong?reportId=...&latitude=...&longitude=...`).
+- **Các nhóm testcase chính**:
+  1. **Nhóm 1: Khối Phân tích khu vực bằng AI trên Popup (Mục E - AI-E-001 .. AI-E-009)**:
+     - `UI-AI-001`: Hiển thị đầy đủ khối "Phân tích khu vực bằng AI" với nhãn badge, icon sparkle, tiêu đề "Tổng quan địa phương".
+     - `UI-AI-002`: Hiển thị chính xác nhãn "Địa bàn đang xem" và thông tin địa chỉ hành chính của khu vực (Phường/Xã/Quận/Tỉnh).
+     - `UI-AI-003`: Hiển thị đúng dòng giới thiệu "Xem báo cáo phân tích đã được LandBase cập nhật cho địa phương này."
+     - `UI-AI-004`: Hiển thị nút "Xem báo cáo địa phương" kèm icon chuyển liên kết ngoài (↗) khi người dùng đã đăng nhập và khu vực có báo cáo.
+     - `UI-AI-005`: Người dùng chưa đăng nhập (Guest) -> Nút hiển thị "Đăng nhập để xem báo cáo", click vào mở Modal Đăng nhập.
+     - `UI-AI-006`: Địa bàn chưa có báo cáo hiện hành -> Hiển thị thông báo "Chưa có báo cáo hiện hành cho địa bàn này." và ẩn nút mở báo cáo.
+     - `UI-AI-007`: Popup không tự tiện render nội dung AI tóm tắt dài dòng bên trong (bảo toàn bố cục gọn gàng, đồng bộ với khối Tổng quan BĐS, Tiện ích, Ước tính chi phí).
+  2. **Nhóm 2: Điều hướng & Xem Báo cáo AI từ đây (Mục F - AI-F-001 .. AI-F-012)**:
+     - `UI-AI-008`: Click "Xem báo cáo địa phương" điều hướng chính xác sang URL `/bao-cao-dia-phuong` với đúng query parameters (`reportId`, `latitude`, `longitude`).
+     - `UI-AI-009`: Màn hình Báo cáo địa phương hiển thị đúng tiêu đề "BÁO CÁO ĐỊA PHƯƠNG", nhãn "AI", địa bàn và ngày cập nhật.
+     - `UI-AI-010`: Hiển thị đầy đủ 4 tab nội dung phân tích AI chuyên sâu: Quy hoạch, Giá thị trường, Hạ tầng, Tiện ích.
+     - `UI-AI-011`: Hiển thị chi phí mở khóa Vàng (1 Vàng) và nút hành động "Kiểm tra số dư và xem báo cáo" cùng nút "Xuất báo cáo".
+     - `UI-AI-012`: Không trừ Vàng của người dùng khi chỉ mới mở popup Tổng quan khu vực trên bản đồ (Vàng chỉ trừ khi xác nhận mở khóa ở màn đích).
+     - `UI-AI-013`: Màn hình rỗng (Empty State) khi địa bàn chưa có báo cáo: "Chưa có báo cáo hiện hành cho địa bàn này."
+     - `UI-AI-014`: Đóng popup Tổng quan khu vực bằng nút Đóng X trả về giao diện bản đồ sạch sẽ.
+- **Lệnh chạy kiểm thử trực tiếp**:
+  ```powershell
+  # Chạy giao diện tương tác và chọn module 12
+  node run-tests.js
+  
+  # Hoặc kích hoạt trực tiếp bộ test
+  npx playwright test tests/area-overview-ai-ui.spec.ts --project=chromium
+  ```
 
 ## Kiểm thử Đơn hàng & Thanh toán Gói Pro Subscription (/cart, /order & /cancel)
 - **File test Playwright**: `tests/api/subscription-order.spec.ts` (38 test cases)
