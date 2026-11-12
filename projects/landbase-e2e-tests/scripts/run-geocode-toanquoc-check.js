@@ -4,7 +4,6 @@ const path = require('path');
 const projectDir = path.join(__dirname, '..');
 const jsonPath = path.join(projectDir, 'test-data', 'toanquoc-77061-roads-with-coords.json');
 const artifactsDir = path.join(projectDir, 'artifacts');
-const downloadsDir = 'c:\\Users\\Admin\\Downloads';
 
 if (!fs.existsSync(artifactsDir)) fs.mkdirSync(artifactsDir, { recursive: true });
 
@@ -209,25 +208,28 @@ function normalizeRoadName(str) {
 
   const reportPath = path.join(artifactsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV.html');
   fs.writeFileSync(reportPath, html, 'utf8');
-  if (fs.existsSync(downloadsDir)) {
-    fs.writeFileSync(path.join(downloadsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV.html'), html, 'utf8');
 
-    const esc = v => {
-      const s = String(v ?? '');
-      return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
-    };
-    const csvHeader = 'STT,Mã tuyến,Tên đường gốc,Phường/Xã (Nguồn),Quận/Huyện (Nguồn),Tỉnh/TP (Nguồn),Tỉnh/TP (Mới),Tên đường DEV trả về,Phường/Xã (DEV),Tỉnh/TP (DEV),Vĩ độ DEV,Kinh độ DEV,Trạng thái';
-    const toCsvRow = (r, idx) =>
-      [idx + 1, r.code, r.name, r.ward, r.dist, r.state, r.newProv, r.actualName, r.actualWard, r.actualProv, r.actualLat, r.actualLon, r.statusText]
-        .map(esc)
-        .join(',');
-    const allCsv = '\uFEFF' + [csvHeader, ...results.map(toCsvRow)].join('\r\n');
-    const failCsv = '\uFEFF' + [csvHeader, ...results.filter(r => !r.ok).map(toCsvRow)].join('\r\n');
-    fs.writeFileSync(path.join(downloadsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV.csv'), allCsv, 'utf8');
-    fs.writeFileSync(path.join(downloadsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV_Chi_Tiet_Loi.csv'), failCsv, 'utf8');
-  }
+  const esc = v => {
+    const s = String(v ?? '');
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const csvHeader = 'STT,Mã tuyến,Tên đường gốc,Phường/Xã (Nguồn),Quận/Huyện (Nguồn),Tỉnh/TP (Nguồn),Tỉnh/TP (Mới),Tên đường DEV trả về,Phường/Xã (DEV),Tỉnh/TP (DEV),Vĩ độ DEV,Kinh độ DEV,Trạng thái';
+  const toCsvRow = (r, idx) =>
+    [idx + 1, r.code, r.name, r.ward, r.dist, r.state, r.newProv, r.actualName, r.actualWard, r.actualProv, r.actualLat, r.actualLon, r.statusText]
+      .map(esc)
+      .join(',');
+  const allCsv = '\uFEFF' + [csvHeader, ...results.map(toCsvRow)].join('\r\n');
+  const failCsv = '\uFEFF' + [csvHeader, ...results.filter(r => !r.ok).map(toCsvRow)].join('\r\n');
+
+  const allCsvPath = path.join(artifactsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV.csv');
+  const failCsvPath = path.join(artifactsDir, 'Bao_Cao_Tuyen_Duong_Toan_Quoc_DEV_Chi_Tiet_Loi.csv');
+  fs.writeFileSync(allCsvPath, allCsv, 'utf8');
+  fs.writeFileSync(failCsvPath, failCsv, 'utf8');
 
   console.log(`✅ Hoàn tất! ĐẠT: ${passCount}/${results.length} | LỖI/LỆCH: ${failCount}/${results.length}`);
-  console.log(`📄 Báo cáo HTML & Excel CSV chi tiết đã lưu tại: ${downloadsDir}\n`);
+  console.log(`📄 Báo cáo HTML & Excel CSV chi tiết đã lưu trong thư mục dự án (${artifactsDir}):`);
+  console.log(`   └─ HTML:      ${reportPath}`);
+  console.log(`   └─ CSV tất cả: ${allCsvPath}`);
+  console.log(`   └─ CSV lỗi:    ${failCsvPath}\n`);
 })();
 

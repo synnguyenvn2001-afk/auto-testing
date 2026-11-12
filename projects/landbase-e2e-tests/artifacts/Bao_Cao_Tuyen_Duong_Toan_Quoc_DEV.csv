@@ -1,0 +1,3 @@
+﻿STT,Mã tuyến,Tên đường gốc,Phường/Xã (Nguồn),Quận/Huyện (Nguồn),Tỉnh/TP (Nguồn),Tỉnh/TP (Mới),Tên đường DEV trả về,Phường/Xã (DEV),Tỉnh/TP (DEV),Vĩ độ DEV,Kinh độ DEV,Trạng thái
+1,TQ-00001,cầu,Thị trấn Cờ Đỏ,Huyện Cờ Đỏ,Thành phố Cần Thơ,Thành phố Cần Thơ,cầu,Xã Cờ Đỏ,Thành phố Cần Thơ,10.0925856,105.426784,KHỚP ĐÚNG
+2,TQ-00002,Hà Huy Giáp,Thị trấn Cờ Đỏ,Huyện Cờ Đỏ,Thành phố Cần Thơ,Thành phố Cần Thơ,Hà Huy Giáp,Huyện Cờ Đỏ,Thành phố Cần Thơ,10.0946935,105.4281566,KHỚP ĐÚNG

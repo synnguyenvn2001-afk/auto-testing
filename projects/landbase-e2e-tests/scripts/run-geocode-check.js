@@ -4,7 +4,6 @@ const path = require('path');
 const projectDir = path.join(__dirname, '..');
 const enrichedJsonPath = path.join(projectDir, 'test-data', 'hanoi-6944-roads-with-wards.json');
 const artifactsDir = path.join(projectDir, 'artifacts');
-const downloadsDir = 'c:\\Users\\Admin\\Downloads';
 
 if (!fs.existsSync(artifactsDir)) {
   fs.mkdirSync(artifactsDir, { recursive: true });
@@ -220,9 +219,6 @@ function normalizeRoadName(str) {
 
   const artifactReportPath = path.join(artifactsDir, 'Bao_Cao_Vi_Tri_Tuyen_Duong_HaNoi_DEV.html');
   fs.writeFileSync(artifactReportPath, html, 'utf8');
-  if (fs.existsSync(downloadsDir)) {
-    fs.writeFileSync(path.join(downloadsDir, 'Bao_Cao_Vi_Tri_Tuyen_Duong_HaNoi_DEV.html'), html, 'utf8');
-  }
 
   // Ghi Job Summary nếu đang chạy trên GitHub Actions Cloud
   if (process.env.GITHUB_STEP_SUMMARY) {
