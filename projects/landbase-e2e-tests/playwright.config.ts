@@ -3,7 +3,11 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const projectRoot = __dirname;
-const envKey = process.env.TEST_ENV || ((process.env.BASE_URL || '').includes('dev') ? 'dev' : 'prod');
+const envKey = process.env.TEST_ENV || (
+  (process.env.BASE_URL || '').includes('dev')
+    ? 'dev'
+    : ((process.env.BASE_URL || '').includes('laand.vn') ? 'ppe' : 'prod')
+);
 const authDir = path.join(projectRoot, 'playwright', '.auth');
 const specificAuth = path.join(authDir, `user-${envKey}.json`);
 const fallbackAuth = path.join(authDir, 'user.json');
@@ -46,7 +50,11 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL || process.env.WEBAPP_URL || (process.env.TEST_ENV === 'prod' ? 'https://landbase.vn' : 'https://dev-webapp.laand.vn'),
+    baseURL: process.env.BASE_URL || process.env.WEBAPP_URL || (
+      process.env.TEST_ENV === 'ppe'
+        ? 'https://laand.vn'
+        : (process.env.TEST_ENV === 'prod' ? 'https://landbase.vn' : 'https://dev-webapp.laand.vn')
+    ),
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Tự động chụp ảnh màn hình ở cuối mỗi testcase để kẹp vào HTML report */
@@ -69,7 +77,11 @@ export default defineConfig({
       testMatch: /tests[\\/]api[\\/].*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https://dev-webapp.laand.vn',
+        baseURL: process.env.WEBAPP_BASE_URL || process.env.BASE_URL || (
+          process.env.TEST_ENV === 'ppe'
+            ? 'https://laand.vn'
+            : (process.env.TEST_ENV === 'prod' ? 'https://landbase.vn' : 'https://dev-webapp.laand.vn')
+        ),
       },
     },
     {

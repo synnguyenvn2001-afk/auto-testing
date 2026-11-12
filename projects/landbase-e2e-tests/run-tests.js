@@ -159,6 +159,16 @@ const envConfigs = {
     password: process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123',
     badge: '🛠️ Development (https://dev-webapp.laand.vn)',
   },
+  ppe: {
+    key: 'ppe',
+    name: 'Pre-Production (Môi trường PPE)',
+    baseUrl: 'https://laand.vn',
+    webappUrl: 'https://laand.vn',
+    gatewayUrl: process.env.PPE_GATEWAY_URL || 'https://dev-gateway.laand.vn',
+    username: process.env.PPE_USERNAME || process.env.DEV_USERNAME || process.env.TEST_USERNAME || 'usert1',
+    password: process.env.PPE_PASSWORD || process.env.DEV_PASSWORD || process.env.TEST_PASSWORD || 'Enao@123',
+    badge: '🧪 Pre-Production / PPE (https://laand.vn)',
+  },
 };
 
 const resolveEnv = (rawChoice, defaultKey = 'prod') => {
@@ -167,19 +177,23 @@ const resolveEnv = (rawChoice, defaultKey = 'prod') => {
   if (val === '1' || val === 'prod' || val === 'production' || val.includes('landbase.vn')) {
     return envConfigs.prod;
   }
-  if (val === '2' || val === 'dev' || val === 'development' || val.includes('dev-webapp') || val.includes('laand.vn')) {
+  if (val === '2' || val === 'dev' || val === 'development' || val.includes('dev-webapp')) {
     return envConfigs.dev;
+  }
+  if (val === '3' || val === 'ppe' || val === 'preprod' || val === 'pre-production' || val.includes('laand.vn')) {
+    return envConfigs.ppe;
   }
   if (val.startsWith('http://') || val.startsWith('https://')) {
     const isDev = val.includes('dev');
+    const isPpe = val.includes('laand.vn');
     return {
-      key: isDev ? 'dev' : 'prod',
+      key: isDev ? 'dev' : (isPpe ? 'ppe' : 'prod'),
       name: `Custom URL (${val})`,
       baseUrl: val,
       webappUrl: val,
       gatewayUrl: envConfigs.dev.gatewayUrl,
-      username: isDev ? 'usert1' : 'user',
-      password: isDev ? 'Enao@123' : 'Enao@1234',
+      username: (isDev || isPpe) ? 'usert1' : 'user',
+      password: (isDev || isPpe) ? 'Enao@123' : 'Enao@1234',
       badge: `🌐 Custom URL (${val})`,
     };
   }
@@ -213,15 +227,16 @@ async function main() {
     console.log(`✅ Môi trường từ tham số dòng lệnh: ${selectedEnv.badge}\n`);
   } else {
     console.log('--- BƯỚC 1: CHỌN MÔI TRƯỜNG KIỂM THỬ (ENVIRONMENT) ---');
-    console.log('  1. 🚀 Production  (Môi trường Thật - https://landbase.vn)');
-    console.log('  2. 🛠️ Development (Môi trường DEV  - https://dev-webapp.laand.vn)');
-    const envAns = await askQuestion('\n👉 Nhập lựa chọn Môi trường (1-2) [Mặc định: 1 - Production]: ');
+    console.log('  1. 🚀 Production      (Môi trường Thật - https://landbase.vn)');
+    console.log('  2. 🛠️ Development     (Môi trường DEV  - https://dev-webapp.laand.vn)');
+    console.log('  3. 🧪 Pre-Production  (Môi trường PPE  - https://laand.vn)');
+    const envAns = await askQuestion('\n👉 Nhập lựa chọn Môi trường (1-3) [Mặc định: 1 - Production]: ');
     selectedEnv = resolveEnv(envAns, 'prod');
     console.log(`\n✅ Đã chọn môi trường: ${selectedEnv.badge}\n`);
   }
 
   // =========================================================================
-  // CHỌN TÀI KHOẢN KIỂM THỬ (TEST ACCOUNT CHO DEV)
+  // CHỌN TÀI KHOẢN KIỂM THỬ (TEST ACCOUNT CHO DEV & PPE)
   // =========================================================================
   const devAccounts = [
     { username: 'usert1', password: 'Enao@123', label: 'Tài khoản chính (usert1)' },
@@ -242,8 +257,8 @@ async function main() {
       selectedEnv.password = getArgVal('--pass') || getArgVal('--password') || 'Enao@123';
     }
     console.log(`👤 Tài khoản từ tham số dòng lệnh: ${selectedEnv.username}\n`);
-  } else if (selectedEnv.key === 'dev') {
-    console.log('--- CHỌN TÀI KHOẢN TEST DEV (ACCOUNT) ---');
+  } else if (selectedEnv.key === 'dev' || selectedEnv.key === 'ppe') {
+    console.log(`--- CHỌN TÀI KHOẢN TEST ${selectedEnv.key.toUpperCase()} (ACCOUNT) ---`);
     devAccounts.forEach((acc, idx) => {
       console.log(`  ${idx + 1}. 👤 ${acc.username} - ${acc.label}`);
     });

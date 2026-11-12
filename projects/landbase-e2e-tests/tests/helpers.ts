@@ -92,8 +92,9 @@ export async function loginIfNeeded(page: Page) {
     // Chờ ô nhập username sẵn sàng đến 10000ms
     if (await usernameInput.isVisible({ timeout: 10000 }).catch(() => false)) {
       const isDev = (process.env.TEST_ENV === 'dev') || (process.env.BASE_URL || '').includes('dev');
-      const testUsername = process.env.TEST_USERNAME || (isDev ? 'usert1' : 'user');
-      const testPassword = process.env.TEST_PASSWORD || (isDev ? 'Enao@123' : 'Enao@1234');
+      const isPpe = (process.env.TEST_ENV === 'ppe') || ((process.env.BASE_URL || '').includes('laand.vn') && !(process.env.BASE_URL || '').includes('dev'));
+      const testUsername = process.env.TEST_USERNAME || (isDev || isPpe ? 'usert1' : 'user');
+      const testPassword = process.env.TEST_PASSWORD || (isDev || isPpe ? 'Enao@123' : 'Enao@1234');
 
       await usernameInput.fill(testUsername).catch(() => {});
       await passwordInput.fill(testPassword).catch(() => {});

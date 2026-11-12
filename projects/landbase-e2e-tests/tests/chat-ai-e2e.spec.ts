@@ -27,8 +27,9 @@ const WEBAPP_URL = process.env.WEBAPP_BASE_URL || process.env.BASE_URL || 'https
 async function ensureAuthenticatedSession(context: BrowserContext) {
   try {
     const isDev = (process.env.TEST_ENV === 'dev') || WEBAPP_URL.includes('dev');
-    const testUsername = process.env.TEST_USERNAME || (isDev ? 'usert1' : 'user');
-    const testPassword = process.env.TEST_PASSWORD || (isDev ? 'Enao@123' : 'Enao@1234');
+    const isPpe = (process.env.TEST_ENV === 'ppe') || (WEBAPP_URL.includes('laand.vn') && !WEBAPP_URL.includes('dev'));
+    const testUsername = process.env.TEST_USERNAME || (isDev || isPpe ? 'usert1' : 'user');
+    const testPassword = process.env.TEST_PASSWORD || (isDev || isPpe ? 'Enao@123' : 'Enao@1234');
 
     const csrfRes = await fetch(`${WEBAPP_URL}/api/auth/csrf`);
     const csrfJson = await csrfRes.json();

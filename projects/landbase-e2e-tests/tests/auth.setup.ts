@@ -8,14 +8,16 @@ const authFile = AUTH_STATE_PATH;
 setup('authenticate user once and save storage state', async ({ page }) => {
   setup.setTimeout(60000);
 
-  const baseUrl = process.env.BASE_URL || 'https://landbase.vn';
+  const baseUrl = process.env.BASE_URL || (process.env.TEST_ENV === 'ppe' ? 'https://laand.vn' : 'https://landbase.vn');
   const isDev = (process.env.TEST_ENV === 'dev') || baseUrl.includes('dev');
-  const defaultUsername = isDev ? 'usert1' : 'user';
-  const defaultPassword = isDev ? 'Enao@123' : 'Enao@1234';
+  const isPpe = (process.env.TEST_ENV === 'ppe') || (baseUrl.includes('laand.vn') && !baseUrl.includes('dev'));
+  const defaultUsername = (isDev || isPpe) ? 'usert1' : 'user';
+  const defaultPassword = (isDev || isPpe) ? 'Enao@123' : 'Enao@1234';
   const username = process.env.TEST_USERNAME || defaultUsername;
   const password = process.env.TEST_PASSWORD || defaultPassword;
 
-  console.log(`Navigating to ${baseUrl} [${isDev ? 'DEV' : 'PROD'}]...`);
+  const envLabel = isDev ? 'DEV' : (isPpe ? 'PPE' : 'PROD');
+  console.log(`Navigating to ${baseUrl} [${envLabel}]...`);
   await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(2000);
   await skipOnboardingTour(page);
@@ -59,7 +61,7 @@ setup('authenticate user once and save storage state', async ({ page }) => {
   // 3. Lưu toàn bộ Cookies, LocalStorage và Session Tokens vào file
   await page.context().storageState({ path: authFile });
   console.log(`✅ Saved storage state to ${authFile}`);
-  if (!isDev) {
+  if (!isDev && !isPpe) {
     const legacyPath = path.join(path.dirname(authFile), 'user.json');
     await page.context().storageState({ path: legacyPath }).catch(() => {});
   }

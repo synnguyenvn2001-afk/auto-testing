@@ -14,16 +14,17 @@ Bộ kiểm thử web bằng Playwright và mobile Android bằng WebdriverIO/Ap
 - `tests/api/`: kiểm thử API tự động toàn diện (274 test cases) gồm Bảng giá đất, BĐS đã lưu, Phong thủy, Hòm thư Feedback, Trợ lý AI (Chat AI), Đơn hàng & Hủy đơn Subscription (/subscription/order & /cancel), Báo cáo tổng quan khu vực (/api/locality-report), AI tổng hợp báo cáo theo vị trí (/news/report-by-location), Tiện ích & Dịch vụ quanh khu vực (/utilities-detail) và Onboarding & Nhận thưởng tân thủ (/rewards/onboarding & /users/*).
 
 ## Tùy chọn Môi trường Kiểm thử (Environment Selection)
-Bộ test tự động hỗ trợ linh hoạt chạy trên cả 2 môi trường:
+Bộ test tự động hỗ trợ linh hoạt chạy trên cả 3 môi trường:
 - 🚀 **Production (Môi trường Thật)**: `https://landbase.vn` (Tài khoản test: `user` / `Enao@1234`)
 - 🛠️ **Development (Môi trường DEV)**: `https://dev-webapp.laand.vn` (Tài khoản mặc định: `usert1` / `Enao@123`, hỗ trợ sẵn `usert1` -> `usert5`)
+- 🧪 **Pre-Production (Môi trường PPE)**: `https://laand.vn` (Tài khoản mặc định: `usert1` / `Enao@123`, hỗ trợ sẵn `usert1` -> `usert5`)
 
 ### Đảo / Chuyển đổi Tài khoản Kiểm thử (Switch Test Accounts)
-Hệ thống hỗ trợ 5 tài khoản test được cấu hình sẵn trên DEV (`usert1` đến `usert5`, mật khẩu `Enao@123`):
+Hệ thống hỗ trợ 5 tài khoản test được cấu hình sẵn trên DEV và PPE (`usert1` đến `usert5`, mật khẩu `Enao@123`):
 1. **Khi chạy kiểm thử tự động (Playwright Web UI & API)**:
-   - Khi chạy `npm run test` chọn DEV, hệ thống sẽ mở menu chọn tài khoản:
+   - Khi chạy `npm run test` chọn DEV hoặc PPE, hệ thống sẽ mở menu chọn tài khoản:
      ```text
-     --- CHỌN TÀI KHOẢN TEST DEV (ACCOUNT) ---
+     --- CHỌN TÀI KHOẢN TEST DEV / PPE (ACCOUNT) ---
        1. 👤 usert1 - Tài khoản chính (usert1)
        2. 👤 usert2 - Tài khoản phụ 2 (usert2)
        3. 👤 usert3 - Tài khoản phụ 3 (usert3)
@@ -34,7 +35,7 @@ Hệ thống hỗ trợ 5 tài khoản test được cấu hình sẵn trên DEV
    - Hoặc chỉ định trực tiếp qua cờ CLI:
      ```bash
      node run-tests.js --env=dev --user=usert2
-     node run-tests.js --env=dev --user=usert3
+     node run-tests.js --env=ppe --user=usert1
      ```
 2. **Khi chạy Postman**:
    - Để đổi tài khoản cho Postman và cấp mới token, chạy lệnh:
@@ -47,21 +48,25 @@ Hệ thống hỗ trợ 5 tài khoản test được cấu hình sẵn trên DEV
 
 Khi khởi chạy `npm run test`, hệ thống sẽ tự động hiển thị menu tương tác để bạn chọn môi trường:
 ```
---- BƯỚC 2: CHỌN MÔI TRƯỜNG KIỂM THỬ (ENVIRONMENT) ---
-  1. 🚀 Production  - https://landbase.vn (Môi trường Thật)
-  2. 🛠️ Development - https://dev-webapp.laand.vn (Môi trường DEV)
-👉 Nhập lựa chọn Môi trường (1-2) [Mặc định: 1 - Production]: 
+--- BƯỚC 1: CHỌN MÔI TRƯỜNG KIỂM THỬ (ENVIRONMENT) ---
+  1. 🚀 Production      (Môi trường Thật - https://landbase.vn)
+  2. 🛠️ Development     (Môi trường DEV  - https://dev-webapp.laand.vn)
+  3. 🧪 Pre-Production  (Môi trường PPE  - https://laand.vn)
+👉 Nhập lựa chọn Môi trường (1-3) [Mặc định: 1 - Production]: 
 ```
 
 Bạn cũng có thể chỉ định môi trường trực tiếp qua lệnh hoặc cờ CLI:
 - `npm run test:prod`: Chạy kiểm thử Web trên môi trường Production (`landbase.vn`).
 - `npm run test:dev`: Chạy kiểm thử Web trên môi trường Development (`dev-webapp.laand.vn`).
+- `npm run test:ppe`: Chạy kiểm thử Web trên môi trường Pre-Production (`laand.vn`).
 - `npm run test:api:dev`: Chạy kiểm thử API trên môi trường Development.
 - `npm run test:api:prod`: Chạy kiểm thử API trên môi trường Production.
+- `npm run test:api:ppe`: Chạy kiểm thử API trên môi trường Pre-Production.
 - Hoặc truyền tham số dòng lệnh:
   ```bash
   node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=prod
   node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=dev
+  node projects/landbase-e2e-tests/run-tests.js --platform=1 --env=ppe
   node projects/landbase-e2e-tests/run-tests.js --url=https://your-custom-domain.vn
   ```
 
